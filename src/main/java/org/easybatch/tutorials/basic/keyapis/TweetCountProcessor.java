@@ -37,7 +37,7 @@ public class TweetCountProcessor implements ComputationalRecordProcessor<Tweet, 
     private int count;
 
     @Override
-    public Tweet processRecord(Tweet tweet) throws Exception {
+    public Tweet processRecord(Tweet tweet) {
         if (tweet.getMessage().contains("#EasyBatch")) {
             count++;
         }

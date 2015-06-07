@@ -27,8 +27,10 @@ package org.easybatch.tutorials.intermediate.recipes;
 import org.easybatch.core.api.Header;
 import org.easybatch.core.api.Record;
 import org.easybatch.core.api.RecordReader;
+import org.easybatch.core.exception.RecordReaderOpeningException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -59,8 +61,12 @@ public class RecipeRecordReader implements RecordReader {
     }
 
     @Override
-    public void open() throws Exception {
-        scanner = new Scanner(file);
+    public void open() throws RecordReaderOpeningException {
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            throw new RecordReaderOpeningException("Unable to open record reader", e);
+        }
     }
 
     @Override
@@ -69,7 +75,7 @@ public class RecipeRecordReader implements RecordReader {
     }
 
     @Override
-    public Record readNextRecord() throws Exception {
+    public Record readNextRecord() {
         currentRecordNumber++;
         Recipe recipe = new Recipe();
         while (scanner.hasNext()) {
@@ -103,8 +109,10 @@ public class RecipeRecordReader implements RecordReader {
     }
 
     @Override
-    public void close() throws Exception {
-        scanner.close();
+    public void close() {
+        if (scanner != null) {
+            scanner.close();
+        }
     }
 
 }

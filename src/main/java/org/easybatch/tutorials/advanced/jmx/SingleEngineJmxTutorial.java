@@ -24,7 +24,8 @@
 
 package org.easybatch.tutorials.advanced.jmx;
 
-import org.easybatch.core.impl.Engine;
+import org.easybatch.core.api.Engine;
+import org.easybatch.core.api.Report;
 import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.core.reader.StringRecordReader;
 
@@ -40,13 +41,15 @@ public class SingleEngineJmxTutorial {
         // Create the String data source
         String dataSource =
                 "1,foo,easy batch rocks! #EasyBatch\n" +
-                "2,foo,easy batch rocks! #EasyBatch\n" +
-                "3,foo,easy batch rocks! #EasyBatch\n" +
-                "4,foo,easy batch rocks! #EasyBatch\n" +
-                "5,foo,easy batch rocks! #EasyBatch\n" +
-                "6,foo,easy batch rocks! #EasyBatch\n" +
-                "7,foo,easy batch rocks! #EasyBatch\n" +
-                "8,bar,@foo I do confirm :-)";
+                "2,bar,@foo I do confirm :-)\n" +
+                "3,baz,@foo @bar what are you talking about? Am I in trouble?\n" +
+                "4,foo,@baz yes you are in trouble!\n" +
+                "5,bar,@baz It's about easy batch. See in here: http://www.easybatch.org cc @md_benhassine\n" +
+                "6,baz,@foo @bar @md_benhassine Oh damn that's really easy!\n" +
+                "7,md_benhassine,Thank you all! your feedback is welcome :-)\n" +
+                "8,foo,@md_benhassine Have you some benchmarks out there?\n" +
+                "9,md_benhassine,@foo yep check them out here: https://github.com/EasyBatch/easybatch-benchmarks\n" +
+                "10,foo,@md_benhassine I'll see there thx!";
 
         // Build a batch engine
         Engine engine = new EngineBuilder()
@@ -56,7 +59,9 @@ public class SingleEngineJmxTutorial {
                 .build();
 
         // Run the batch engine
-        engine.call();
+        Report report = engine.call();
+
+        System.out.println("report = " + report);
 
     }
 

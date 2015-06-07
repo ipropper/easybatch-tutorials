@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class LineTokenizer implements RecordMapper<List<String>> {
 
-    public List<String> mapRecord(Record record) throws Exception {
+    public List<String> mapRecord(Record record) {
         String payload = (String) record.getPayload();
         return Arrays.asList(payload.split(" "));
     }

@@ -43,7 +43,7 @@ public class TweetIndexer implements RecordProcessor<String, String>{
     }
 
     @Override
-    public String processRecord(String tweet) throws Exception {
+    public String processRecord(String tweet) {
 
         //index the tweet in the twitter index
         client.prepareIndex("twitter", "tweet")

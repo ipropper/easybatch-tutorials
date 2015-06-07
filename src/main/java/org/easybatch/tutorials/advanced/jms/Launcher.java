@@ -24,8 +24,8 @@
 
 package org.easybatch.tutorials.advanced.jms;
 
+import org.easybatch.core.api.Engine;
 import org.easybatch.core.api.Report;
-import org.easybatch.core.impl.Engine;
 import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.integration.jms.JmsPoisonRecordFilter;
 import org.easybatch.integration.jms.JmsRecordReader;

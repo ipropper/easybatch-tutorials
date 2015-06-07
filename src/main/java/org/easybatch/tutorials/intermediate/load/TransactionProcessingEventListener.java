@@ -43,12 +43,12 @@ public class TransactionProcessingEventListener implements RecordProcessorEventL
     private static final Logger LOGGER = Logger.getLogger(TweetLoader.class.getName());
 
     @Override
-    public void beforeProcessingRecord(Object record) {
+    public void beforeRecordProcessing(Object record) {
         DatabaseUtil.getCurrentSession().beginTransaction();
     }
 
     @Override
-    public void afterProcessingRecord(Object record, final Object processingResult) {
+    public void afterRecordProcessing(Object record, final Object processingResult) {
         DatabaseUtil.getCurrentSession().getTransaction().commit();
         LOGGER.log(Level.INFO, "Tweet {0} successfully persisted in the database", record);
     }

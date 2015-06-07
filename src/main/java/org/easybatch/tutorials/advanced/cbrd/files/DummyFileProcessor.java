@@ -35,7 +35,7 @@ import org.easybatch.core.record.FileRecord;
 public class DummyFileProcessor implements RecordProcessor<FileRecord, FileRecord> {
 
     @Override
-    public FileRecord processRecord(FileRecord record) throws Exception {
+    public FileRecord processRecord(FileRecord record) {
         System.out.println("processed file = " + record.getPayload().getAbsolutePath());
         return record;
     }

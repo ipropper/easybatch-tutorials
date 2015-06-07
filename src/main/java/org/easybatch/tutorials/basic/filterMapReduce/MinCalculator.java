@@ -36,7 +36,7 @@ public class MinCalculator implements ComputationalRecordProcessor<Integer, Inte
     private Integer min = Integer.MAX_VALUE;
 
     @Override
-    public Integer processRecord(Integer record) throws Exception {
+    public Integer processRecord(Integer record) {
         if (record < min) {
             min = record;
         }

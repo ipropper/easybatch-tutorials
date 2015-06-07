@@ -25,6 +25,7 @@
 package org.easybatch.tutorials.advanced.jmx;
 
 import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.exception.RecordProcessingException;
 import org.easybatch.core.record.StringRecord;
 
 /**
@@ -35,12 +36,15 @@ import org.easybatch.core.record.StringRecord;
 public class TweetSlowProcessor implements RecordProcessor<StringRecord, StringRecord> {
 
     @Override
-    public StringRecord processRecord(StringRecord record) throws Exception {
+    public StringRecord processRecord(StringRecord record) throws RecordProcessingException {
         //slow down the processor for demonstration purpose
-        Thread.sleep(3000);
-
-        System.out.println(record.getPayload());
-        return record;
+        try {
+            Thread.sleep(500);
+            System.out.println(record.getPayload());
+            return record;
+        } catch (InterruptedException e) {
+            throw new RecordProcessingException("Unable to process record " + record, e);
+        }
     }
 
 }

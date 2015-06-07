@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.advanced.quartz;
 
-import org.easybatch.core.impl.Engine;
+import org.easybatch.core.api.Engine;
 import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.core.reader.StringRecordReader;
 import org.easybatch.integration.quartz.BatchScheduler;

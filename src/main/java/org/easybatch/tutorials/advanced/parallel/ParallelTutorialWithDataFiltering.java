@@ -24,11 +24,11 @@
 
 package org.easybatch.tutorials.advanced.parallel;
 
+import org.easybatch.core.api.Engine;
 import org.easybatch.core.api.RecordFilter;
 import org.easybatch.core.api.Report;
 import org.easybatch.core.filter.RecordNumberGreaterThanFilter;
 import org.easybatch.core.filter.RecordNumberLowerThanFilter;
-import org.easybatch.core.impl.Engine;
 import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tools.reporting.DefaultReportMerger;
@@ -36,11 +36,13 @@ import org.easybatch.tools.reporting.ReportMerger;
 import org.easybatch.tutorials.basic.helloworld.TweetProcessor;
 
 import java.io.File;
-import java.util.Arrays;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+
+import static java.util.Arrays.asList;
 
 /**
  * Main class to run the parallel tutorial with data source filtering.
@@ -59,14 +61,14 @@ public class ParallelTutorialWithDataFiltering {
 
         // Build worker engines
         // worker engine 1: process data from tweets.csv, filter records 6-10
-        Engine engine1 = buildEngine(tweets, new RecordNumberGreaterThanFilter(5));
+        Engine engine1 = buildEngine(tweets, new RecordNumberGreaterThanFilter(5), "worker-engine1");
         // worker engine 2: process data from tweets.csv, filter records 1-5
-        Engine engine2 = buildEngine(tweets, new RecordNumberLowerThanFilter(6));
+        Engine engine2 = buildEngine(tweets, new RecordNumberLowerThanFilter(6), "worker-engine2");
 
         //create a 2 threads pool to call worker engines in parallel
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
-        List<Future<Report>> partialReports = executorService.invokeAll(Arrays.asList(engine1, engine2));
+        List<Future<Report>> partialReports = executorService.invokeAll(asList(engine1, engine2));
 
         //merge partial reports into a global one
         Report report1 = partialReports.get(0).get();
@@ -80,8 +82,9 @@ public class ParallelTutorialWithDataFiltering {
 
     }
 
-    private static Engine buildEngine(File file, RecordFilter recordFilter) throws Exception{
-        return new EngineBuilder()
+    private static Engine buildEngine(File file, RecordFilter recordFilter, String engineName) throws FileNotFoundException {
+        return EngineBuilder.aNewEngine()
+                .named(engineName)
                 .reader(new FlatFileRecordReader(file))
                 .filter(recordFilter)
                 .processor(new TweetProcessor())

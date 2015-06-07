@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.advanced.spring;
 
-import org.easybatch.core.impl.Engine;
+import org.easybatch.core.api.Engine;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

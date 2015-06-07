@@ -48,7 +48,7 @@ Listening for incoming records on http://localhost:8000/api/orders
 Hit enter to stop the application...
 ```
 
-You can send arbitrary requests to http://localhost:8000/api/orders using curl -XPUT http://localhost:8000/api/orders -d '{orderData}' for example and see that the worker engine has processed the record.
+You can send arbitrary requests to `http://localhost:8000/api/orders` using `curl -XPUT http://localhost:8000/api/orders -d '{orderData}'` for example and see that the worker engine has processed the record.
 
 ### From Your IDE
 

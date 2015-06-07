@@ -30,12 +30,16 @@ import org.apache.commons.io.IOUtils;
 import org.easybatch.core.api.Header;
 import org.easybatch.core.api.Record;
 import org.easybatch.core.dispatcher.AbstractRecordDispatcher;
+import org.easybatch.core.dispatcher.RecordDispatchingException;
 import org.easybatch.core.record.StringRecord;
 import org.easybatch.tutorials.advanced.jms.JMSUtil;
 
+import javax.jms.JMSException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+
+import static java.lang.String.format;
 
 /**
  * Record dispatcher listening to incoming rest requests.
@@ -54,8 +58,13 @@ public class RestEndpointRecordDispatcher extends AbstractRecordDispatcher imple
     private long recordNumber;
 
     @Override
-    public void dispatchRecord(Record record) throws Exception {
-        JMSUtil.sendStringRecord((StringRecord)record);
+    public void dispatchRecord(Record record) throws RecordDispatchingException {
+        try {
+            JMSUtil.sendStringRecord((StringRecord)record);
+        } catch (JMSException e) {
+            String message = format("Unable to dispatch record %s", record);
+            throw new RecordDispatchingException(message);
+        }
     }
 
     @Override
@@ -66,8 +75,11 @@ public class RestEndpointRecordDispatcher extends AbstractRecordDispatcher imple
         try {
             Header header = new Header(++recordNumber, "REST API: /api/orders", new Date());
             dispatchRecord(new StringRecord(header, payload));
+            httpExchange.sendResponseHeaders(200, 0);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            httpExchange.sendResponseHeaders(500, 0);
+        } finally {
+            httpExchange.close();
         }
     }
 }

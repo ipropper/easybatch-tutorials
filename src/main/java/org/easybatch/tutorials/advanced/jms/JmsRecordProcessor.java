@@ -25,8 +25,10 @@
 package org.easybatch.tutorials.advanced.jms;
 
 import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.exception.RecordProcessingException;
 import org.easybatch.integration.jms.JmsRecord;
 
+import javax.jms.JMSException;
 import javax.jms.TextMessage;
 
 /**
@@ -37,9 +39,13 @@ import javax.jms.TextMessage;
 public class JmsRecordProcessor implements RecordProcessor<JmsRecord, JmsRecord> {
 
     @Override
-    public JmsRecord processRecord(JmsRecord record) throws Exception {
+    public JmsRecord processRecord(JmsRecord record) throws RecordProcessingException {
         TextMessage message = (TextMessage) record.getPayload();
-        System.out.println("JMS message '" + message.getText() + "' processed");
+        try {
+            System.out.println("JMS message '" + message.getText() + "' processed");
+        } catch (JMSException e) {
+            throw new RecordProcessingException("Unable to process record " + record, e);
+        }
         return record;
     }
 

@@ -36,7 +36,11 @@
     <!-- configure Easy Batch engine -->
     <bean id="engine" class="org.easybatch.integration.spring.BatchFactoryBean">
         <property name="recordReader" ref="tweetReader"/>
-        <property name="recordFilter" ref="headerRecordFilter"/>
+        <property name="filterChain">
+            <list>
+                <ref bean="headerRecordFilter"/>
+            </list>
+        </property>
         <property name="recordMapper" ref="tweetMapper"/>
         <property name="processingPipeline">
             <list>

@@ -35,7 +35,7 @@ import org.easybatch.core.record.StringRecord;
 public class TweetProcessor implements RecordProcessor<StringRecord, StringRecord> {
 
     @Override
-    public StringRecord processRecord(StringRecord record) throws Exception {
+    public StringRecord processRecord(StringRecord record) {
         System.out.println(record.getPayload());
         return record;
     }

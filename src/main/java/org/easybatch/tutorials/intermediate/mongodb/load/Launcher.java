@@ -25,8 +25,8 @@
 package org.easybatch.tutorials.intermediate.mongodb.load;
 
 import com.mongodb.MongoClient;
+import org.easybatch.core.api.Engine;
 import org.easybatch.core.filter.HeaderRecordFilter;
-import org.easybatch.core.impl.Engine;
 import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.flatfile.dsv.DelimitedRecordMapper;

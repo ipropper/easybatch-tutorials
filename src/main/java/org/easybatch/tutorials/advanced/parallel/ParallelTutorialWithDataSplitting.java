@@ -24,8 +24,8 @@
 
 package org.easybatch.tutorials.advanced.parallel;
 
+import org.easybatch.core.api.Engine;
 import org.easybatch.core.api.Report;
-import org.easybatch.core.impl.Engine;
 import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tools.reporting.DefaultReportMerger;
@@ -33,11 +33,13 @@ import org.easybatch.tools.reporting.ReportMerger;
 import org.easybatch.tutorials.basic.helloworld.TweetProcessor;
 
 import java.io.File;
-import java.util.Arrays;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+
+import static java.util.Arrays.asList;
 
 /**
  * Main class to run the parallel tutorial with data source splitting.
@@ -59,13 +61,13 @@ public class ParallelTutorialWithDataSplitting {
                 .getResource("/org/easybatch/tutorials/advanced/parallel/tweets-part2.csv").toURI());
 
         // Build worker engines
-        Engine engine1 = buildEngine(tweetsPart1);
-        Engine engine2 = buildEngine(tweetsPart2);
+        Engine engine1 = buildEngine(tweetsPart1, "worker-engine1");
+        Engine engine2 = buildEngine(tweetsPart2, "worker-engine2");
 
         //create a 2 threads pool to call worker engines in parallel
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
-        List<Future<Report>> partialReports = executorService.invokeAll(Arrays.asList(engine1, engine2));
+        List<Future<Report>> partialReports = executorService.invokeAll(asList(engine1, engine2));
 
         //merge partial reports into a global one
         Report report1 = partialReports.get(0).get();
@@ -79,8 +81,9 @@ public class ParallelTutorialWithDataSplitting {
 
     }
 
-    private static Engine buildEngine(File file) throws Exception{
-        return new EngineBuilder()
+    private static Engine buildEngine(File file, String engineName) throws FileNotFoundException {
+        return EngineBuilder.aNewEngine()
+                .named(engineName)
                 .reader(new FlatFileRecordReader(file))
                 .processor(new TweetProcessor())
                 .build();

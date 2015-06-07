@@ -24,12 +24,12 @@
 
 package org.easybatch.tutorials.advanced.cbrd.fruits;
 
+import org.easybatch.core.api.Engine;
 import org.easybatch.core.api.Record;
 import org.easybatch.core.dispatcher.ContentBasedRecordDispatcher;
 import org.easybatch.core.dispatcher.ContentBasedRecordDispatcherBuilder;
 import org.easybatch.core.dispatcher.PoisonRecordBroadcaster;
 import org.easybatch.core.filter.PoisonRecordFilter;
-import org.easybatch.core.impl.Engine;
 import org.easybatch.core.reader.QueueRecordReader;
 import org.easybatch.core.reader.StringRecordReader;
 
@@ -38,6 +38,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static java.util.Arrays.asList;
 import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
 
 /**
@@ -67,34 +68,34 @@ public class FruitsParallelProcessingTutorial {
 
         // Build a master engine that will read records from the data source and dispatch them to worker engines
         Engine masterEngine = aNewEngine()
+                .named("master-engine")
                 .reader(new StringRecordReader(fruits))
                 .processor(recordDispatcher)
                 .batchProcessEventListener(new PoisonRecordBroadcaster(recordDispatcher))
                 .build();
 
         // Build easy batch engines
-        Engine workerEngine1 = buildWorkerEngine(appleQueue);
-        Engine workerEngine2 = buildWorkerEngine(orangeQueue);
-        Engine workerEngine3 = buildWorkerEngine(defaultQueue);
+        Engine workerEngine1 = buildWorkerEngine(appleQueue, "apple-worker-engine");
+        Engine workerEngine2 = buildWorkerEngine(orangeQueue, "orange-worker-engine");
+        Engine workerEngine3 = buildWorkerEngine(defaultQueue, "default-worker-engine");
 
         // Create a threads pool to call Easy Batch engines in parallel
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
         // Submit master and worker engines to executor service
-        executorService.submit(masterEngine);
-        executorService.submit(workerEngine1);
-        executorService.submit(workerEngine2);
-        executorService.submit(workerEngine3);
+        executorService.invokeAll(asList(masterEngine, workerEngine1, workerEngine2, workerEngine3));
 
         // Shutdown executor service
         executorService.shutdown();
 
     }
 
-    public static Engine buildWorkerEngine(BlockingQueue<Record> queue) {
+    public static Engine buildWorkerEngine(BlockingQueue<Record> queue, String engineName) {
         return aNewEngine()
+                .named(engineName)
                 .reader(new QueueRecordReader(queue))
                 .filter(new PoisonRecordFilter())
+                .processor(new FruitProcessor())
                 .build();
     }
 

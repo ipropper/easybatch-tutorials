@@ -24,9 +24,9 @@
 
 package org.easybatch.tutorials.basic.pipeline;
 
+import org.easybatch.core.api.Engine;
 import org.easybatch.core.api.Report;
 import org.easybatch.core.filter.GrepFilter;
-import org.easybatch.core.impl.Engine;
 import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.flatfile.FlatFileRecordReader;
 

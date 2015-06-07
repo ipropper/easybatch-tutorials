@@ -40,7 +40,7 @@ public class UniqProcessor implements ComputationalRecordProcessor<String, Strin
 
 
     @Override
-    public String processRecord(String record) throws Exception {
+    public String processRecord(String record) {
         if (!uniqueStrings.contains(record)) {
             uniqueStrings.add(record);
         }

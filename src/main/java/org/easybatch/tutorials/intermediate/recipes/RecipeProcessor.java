@@ -32,7 +32,7 @@ import org.easybatch.core.api.RecordProcessor;
 public class RecipeProcessor implements RecordProcessor<Recipe, Recipe> {
 
     @Override
-    public Recipe processRecord(Recipe recipe) throws Exception {
+    public Recipe processRecord(Recipe recipe) {
         System.out.println(recipe);
         return recipe;
     }

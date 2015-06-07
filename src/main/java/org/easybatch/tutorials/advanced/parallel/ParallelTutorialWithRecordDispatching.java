@@ -24,22 +24,22 @@
 
 package org.easybatch.tutorials.advanced.parallel;
 
+import org.easybatch.core.api.Engine;
 import org.easybatch.core.api.Record;
 import org.easybatch.core.dispatcher.PoisonRecordBroadcaster;
 import org.easybatch.core.dispatcher.RoundRobinRecordDispatcher;
 import org.easybatch.core.filter.PoisonRecordFilter;
-import org.easybatch.core.impl.Engine;
 import org.easybatch.core.reader.QueueRecordReader;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tutorials.basic.helloworld.TweetProcessor;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static java.util.Arrays.asList;
 import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
 
 /**
@@ -61,33 +61,35 @@ public class ParallelTutorialWithRecordDispatching {
         BlockingQueue<Record> queue1 = new LinkedBlockingQueue<Record>();
         BlockingQueue<Record> queue2 = new LinkedBlockingQueue<Record>();
 
-        // Create a round robin record dispatcher that will be used to distribute records to worker engines
-        RoundRobinRecordDispatcher roundRobinRecordDispatcher = new RoundRobinRecordDispatcher(Arrays.asList(queue1, queue2));
+        // Create a round robin record dispatcher to distribute records to worker engines
+        RoundRobinRecordDispatcher roundRobinRecordDispatcher = new RoundRobinRecordDispatcher(asList(queue1, queue2));
 
-        // Build a master engine that will read records from the data source and dispatch them to worker engines
+        // Build a master engine to read records from the data source and dispatch them to worker engines
         Engine masterEngine = aNewEngine()
+                .named("master-engine")
                 .reader(new FlatFileRecordReader(tweets))
                 .processor(roundRobinRecordDispatcher)
                 .batchProcessEventListener(new PoisonRecordBroadcaster(roundRobinRecordDispatcher))
                 .build();
 
         // Build worker engines
-        Engine workerEngine1 = buildWorkerEngine(queue1);
-        Engine workerEngine2 = buildWorkerEngine(queue2);
+        Engine workerEngine1 = buildWorkerEngine(queue1, "worker-engine1");
+        Engine workerEngine2 = buildWorkerEngine(queue2, "worker-engine2");
 
         // Create a thread pool to call master and worker engines in parallel
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
         // Submit workers to executor service
-        executorService.invokeAll(Arrays.asList(masterEngine, workerEngine1, workerEngine2));
+        executorService.invokeAll(asList(masterEngine, workerEngine1, workerEngine2));
 
         // Shutdown executor service
         executorService.shutdown();
 
     }
 
-    public static Engine buildWorkerEngine(BlockingQueue<Record> queue) {
+    public static Engine buildWorkerEngine(BlockingQueue<Record> queue, String engineName) {
         return aNewEngine()
+                .named(engineName)
                 .reader(new QueueRecordReader(queue))
                 .filter(new PoisonRecordFilter())
                 .processor(new TweetProcessor())

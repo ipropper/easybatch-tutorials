@@ -40,7 +40,7 @@ public class SortProcessor implements ComputationalRecordProcessor<String, Strin
 
 
     @Override
-    public String processRecord(String record) throws Exception {
+    public String processRecord(String record) {
         sortedStrings.add(record);
         return record;
     }

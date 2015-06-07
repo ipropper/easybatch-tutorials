@@ -5,6 +5,11 @@
 This tutorial is an application that reads tweets from a flat file and prints them out to the standard output.
 The `TweetSlowProcessor` simulates a long running processor to allow you to monitor the application using a JMX client.
 
+This tutorial contains 2 examples:
+
+- `SingleEngineJmxTutorial`: shows how to monitor a single engine
+- `ParallelEngineJmxTutorial`: shows how to monitor two worker engines running in parallel 
+
 ## Pre-requisite
 
 * JDK 1.6+
@@ -36,16 +41,18 @@ $> # Launch the single engine jmx tutorial
 $>mvn exec:java -PrunSingleEngineJmxTutorial
 ```
 
-Using your JMX client, navigate to the `org.easybatch.core.jmx:type=EngineNameHere` MBean
+Using your JMX client, navigate to the `org.easybatch.core.jmx:name=engine` MBean
  and you will be able to monitor the execution progress of the application in real time.
  
 ```
 $> # Launch the parallel engine jmx tutorial
 $>mvn exec:java -PrunParallelEngineJmxTutorial
 ```
-
-Using your JMX client, navigate to the `org.easybatch.core.jmx:type=EngineNameHere` MBean.
- You can see two beans named `engine1` and `engine2` registered there. You can monitor the execution progress of each process
+When you want to monitor multiple engines in parallel, you can give each engine a name. This name will be the name
+of the JMX MBean that monitors the engine.
+In this tutorial, we are running two engines in parallel named `worker-engine1` and `worker-engine2`.
+Using your JMX client, navigate to the `org.easybatch.core.jmx` type.
+ You can see two MBeans named `worker-engine1` and `worker-engine2` registered there. You can monitor the execution progress of each engine
  in real time.
 
 ### From Your IDE
@@ -55,11 +62,14 @@ Using your JMX client, navigate to the `org.easybatch.core.jmx:type=EngineNameHe
 * Navigate to the `org.easybatch.tutorials.advanced.jmx` package
 * Run the `org.easybatch.tutorials.advanced.jmx.SingleEngineJmxTutorial` class without any argument
 
-Using your JMX client, navigate to the `org.easybatch.core.jmx:type=EngineNameHere` MBean
+Using your JMX client, navigate to the `org.easybatch.core.jmx:name=engine` MBean
  and you will be able to monitor the execution progress of the application in real time.
  
 * Run the `org.easybatch.tutorials.advanced.jmx.ParallelEngineJmxTutorial` class without any argument
 
-Using your JMX client, navigate to the `org.easybatch.core.jmx:type=EngineNameHere` MBean.
- You can see two beans named `engine1` and `engine2` registered there. You can monitor the execution progress of each process
+When you want to monitor multiple engines in parallel, you can give each engine a name. This name will be the name
+of the JMX MBean that monitors the engine.
+In this tutorial, we are running two engines in parallel named `worker-engine1` and `worker-engine2`.
+Using your JMX client, navigate to the `org.easybatch.core.jmx` type.
+ You can see two MBeans named `worker-engine1` and `worker-engine2` registered there. You can monitor the execution progress of each engine
  in real time.

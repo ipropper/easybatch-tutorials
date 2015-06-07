@@ -40,6 +40,7 @@ Open a second terminal and run the following command:
 `mvn exec:java -PrunJmsSender`
 
 You will be able to type in tweets in the console to post them to the JMS queue and see how the engine will process them as they come.
+To quit the application, type in "quit" in order to send a poison record that will stop the engine.
 
 ### From Your IDE
 

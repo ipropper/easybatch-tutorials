@@ -43,7 +43,7 @@ public class TranslateProcessor implements RecordProcessor<String, String> {
     }
 
     @Override
-    public String processRecord(String record) throws Exception {
+    public String processRecord(String record) {
         return record.replaceAll(regexp, replacement);
     }
 

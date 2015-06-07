@@ -34,7 +34,7 @@ import org.easybatch.tutorials.common.Tweet;
  */
 public class TweetLoader implements RecordProcessor<Tweet, Tweet> {
 
-    public Tweet processRecord(Tweet tweet) throws Exception {
+    public Tweet processRecord(Tweet tweet) {
 
         DatabaseUtil.getCurrentSession().saveOrUpdate(tweet);
         return tweet;

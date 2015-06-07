@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.intermediate.recipes;
 
-import org.easybatch.core.impl.Engine;
+import org.easybatch.core.api.Engine;
 import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.core.mapper.GenericRecordMapper;
 

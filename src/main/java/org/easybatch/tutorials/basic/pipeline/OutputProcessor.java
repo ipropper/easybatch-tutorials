@@ -25,7 +25,9 @@
 package org.easybatch.tutorials.basic.pipeline;
 
 import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.exception.RecordProcessingException;
 
+import java.io.IOException;
 import java.io.OutputStream;
 
 /**
@@ -42,9 +44,13 @@ public class OutputProcessor implements RecordProcessor<String, String> {
     }
 
     @Override
-    public String processRecord(String record) throws Exception {
-        outputStream.write(record.getBytes());
-        outputStream.write(System.getProperty("line.separator").getBytes());
+    public String processRecord(String record) throws RecordProcessingException {
+        try {
+            outputStream.write(record.getBytes());
+            outputStream.write(System.getProperty("line.separator").getBytes());
+        } catch (IOException e) {
+            throw new RecordProcessingException("Unable to write record to output stream", e);
+        }
         return record;
     }
 

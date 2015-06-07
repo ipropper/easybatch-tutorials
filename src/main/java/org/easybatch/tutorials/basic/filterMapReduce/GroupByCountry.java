@@ -18,7 +18,7 @@ public class GroupByCountry implements ComputationalRecordProcessor<Record, Reco
     private  Map<String, Set<Person>> personsByCountry = new HashMap<String, Set<Person>>();
 
     @Override
-    public Record processRecord(Record record) throws Exception {
+    public Record processRecord(Record record) {
         Person person = (Person) record.getPayload();
         String country = person.getCountry();
         if (!personsByCountry.containsKey(country)) {

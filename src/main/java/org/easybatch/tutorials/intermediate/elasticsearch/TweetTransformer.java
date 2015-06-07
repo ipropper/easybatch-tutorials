@@ -25,9 +25,13 @@
 package org.easybatch.tutorials.intermediate.elasticsearch;
 
 import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.exception.RecordProcessingException;
 import org.easybatch.tutorials.common.Tweet;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 
+import java.io.IOException;
+
+import static java.lang.String.format;
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 /**
@@ -35,19 +39,24 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class TweetTransformer implements RecordProcessor<Tweet, String>{
+public class TweetTransformer implements RecordProcessor<Tweet, String> {
 
     @Override
-    public String processRecord(Tweet tweet) throws Exception {
+    public String processRecord(Tweet tweet) throws RecordProcessingException {
 
-        XContentBuilder builder = jsonBuilder()
-                .startObject()
-                .field("id", tweet.getId())
-                .field("user", tweet.getUser())
-                .field("message", tweet.getMessage())
-                .endObject();
-
-        return builder.string();
+        XContentBuilder builder;
+        try {
+            builder = jsonBuilder()
+                    .startObject()
+                    .field("id", tweet.getId())
+                    .field("user", tweet.getUser())
+                    .field("message", tweet.getMessage())
+                    .endObject();
+            return builder.string();
+        } catch (IOException e) {
+            String message = format("Unable to process tweet %s", tweet);
+            throw new RecordProcessingException(message, e);
+        }
     }
 
 }

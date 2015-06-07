@@ -63,6 +63,6 @@ public class TweetExporterBatchEventListener implements BatchProcessEventListene
     }
 
     @Override
-    public void onException(Throwable throwable) {
+    public void onBatchException(Throwable throwable) {
     }
 }

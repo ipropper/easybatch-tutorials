@@ -24,13 +24,13 @@
 
 package org.easybatch.tutorials.advanced.cbrd.files;
 
+import org.easybatch.core.api.Engine;
 import org.easybatch.core.api.Record;
 import org.easybatch.core.dispatcher.ContentBasedRecordDispatcher;
 import org.easybatch.core.dispatcher.ContentBasedRecordDispatcherBuilder;
 import org.easybatch.core.dispatcher.PoisonRecordBroadcaster;
 import org.easybatch.core.filter.FileExtensionFilter;
 import org.easybatch.core.filter.PoisonRecordFilter;
-import org.easybatch.core.impl.Engine;
 import org.easybatch.core.reader.FileRecordReader;
 import org.easybatch.core.reader.QueueRecordReader;
 
@@ -41,6 +41,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static java.util.Arrays.asList;
 import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
 
 /**
@@ -68,6 +69,7 @@ public class FilesParallelProcessingTutorial {
 
         // Build a master engine that will read files from the directory and dispatch them to worker engines
         Engine masterEngine = aNewEngine()
+                .named("master-engine")
                 .reader(new FileRecordReader(directory))
                 .filter(new FileExtensionFilter(Arrays.asList(".log", ".tmp")))
                 .processor(recordDispatcher)
@@ -75,24 +77,23 @@ public class FilesParallelProcessingTutorial {
                 .build();
 
         // Build easy batch engines
-        Engine workerEngine1 = buildWorkerEngine(csvQueue);
-        Engine workerEngine2 = buildWorkerEngine(xmlQueue);
+        Engine workerEngine1 = buildWorkerEngine(csvQueue, "csv-worker-engine");
+        Engine workerEngine2 = buildWorkerEngine(xmlQueue, "xml-worker-engine");
 
         // Create a threads pool to call Easy Batch engines in parallel
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
         // Submit master and worker engines to executor service
-        executorService.submit(masterEngine);
-        executorService.submit(workerEngine1);
-        executorService.submit(workerEngine2);
+        executorService.invokeAll(asList(masterEngine, workerEngine1, workerEngine2));
 
         // Shutdown executor service
         executorService.shutdown();
 
     }
 
-    public static Engine buildWorkerEngine(BlockingQueue<Record> queue) {
+    public static Engine buildWorkerEngine(BlockingQueue<Record> queue, String engineName) {
         return aNewEngine()
+                .named(engineName)
                 .reader(new QueueRecordReader(queue))
                 .filter(new PoisonRecordFilter())
                 .processor(new DummyFileProcessor())

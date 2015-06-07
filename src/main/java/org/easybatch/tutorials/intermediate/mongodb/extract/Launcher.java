@@ -27,7 +27,7 @@ package org.easybatch.tutorials.intermediate.mongodb.extract;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
-import org.easybatch.core.impl.Engine;
+import org.easybatch.core.api.Engine;
 import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.integration.mongodb.MongoDBRecordMapper;
 import org.easybatch.integration.mongodb.MongoDBRecordReader;

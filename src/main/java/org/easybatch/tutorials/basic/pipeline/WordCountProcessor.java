@@ -41,7 +41,7 @@ public class WordCountProcessor implements ComputationalRecordProcessor<String, 
     }
 
     @Override
-    public String processRecord(String record) throws Exception {
+    public String processRecord(String record) {
         count += record.split(" ").length;
         return record;
     }

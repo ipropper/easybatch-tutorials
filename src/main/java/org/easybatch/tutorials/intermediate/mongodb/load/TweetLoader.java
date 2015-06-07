@@ -45,7 +45,7 @@ public class TweetLoader implements RecordProcessor<Tweet, Tweet> {
     }
 
     @Override
-    public Tweet processRecord(Tweet tweet) throws Exception {
+    public Tweet processRecord(Tweet tweet) {
 
         DBObject dbObject = new BasicDBObject()
                 .append("_id", tweet.getId())

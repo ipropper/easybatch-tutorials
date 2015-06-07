@@ -37,7 +37,7 @@ public class LineCountProcessor implements ComputationalRecordProcessor<Record, 
     private Integer count = 0;
 
     @Override
-    public Record processRecord(Record record) throws Exception {
+    public Record processRecord(Record record) {
         count ++;
         return record;
     }

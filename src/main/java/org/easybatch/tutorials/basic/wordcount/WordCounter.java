@@ -19,7 +19,7 @@ public class WordCounter implements ComputationalRecordProcessor<List<String>, L
         return words;
     }
 
-    public List<String> processRecord(List<String> tokens) throws Exception {
+    public List<String> processRecord(List<String> tokens) {
         for (String token : tokens) {
             Integer count = words.get(token);
             count = (count == null) ? 1 : count + 1;

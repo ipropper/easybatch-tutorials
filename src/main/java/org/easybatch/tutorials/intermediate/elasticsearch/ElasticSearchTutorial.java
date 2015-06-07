@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.intermediate.elasticsearch;
 
-import org.easybatch.core.impl.Engine;
+import org.easybatch.core.api.Engine;
 import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.jdbc.JdbcRecordMapper;
 import org.easybatch.jdbc.JdbcRecordReader;
@@ -60,7 +60,7 @@ public class ElasticSearchTutorial {
         // Build a batch engine
         Engine engine = new EngineBuilder()
                 .reader(new JdbcRecordReader(connection, "select * from tweet"))
-                .mapper(new JdbcRecordMapper<Tweet>(Tweet.class))
+                .mapper(new JdbcRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
                 .processor(new TweetTransformer())
                 .processor(new TweetIndexer(client))
                 .build();

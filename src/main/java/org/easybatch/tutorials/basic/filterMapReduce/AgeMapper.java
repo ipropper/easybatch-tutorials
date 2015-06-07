@@ -35,7 +35,7 @@ import org.easybatch.core.api.RecordMapper;
 public class AgeMapper implements RecordMapper<Integer> {
 
     @Override
-    public Integer mapRecord(Record record) throws Exception {
+    public Integer mapRecord(Record record) {
         Person person = (Person) record.getPayload();
         return person.getAge();
     }
