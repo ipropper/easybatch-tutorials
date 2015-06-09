@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.intermediate.mongodb.extract;
 
-import org.easybatch.core.api.event.batch.BatchProcessEventListener;
+import org.easybatch.core.api.event.job.JobEventListener;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,7 +34,7 @@ import java.io.OutputStream;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class TweetExporterBatchEventListener implements BatchProcessEventListener {
+public class TweetExporterBatchEventListener implements JobEventListener {
 
     private OutputStream outputStream;
 
@@ -43,7 +43,7 @@ public class TweetExporterBatchEventListener implements BatchProcessEventListene
     }
 
     @Override
-    public void beforeBatchStart() {
+    public void beforeJobStart() {
         try {
             outputStream.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".getBytes());
             outputStream.write("<tweets>\n".getBytes());
@@ -53,7 +53,7 @@ public class TweetExporterBatchEventListener implements BatchProcessEventListene
     }
 
     @Override
-    public void afterBatchEnd() {
+    public void afterJobEnd() {
         try {
             outputStream.write("</tweets>".getBytes());
             outputStream.close();
@@ -63,6 +63,6 @@ public class TweetExporterBatchEventListener implements BatchProcessEventListene
     }
 
     @Override
-    public void onBatchException(Throwable throwable) {
+    public void onJobException(Throwable throwable) {
     }
 }

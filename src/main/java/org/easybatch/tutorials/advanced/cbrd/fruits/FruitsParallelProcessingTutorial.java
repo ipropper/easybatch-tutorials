@@ -71,7 +71,7 @@ public class FruitsParallelProcessingTutorial {
                 .named("master-engine")
                 .reader(new StringRecordReader(fruits))
                 .processor(recordDispatcher)
-                .batchProcessEventListener(new PoisonRecordBroadcaster(recordDispatcher))
+                .jobEventListener(new PoisonRecordBroadcaster(recordDispatcher))
                 .build();
 
         // Build easy batch engines

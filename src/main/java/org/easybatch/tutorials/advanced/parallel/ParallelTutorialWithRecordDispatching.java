@@ -69,7 +69,7 @@ public class ParallelTutorialWithRecordDispatching {
                 .named("master-engine")
                 .reader(new FlatFileRecordReader(tweets))
                 .processor(roundRobinRecordDispatcher)
-                .batchProcessEventListener(new PoisonRecordBroadcaster(roundRobinRecordDispatcher))
+                .jobEventListener(new PoisonRecordBroadcaster(roundRobinRecordDispatcher))
                 .build();
 
         // Build worker engines

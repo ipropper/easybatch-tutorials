@@ -73,7 +73,7 @@ public class FilesParallelProcessingTutorial {
                 .reader(new FileRecordReader(directory))
                 .filter(new FileExtensionFilter(Arrays.asList(".log", ".tmp")))
                 .processor(recordDispatcher)
-                .batchProcessEventListener(new PoisonRecordBroadcaster(recordDispatcher))
+                .jobEventListener(new PoisonRecordBroadcaster(recordDispatcher))
                 .build();
 
         // Build easy batch engines

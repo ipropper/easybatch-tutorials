@@ -59,7 +59,7 @@ public class Launcher {
                 .reader(new MongoDBRecordReader(tweetsCollections, new BasicDBObject()))
                 .mapper(new MongoDBRecordMapper<Tweet>(Tweet.class))
                 .processor(new TweetExporter(tweets))
-                .batchProcessEventListener(new TweetExporterBatchEventListener(tweets))
+                .jobEventListener(new TweetExporterBatchEventListener(tweets))
                 .build();
 
         // run easy batch engine
