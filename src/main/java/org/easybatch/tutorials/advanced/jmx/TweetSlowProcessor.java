@@ -39,7 +39,7 @@ public class TweetSlowProcessor implements RecordProcessor<StringRecord, StringR
     public StringRecord processRecord(StringRecord record) throws RecordProcessingException {
         //slow down the processor for demonstration purpose
         try {
-            Thread.sleep(500);
+            Thread.sleep(5000);
             System.out.println(record.getPayload());
             return record;
         } catch (InterruptedException e) {
