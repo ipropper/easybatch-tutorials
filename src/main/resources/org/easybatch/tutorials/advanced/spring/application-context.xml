@@ -17,7 +17,7 @@
 
     </bean>
     <!-- configure record mapper -->
-    <bean id="tweetMapper" class="org.easybatch.flatfile.dsv.DelimitedRecordMapper">
+    <bean id="tweetMapper" class="org.easybatch.flatfile.DelimitedRecordMapper">
         <constructor-arg>
             <value type="java.lang.Class">org.easybatch.tutorials.common.Tweet</value>
         </constructor-arg>
@@ -34,7 +34,7 @@
     <bean id="tweetProcessor" class="org.easybatch.tutorials.common.TweetProcessor"/>
 
     <!-- configure Easy Batch engine -->
-    <bean id="engine" class="org.easybatch.integration.spring.BatchFactoryBean">
+    <bean id="engine" class="org.easybatch.integration.spring.EngineFactoryBean">
         <property name="recordReader" ref="tweetReader"/>
         <property name="filterChain">
             <list>
