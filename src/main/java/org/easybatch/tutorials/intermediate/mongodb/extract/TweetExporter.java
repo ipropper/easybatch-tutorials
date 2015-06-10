@@ -25,8 +25,8 @@
 package org.easybatch.tutorials.intermediate.mongodb.extract;
 
 import com.thoughtworks.xstream.XStream;
+import org.easybatch.core.api.RecordProcessingException;
 import org.easybatch.core.api.RecordProcessor;
-import org.easybatch.core.exception.RecordProcessingException;
 
 import java.io.IOException;
 import java.io.OutputStream;

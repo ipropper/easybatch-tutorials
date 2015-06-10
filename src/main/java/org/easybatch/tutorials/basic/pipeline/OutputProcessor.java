@@ -24,8 +24,8 @@
 
 package org.easybatch.tutorials.basic.pipeline;
 
+import org.easybatch.core.api.RecordProcessingException;
 import org.easybatch.core.api.RecordProcessor;
-import org.easybatch.core.exception.RecordProcessingException;
 
 import java.io.IOException;
 import java.io.OutputStream;

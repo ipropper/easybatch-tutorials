@@ -24,9 +24,9 @@
 
 package org.easybatch.tutorials.advanced.jms;
 
+import org.easybatch.core.api.RecordProcessingException;
 import org.easybatch.core.api.RecordProcessor;
-import org.easybatch.core.exception.RecordProcessingException;
-import org.easybatch.integration.jms.JmsRecord;
+import org.easybatch.jms.JmsRecord;
 
 import javax.jms.JMSException;
 import javax.jms.TextMessage;

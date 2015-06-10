@@ -24,8 +24,8 @@
 
 package org.easybatch.tutorials.advanced.jmx;
 
+import org.easybatch.core.api.RecordProcessingException;
 import org.easybatch.core.api.RecordProcessor;
-import org.easybatch.core.exception.RecordProcessingException;
 import org.easybatch.core.record.StringRecord;
 
 /**
