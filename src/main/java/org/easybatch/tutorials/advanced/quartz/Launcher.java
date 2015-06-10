@@ -27,7 +27,7 @@ package org.easybatch.tutorials.advanced.quartz;
 import org.easybatch.core.api.Engine;
 import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.core.reader.StringRecordReader;
-import org.easybatch.integration.quartz.BatchScheduler;
+import org.easybatch.integration.quartz.BatchJobScheduler;
 import org.easybatch.tutorials.basic.helloworld.TweetProcessor;
 
 import java.util.Date;
@@ -35,11 +35,11 @@ import java.util.Date;
 /**
  * Main class to run the Hello World tutorial repeatedly every minute using easy batch - quartz integration module.<br/>
  *
- * The {@link org.easybatch.integration.quartz.BatchScheduler} API lets you schedule easy batch executions as follows :
+ * The {@link org.easybatch.integration.quartz.BatchJobScheduler} API lets you schedule easy batch executions as follows :
  * <ul>
- * <li>At a fixed point of time using {@link org.easybatch.integration.quartz.BatchScheduler#scheduleAt(java.util.Date)}</li>
- * <li>Repeatedly with predefined interval using {@link org.easybatch.integration.quartz.BatchScheduler#scheduleAtWithInterval(java.util.Date, int)}</li>
- * <li>Using unix cron-like expression with {@link org.easybatch.integration.quartz.BatchScheduler#scheduleCron(String)}</li>
+ * <li>At a fixed point of time using {@link org.easybatch.integration.quartz.BatchJobScheduler#scheduleAt(java.util.Date)}</li>
+ * <li>Repeatedly with predefined interval using {@link org.easybatch.integration.quartz.BatchJobScheduler#scheduleAtWithInterval(java.util.Date, int)}</li>
+ * <li>Using unix cron-like expression with {@link org.easybatch.integration.quartz.BatchJobScheduler#scheduleCron(String)}</li>
  * </ul>
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
@@ -60,7 +60,7 @@ public class Launcher {
                 .build();
 
         // Schedule the engine to start now and run every minute
-        BatchScheduler scheduler = new BatchScheduler(engine);
+        BatchJobScheduler scheduler = new BatchJobScheduler(engine);
         scheduler.scheduleAtWithInterval(new Date(), 1);
         scheduler.start();
 
