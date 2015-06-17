@@ -37,9 +37,9 @@ import java.util.Date;
  *
  * The {@link org.easybatch.integration.quartz.BatchJobScheduler} API lets you schedule easy batch executions as follows :
  * <ul>
- * <li>At a fixed point of time using {@link org.easybatch.integration.quartz.BatchJobScheduler#scheduleAt(java.util.Date)}</li>
- * <li>Repeatedly with predefined interval using {@link org.easybatch.integration.quartz.BatchJobScheduler#scheduleAtWithInterval(java.util.Date, int)}</li>
- * <li>Using unix cron-like expression with {@link org.easybatch.integration.quartz.BatchJobScheduler#scheduleCron(String)}</li>
+ * <li>At a fixed point of time using {@link org.easybatch.integration.quartz.BatchJobScheduler#scheduleAt(Engine, java.util.Date)}</li>
+ * <li>Repeatedly with predefined interval using {@link org.easybatch.integration.quartz.BatchJobScheduler#scheduleAtWithInterval(Engine, java.util.Date, int)}</li>
+ * <li>Using unix cron-like expression with {@link org.easybatch.integration.quartz.BatchJobScheduler#scheduleCron(Engine, String)}</li>
  * </ul>
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
@@ -59,11 +59,14 @@ public class Launcher {
                 .processor(new TweetProcessor())
                 .build();
 
-        // Schedule the engine to start now and run every minute
-        BatchJobScheduler scheduler = new BatchJobScheduler(engine);
-        scheduler.scheduleAtWithInterval(new Date(), 1);
+        // Schedule the engine to start now and run every 10 seconds
+        BatchJobScheduler scheduler = BatchJobScheduler.getInstance();
+        scheduler.scheduleAtWithInterval(engine, new Date(), 10);
         scheduler.start();
 
+        System.out.println("Hit enter to stop the application");
+        System.in.read();
+        scheduler.stop();
     }
 
 }

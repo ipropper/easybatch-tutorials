@@ -43,8 +43,9 @@ public class TransactionProcessingEventListener implements RecordProcessorEventL
     private static final Logger LOGGER = Logger.getLogger(TweetLoader.class.getName());
 
     @Override
-    public void beforeRecordProcessing(Object record) {
+    public Object beforeRecordProcessing(Object record) {
         DatabaseUtil.getCurrentSession().beginTransaction();
+        return record;
     }
 
     @Override
