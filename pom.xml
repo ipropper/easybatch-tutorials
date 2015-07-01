@@ -4,7 +4,7 @@
 
     <groupId>org.easybatch</groupId>
     <artifactId>easybatch-tutorials</artifactId>
-    <version>3.0.3-SNAPSHOT</version>
+    <version>3.0.3</version>
     <packaging>jar</packaging>
 
     <name>easybatch-tutorials</name>
@@ -700,10 +700,5 @@
         </profile>
 
     </profiles>
-<repositories>
-    <repository>
-        <id>ossrh</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </repository>
-</repositories>
+
 </project>
