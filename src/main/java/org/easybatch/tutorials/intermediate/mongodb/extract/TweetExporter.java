@@ -31,6 +31,8 @@ import org.easybatch.core.api.RecordProcessor;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
+
 /**
  * A processor that writes tweets to an output stream.
  *
@@ -52,7 +54,7 @@ public class TweetExporter implements RecordProcessor<Tweet, Tweet> {
     public Tweet processRecord(Tweet tweet) throws RecordProcessingException {
         try {
             outputStream.write(xStream.toXML(tweet).getBytes());
-            outputStream.write("\n".getBytes());
+            outputStream.write(LINE_SEPARATOR.getBytes());
             return tweet;
         } catch (IOException e) {
             throw new RecordProcessingException("Unable to process tweet " + tweet, e);

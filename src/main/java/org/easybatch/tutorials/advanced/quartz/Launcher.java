@@ -32,6 +32,8 @@ import org.easybatch.tutorials.basic.helloworld.TweetProcessor;
 
 import java.util.Date;
 
+import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
+
 /**
  * Main class to run the Hello World tutorial repeatedly every minute using easy batch - quartz integration module.<br/>
  *
@@ -50,7 +52,7 @@ public class Launcher {
 
         // Create the data source
         String dataSource =
-                "1,foo,easy batch rocks! #EasyBatch\n" +
+                "1,foo,easy batch rocks! #EasyBatch" + LINE_SEPARATOR +
                 "2,bar,@foo I do confirm :-)";
 
         // Build a batch engine

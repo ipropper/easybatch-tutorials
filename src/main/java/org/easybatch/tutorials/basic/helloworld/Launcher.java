@@ -29,6 +29,8 @@ import org.easybatch.core.api.Report;
 import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.core.reader.StringRecordReader;
 
+import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
+
 /**
 * Main class to run the hello world tutorial.
  *
@@ -40,7 +42,7 @@ public class Launcher {
 
         // Create the String data source
         String dataSource =
-                "1,foo,easy batch rocks! #EasyBatch\n" +
+                "1,foo,easy batch rocks! #EasyBatch" + LINE_SEPARATOR +
                 "2,bar,@foo I do confirm :-)";
 
         // Build a batch engine

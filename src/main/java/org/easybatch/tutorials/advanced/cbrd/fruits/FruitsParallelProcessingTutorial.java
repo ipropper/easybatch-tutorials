@@ -40,6 +40,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import static java.util.Arrays.asList;
 import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
+import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
 
 /**
 * Main class to run the content based record dispatching tutorial.
@@ -52,7 +53,11 @@ public class FruitsParallelProcessingTutorial {
 
     public static void main(String[] args) throws Exception {
 
-        String fruits = "1,apple\n2,orange\n3,banana\n4,apple\n5,pear";
+        String fruits = "1,apple" + LINE_SEPARATOR +
+                "2,orange" + LINE_SEPARATOR +
+                "3,banana" + LINE_SEPARATOR +
+                "4,apple" + LINE_SEPARATOR +
+                "5,pear";
 
         // Create queues
         BlockingQueue<Record> appleQueue = new LinkedBlockingQueue<Record>();

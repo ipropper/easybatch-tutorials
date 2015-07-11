@@ -29,6 +29,8 @@ import org.easybatch.core.api.event.job.JobEventListener;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
+
 /**
  * A batch event listener to write a wrapper tag around tweets and close the output stream.
  *
@@ -45,8 +47,8 @@ public class TweetExporterBatchEventListener implements JobEventListener {
     @Override
     public void beforeJobStart() {
         try {
-            outputStream.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".getBytes());
-            outputStream.write("<tweets>\n".getBytes());
+            outputStream.write(("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + LINE_SEPARATOR).getBytes());
+            outputStream.write(("<tweets>" + LINE_SEPARATOR).getBytes());
         } catch (IOException e) {
             throw new RuntimeException("Unable to write output stream header", e);
         }
