@@ -30,6 +30,8 @@ import org.easybatch.core.api.RecordProcessor;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
+
 /**
  * A record processor that prints input records to an output stream.
  *
@@ -47,7 +49,7 @@ public class OutputProcessor implements RecordProcessor<String, String> {
     public String processRecord(String record) throws RecordProcessingException {
         try {
             outputStream.write(record.getBytes());
-            outputStream.write(System.getProperty("line.separator").getBytes());
+            outputStream.write(LINE_SEPARATOR.getBytes());
         } catch (IOException e) {
             throw new RecordProcessingException("Unable to write record to output stream", e);
         }

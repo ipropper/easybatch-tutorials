@@ -35,6 +35,9 @@ import org.easybatch.integration.mongodb.MongoDBRecordReader;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
+import static org.easybatch.core.util.Utils.FILE_SEPARATOR;
+import static org.easybatch.core.util.Utils.JAVA_IO_TMPDIR;
+
 /**
  * Main class to export tweets from MongoDB to an XML file.
  *
@@ -51,7 +54,7 @@ public class Launcher {
         DBCollection tweetsCollections = mongoClient.getDB("test").getCollection("tweets");
 
         // create output file tweets.xml
-        String outputDirectory = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator");
+        String outputDirectory = JAVA_IO_TMPDIR + FILE_SEPARATOR;
         String fileName = outputDirectory + "tweets.xml";
         OutputStream tweets = new FileOutputStream(fileName);
 
