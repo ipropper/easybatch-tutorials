@@ -26,7 +26,7 @@ package org.easybatch.tutorials.basic.filterMapReduce;
 
 import org.easybatch.core.api.Engine;
 import org.easybatch.core.api.Report;
-import org.easybatch.core.reader.ListRecordReader;
+import org.easybatch.core.reader.IterableRecordReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class FilterMapReduceTutorial {
 
         // Build a batch engine
         Engine engine = aNewEngine()
-                .reader(new ListRecordReader<Person>(dataSource))
+                .reader(new IterableRecordReader<Person>(dataSource))
                 .filter(new CountryFilter("france"))
                 .mapper(new AgeMapper())
                 .processor(new MinCalculator())
@@ -71,7 +71,7 @@ public class FilterMapReduceTutorial {
          */
 
         report = aNewEngine()
-                .reader(new ListRecordReader<Person>(dataSource))
+                .reader(new IterableRecordReader<Person>(dataSource))
                 .processor(new GroupByCountry())
                 .build().call();
 
