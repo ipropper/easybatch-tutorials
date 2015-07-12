@@ -32,15 +32,15 @@ import java.io.OutputStream;
 import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
 
 /**
- * A batch event listener to write a wrapper tag around tweets and close the output stream.
+ * A job event listener to write a wrapper tag around tweets and close the output stream.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class TweetExporterBatchEventListener implements JobEventListener {
+public class TweetExporterJobEventListener implements JobEventListener {
 
     private OutputStream outputStream;
 
-    public TweetExporterBatchEventListener(OutputStream outputStream) {
+    public TweetExporterJobEventListener(OutputStream outputStream) {
         this.outputStream = outputStream;
     }
 
