@@ -71,6 +71,12 @@
 
         <dependency>
             <groupId>org.easybatch</groupId>
+            <artifactId>easybatch-hibernate</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.easybatch</groupId>
             <artifactId>easybatch-validation</artifactId>
             <version>${project.version}</version>
         </dependency>
