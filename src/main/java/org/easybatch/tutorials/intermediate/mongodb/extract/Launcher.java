@@ -51,7 +51,7 @@ public class Launcher {
 
         // create a mongo client
         MongoClient mongoClient = new MongoClient();
-        DBCollection tweetsCollections = mongoClient.getDB("test").getCollection("tweets");
+        DBCollection tweetsCollection = mongoClient.getDB("test").getCollection("tweets");
 
         // create output file tweets.xml
         String outputDirectory = JAVA_IO_TMPDIR + FILE_SEPARATOR;
@@ -59,7 +59,7 @@ public class Launcher {
         OutputStream tweets = new FileOutputStream(fileName);
 
         Engine engine = new EngineBuilder()
-                .reader(new MongoDBRecordReader(tweetsCollections, new BasicDBObject()))
+                .reader(new MongoDBRecordReader(tweetsCollection, new BasicDBObject()))
                 .mapper(new MongoDBRecordMapper<Tweet>(Tweet.class))
                 .processor(new TweetExporter(tweets))
                 .jobEventListener(new TweetExporterBatchEventListener(tweets))
