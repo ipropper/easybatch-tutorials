@@ -30,7 +30,6 @@ import org.easybatch.core.reader.StringRecordReader;
 import java.util.Map;
 
 import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
-import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
 
 /**
 * Main class to run the word count tutorial.
@@ -44,8 +43,8 @@ public class Launcher {
 
         // Create a data source
         String dataSource =
-                "big data is often" + LINE_SEPARATOR +
-                "not so big";
+                "Spring batch is cool but a bit complex\n" +
+                "Easy batch is cool too, but easier";
 
         // Build and run a batch engine
         Report report = aNewEngine()

@@ -29,8 +29,6 @@ import org.easybatch.tutorials.advanced.jms.JMSUtil;
 
 import java.net.InetSocketAddress;
 
-import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
-
 public class RestEndpointRecordDispatcherLauncher {
 
     public static void main(String[] args) throws Exception {
@@ -42,8 +40,8 @@ public class RestEndpointRecordDispatcherLauncher {
         server.setExecutor(null); // create a default executor
         server.start();
 
-        System.out.println("Record dispatcher started." + LINE_SEPARATOR +
-                "Listening for incoming records on http://localhost:8000/api/orders" + LINE_SEPARATOR +
+        System.out.println("Record dispatcher started.\n" +
+                "Listening for incoming records on http://localhost:8000/api/orders\n" +
                 "Hit enter to stop the application...");
 
         System.in.read();

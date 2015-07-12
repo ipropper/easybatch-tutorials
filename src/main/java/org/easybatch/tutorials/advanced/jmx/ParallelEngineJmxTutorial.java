@@ -35,7 +35,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static java.util.Arrays.asList;
-import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
 
 /**
  * Main class to run the parallel JMX tutorial.
@@ -50,15 +49,15 @@ public class ParallelEngineJmxTutorial {
 
         // Create the String data source
         String dataSource =
-                "1,foo,easy batch rocks! #EasyBatch" + LINE_SEPARATOR +
-                "2,bar,@foo I do confirm :-)" + LINE_SEPARATOR +
-                "3,baz,@foo @bar what are you talking about? Am I in trouble?" + LINE_SEPARATOR +
-                "4,foo,@baz yes you are in trouble!" + LINE_SEPARATOR +
-                "5,bar,@baz It's about easy batch. See in here: http://www.easybatch.org cc @md_benhassine" + LINE_SEPARATOR +
-                "6,baz,@foo @bar @md_benhassine Oh damn that's really easy!" + LINE_SEPARATOR +
-                "7,md_benhassine,Thank you all! your feedback is welcome :-)" + LINE_SEPARATOR +
-                "8,foo,@md_benhassine Have you some benchmarks out there?" + LINE_SEPARATOR +
-                "9,md_benhassine,@foo yep check them out here: https://github.com/EasyBatch/easybatch-benchmarks" + LINE_SEPARATOR +
+                "1,foo,easy batch rocks! #EasyBatch\n" +
+                "2,bar,@foo I do confirm :-)\n" +
+                "3,baz,@foo @bar what are you talking about? Am I in trouble?\n" +
+                "4,foo,@baz yes you are in trouble!\n" +
+                "5,bar,@baz It's about easy batch. See in here: http://www.easybatch.org cc @md_benhassine\n" +
+                "6,baz,@foo @bar @md_benhassine Oh damn that's really easy!\n" +
+                "7,md_benhassine,Thank you all! your feedback is welcome :-)\n" +
+                "8,foo,@md_benhassine Have you some benchmarks out there?\n" +
+                "9,md_benhassine,@foo yep check them out here: https://github.com/EasyBatch/easybatch-benchmarks\n" +
                 "10,foo,@md_benhassine I'll see there thx!";
 
         // Build worker engines
