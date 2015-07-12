@@ -30,6 +30,7 @@ import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.integration.hibernate.HibernateRecordWriter;
 import org.easybatch.integration.hibernate.HibernateTransactionJobListener;
 import org.easybatch.integration.hibernate.HibernateTransactionStepListener;
+import org.easybatch.tutorials.common.DatabaseUtil;
 import org.easybatch.tutorials.common.Tweet;
 import org.easybatch.validation.BeanValidationRecordValidator;
 import org.hibernate.Session;
@@ -39,7 +40,7 @@ import java.io.File;
 import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
 
 /**
-* Main class to run the data loading tutorial.
+* Main class to run the Hibernate tutorial.
  *
 * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
 */

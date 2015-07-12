@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.intermediate.hibernate;
+package org.easybatch.tutorials.common;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -59,7 +59,9 @@ public class DatabaseUtil {
     }
 
     public static void closeSessionFactory() {
-        sessionFactory.close();
+        if (sessionFactory != null) {
+            sessionFactory.close();
+        }
     }
 
     /*
@@ -130,9 +132,7 @@ public class DatabaseUtil {
     }
 
     public static void executeQuery(Connection connection, String query) throws SQLException {
-
-        Statement statement;
-        statement = connection.createStatement();
+        Statement statement = connection.createStatement();
         int i = statement.executeUpdate(query);
         if (i == -1) {
             System.err.println("database error : " + query);
