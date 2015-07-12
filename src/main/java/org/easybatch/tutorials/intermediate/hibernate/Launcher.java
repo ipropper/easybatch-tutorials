@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.intermediate.load;
+package org.easybatch.tutorials.intermediate.hibernate;
 
 import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.flatfile.DelimitedRecordMapper;

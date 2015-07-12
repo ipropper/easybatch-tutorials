@@ -27,7 +27,7 @@ package org.easybatch.tutorials.intermediate.elasticsearch;
 import org.easybatch.jdbc.JdbcRecordMapper;
 import org.easybatch.jdbc.JdbcRecordReader;
 import org.easybatch.tutorials.common.Tweet;
-import org.easybatch.tutorials.intermediate.load.DatabaseUtil;
+import org.easybatch.tutorials.intermediate.hibernate.DatabaseUtil;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilders;

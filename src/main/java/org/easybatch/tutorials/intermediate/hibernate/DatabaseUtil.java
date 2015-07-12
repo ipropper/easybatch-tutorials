@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.intermediate.load;
+package org.easybatch.tutorials.intermediate.hibernate;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -52,7 +52,7 @@ public class DatabaseUtil {
 
     public static void initializeSessionFactory() {
         Configuration configuration = new Configuration();
-        configuration.configure("/org/easybatch/tutorials/intermediate/load/hibernate.cfg.xml");
+        configuration.configure("/org/easybatch/tutorials/intermediate/hibernate/hibernate.cfg.xml");
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties()).build();
         sessionFactory = configuration.buildSessionFactory(serviceRegistry);
