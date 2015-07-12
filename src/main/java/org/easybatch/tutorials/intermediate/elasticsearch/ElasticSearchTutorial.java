@@ -24,8 +24,6 @@
 
 package org.easybatch.tutorials.intermediate.elasticsearch;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.jdbc.JdbcRecordMapper;
 import org.easybatch.jdbc.JdbcRecordReader;
 import org.easybatch.tutorials.common.Tweet;
@@ -37,6 +35,8 @@ import org.elasticsearch.node.Node;
 import org.elasticsearch.search.SearchHit;
 
 import java.sql.Connection;
+
+import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
 
 /**
  * Main class to launch Elastic search tutorial.
@@ -50,23 +50,23 @@ public class ElasticSearchTutorial {
         /*
          * Start embedded database server
          */
-        Connection connection = DatabaseUtil.startEmbeddedDatabase();
-        DatabaseUtil.populateTweetTable(connection);
+        DatabaseUtil.startEmbeddedDatabase();
+        DatabaseUtil.populateTweetTable();
 
         //start embedded elastic search node
         Node node = ElasticSearchUtils.startEmbeddedNode();
         Client client = node.client();
 
-        // Build a batch engine
-        Engine engine = new EngineBuilder()
+        // get a connection to the database
+        Connection connection = DatabaseUtil.getConnection();
+
+        // Build and run the batch engine
+        aNewEngine()
                 .reader(new JdbcRecordReader(connection, "select * from tweet"))
                 .mapper(new JdbcRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
                 .processor(new TweetTransformer())
                 .processor(new TweetIndexer(client))
-                .build();
-
-        // Run the batch engine
-        engine.call();
+                .build().call();
 
         //check if tweets have been successfully indexed in elastic search
         node.client().admin().indices().prepareRefresh().execute().actionGet();
@@ -83,7 +83,6 @@ public class ElasticSearchTutorial {
         ElasticSearchUtils.stopEmbeddedNode(node);
 
         //shutdown embedded database
-        DatabaseUtil.shutDown(connection);
         DatabaseUtil.cleanUpWorkingDirectory();
     }
 
