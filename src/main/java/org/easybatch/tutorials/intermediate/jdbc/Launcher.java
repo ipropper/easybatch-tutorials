@@ -24,27 +24,25 @@
 
 package org.easybatch.tutorials.intermediate.jdbc;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-import org.easybatch.core.api.Record;
-import org.easybatch.integration.apache.common.csv.ApacheCommonCsvRecord;
-import org.easybatch.integration.apache.common.csv.ApacheCommonCsvRecordReader;
+import org.easybatch.core.filter.HeaderRecordFilter;
+import org.easybatch.flatfile.DelimitedRecordMapper;
+import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.jdbc.JdbcRecordWriter;
 import org.easybatch.jdbc.PreparedStatementProvider;
 import org.easybatch.tutorials.common.DatabaseUtil;
+import org.easybatch.tutorials.common.Tweet;
 
 import java.io.File;
-import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import static java.lang.Integer.parseInt;
 import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
 
 /**
  * Main class to run the JDBC tutorial.
+ *
+ * The goal is to read tweets from a CSV file and load them in a relational database.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
@@ -58,28 +56,25 @@ public class Launcher {
         //Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
 
-        //Setup the Apache Commons CSV reader
-        CSVParser parser = new CSVParser(new FileReader(tweets), CSVFormat.DEFAULT.withHeader("id", "user", "message"));
-        ApacheCommonCsvRecordReader recordReader = new ApacheCommonCsvRecordReader(parser);
-
         //Setup the JDBC writer
         Connection connection = DatabaseUtil.getConnection();
         String query = "INSERT INTO tweet VALUES (?,?,?);";
         JdbcRecordWriter jdbcRecordWriter = new JdbcRecordWriter(connection, query, new PreparedStatementProvider() {
             @Override
-            public void prepareStatement(PreparedStatement preparedStatement, Record record) throws SQLException {
-                CSVRecord csvRecord = ((ApacheCommonCsvRecord) record).getPayload();
-                preparedStatement.setInt(1, parseInt(csvRecord.get("id")));
-                preparedStatement.setString(2, csvRecord.get("user"));
-                preparedStatement.setString(3, csvRecord.get("message"));
+            public void prepareStatement(PreparedStatement preparedStatement, Object record) throws SQLException {
+                Tweet tweet = (Tweet) record;
+                preparedStatement.setInt(1, tweet.getId());
+                preparedStatement.setString(2, tweet.getUser());
+                preparedStatement.setString(3, tweet.getMessage());
             }
         });
 
         // Build and run a batch engine
         aNewEngine()
-                .reader(recordReader)
-                .skip(1)
-                .processor(jdbcRecordWriter)
+                .reader(new FlatFileRecordReader(tweets))
+                .filter(new HeaderRecordFilter())
+                .mapper(new DelimitedRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
+                .writer(jdbcRecordWriter)
                 .build().call();
 
         // Dump tweet table to check inserted data
