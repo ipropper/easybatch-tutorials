@@ -83,6 +83,33 @@ public class Launcher {
         // Shutdown embedded database server and delete temporary files
         DatabaseUtil.cleanUpWorkingDirectory();
 
+        /*
+         * The example above creates and commits a database transaction for every written record.
+         * If your application is performance sensitive, you may consider to commit a transaction for every X records.
+         * Here is how to do that:
+         *
+         * 1. Disable the autocommit in the connection : connection.setAutoCommit(false);
+         * 2. Register a JdbcTransactionStepListener to commit a transaction after every X records
+         * 3. Register a JdbcTransactionJobListener to commit the last records if any
+         *
+         * Putting it all together:
+         *
+         * Connection connection = DatabaseUtil.getConnection();
+         * connection.setAutoCommit(false);
+         * int commitInterval = 2;
+         *
+         * //Setup of the JDBC writer remains the same
+         *
+         * aNewEngine()
+                .reader(new FlatFileRecordReader(tweets))
+                .filter(new HeaderRecordFilter())
+                .mapper(new DelimitedRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
+                .writer(jdbcRecordWriter)
+                .recordProcessorEventListener(new JdbcTransactionStepListener(connection, commitInterval))
+                .jobEventListener(new JdbcTransactionJobListener(connection, true))
+                .build().call();
+         */
+
     }
 
 }
