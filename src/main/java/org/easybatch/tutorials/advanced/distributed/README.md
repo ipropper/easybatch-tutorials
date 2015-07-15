@@ -57,4 +57,4 @@ You can send arbitrary requests to `http://localhost:8000/api/orders` using `cur
 * Navigate to the `org.easybatch.tutorials.advanced.jms` package
 * Run the `org.easybatch.tutorials.advanced.jms.Launcher` class without any argument to launch the engine.
 * Navigate to the `org.easybatch.tutorials.advanced.distributed` package
-* Run the `org.easybatch.tutorials.advanced.distributed.RestEndpointRecordDispatcherLauncher` class without any argument to launch the rest endpoint listener.
+* Run the `org.easybatch.tutorials.advanced.distributed.Launcher` class without any argument to launch the rest endpoint listener.

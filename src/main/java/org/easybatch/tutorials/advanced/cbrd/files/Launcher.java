@@ -22,17 +22,20 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.advanced.cbrd.fruits;
+package org.easybatch.tutorials.advanced.cbrd.files;
 
 import org.easybatch.core.api.Engine;
 import org.easybatch.core.api.Record;
 import org.easybatch.core.dispatcher.ContentBasedRecordDispatcher;
 import org.easybatch.core.dispatcher.ContentBasedRecordDispatcherBuilder;
 import org.easybatch.core.dispatcher.PoisonRecordBroadcaster;
+import org.easybatch.core.filter.FileExtensionFilter;
 import org.easybatch.core.filter.PoisonRecordFilter;
+import org.easybatch.core.reader.FileRecordReader;
 import org.easybatch.core.reader.QueueRecordReader;
-import org.easybatch.core.reader.StringRecordReader;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,55 +43,48 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import static java.util.Arrays.asList;
 import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
-import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
 
 /**
 * Main class to run the content based record dispatching tutorial.
  *
 * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
 */
-public class FruitsParallelProcessingTutorial {
+public class Launcher {
 
-    private static final int THREAD_POOL_SIZE = 4;
+    private static final int THREAD_POOL_SIZE = 3;
 
     public static void main(String[] args) throws Exception {
 
-        String fruits = "1,apple" + LINE_SEPARATOR +
-                "2,orange" + LINE_SEPARATOR +
-                "3,banana" + LINE_SEPARATOR +
-                "4,apple" + LINE_SEPARATOR +
-                "5,pear";
+        File directory = new File(args[0]);
 
         // Create queues
-        BlockingQueue<Record> appleQueue = new LinkedBlockingQueue<Record>();
-        BlockingQueue<Record> orangeQueue = new LinkedBlockingQueue<Record>();
-        BlockingQueue<Record> defaultQueue = new LinkedBlockingQueue<Record>();
+        BlockingQueue<Record> csvQueue = new LinkedBlockingQueue<Record>();
+        BlockingQueue<Record> xmlQueue = new LinkedBlockingQueue<Record>();
 
-        // Create a content based record dispatcher to dispatch records to according queues based on their content
+        // Create a content based record dispatcher to dispatch records based on their content
         ContentBasedRecordDispatcher recordDispatcher = new ContentBasedRecordDispatcherBuilder()
-                .when(new AppleRecordPredicate()).dispatchTo(appleQueue)
-                .when(new OrangeRecordPredicate()).dispatchTo(orangeQueue)
-                .otherwise(defaultQueue)
+                .when(new CsvFilePredicate()).dispatchTo(csvQueue)
+                .when(new XmlFilePredicate()).dispatchTo(xmlQueue)
                 .build();
 
-        // Build a master engine that will read records from the data source and dispatch them to worker engines
+        // Build a master engine that will read files from the directory and dispatch them to worker engines
         Engine masterEngine = aNewEngine()
                 .named("master-engine")
-                .reader(new StringRecordReader(fruits))
+                .reader(new FileRecordReader(directory))
+                .filter(new FileExtensionFilter(Arrays.asList(".log", ".tmp")))
                 .processor(recordDispatcher)
                 .jobEventListener(new PoisonRecordBroadcaster(recordDispatcher))
                 .build();
 
         // Build easy batch engines
-        Engine workerEngine1 = buildWorkerEngine(appleQueue, "apple-worker-engine");
-        Engine workerEngine2 = buildWorkerEngine(orangeQueue, "orange-worker-engine");
-        Engine workerEngine3 = buildWorkerEngine(defaultQueue, "default-worker-engine");
+        Engine workerEngine1 = buildWorkerEngine(csvQueue, "csv-worker-engine");
+        Engine workerEngine2 = buildWorkerEngine(xmlQueue, "xml-worker-engine");
 
         // Create a threads pool to call Easy Batch engines in parallel
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
         // Submit master and worker engines to executor service
-        executorService.invokeAll(asList(masterEngine, workerEngine1, workerEngine2, workerEngine3));
+        executorService.invokeAll(asList(masterEngine, workerEngine1, workerEngine2));
 
         // Shutdown executor service
         executorService.shutdown();
@@ -100,7 +96,7 @@ public class FruitsParallelProcessingTutorial {
                 .named(engineName)
                 .reader(new QueueRecordReader(queue))
                 .filter(new PoisonRecordFilter())
-                .processor(new FruitProcessor())
+                .processor(new DummyFileProcessor())
                 .build();
     }
 

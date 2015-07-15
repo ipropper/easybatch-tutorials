@@ -469,7 +469,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.intermediate.elasticsearch.ElasticSearchTutorial</mainClass>
+                            <mainClass>org.easybatch.tutorials.intermediate.elasticsearch.Launcher</mainClass>
                             <systemProperties>
                                 <systemProperty>
                                     <key>java.util.logging.SimpleFormatter.format</key>
@@ -586,7 +586,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.cbrd.fruits.FruitsParallelProcessingTutorial</mainClass>
+                            <mainClass>org.easybatch.tutorials.advanced.cbrd.fruits.Launcher</mainClass>
                             <systemProperties>
                                 <systemProperty>
                                     <key>java.util.logging.SimpleFormatter.format</key>
@@ -609,7 +609,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.cbrd.files.FilesParallelProcessingTutorial</mainClass>
+                            <mainClass>org.easybatch.tutorials.advanced.cbrd.files.Launcher</mainClass>
                             <systemProperties>
                                 <systemProperty>
                                     <key>java.util.logging.SimpleFormatter.format</key>
@@ -770,7 +770,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.distributed.RestEndpointRecordDispatcherLauncher</mainClass>
+                            <mainClass>org.easybatch.tutorials.advanced.distributed.Launcher</mainClass>
                             <systemProperties>
                                 <systemProperty>
                                     <key>java.util.logging.SimpleFormatter.format</key>

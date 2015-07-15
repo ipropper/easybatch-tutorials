@@ -40,4 +40,4 @@ $>mvn exec:java -PrunFilesParallelProcessingTutorial
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
 * Navigate to the `org.easybatch.tutorials.advanced.cbrd.files` package
-* Run the `org.easybatch.tutorials.advanced.cbrd.files.FilesParallelProcessingTutorial` class without any argument
+* Run the `org.easybatch.tutorials.advanced.cbrd.files.Launcher` class without any argument

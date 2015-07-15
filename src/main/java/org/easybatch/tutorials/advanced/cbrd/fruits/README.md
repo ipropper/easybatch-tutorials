@@ -39,4 +39,4 @@ $>mvn exec:java -PrunFruitsParallelProcessingTutorial
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
 * Navigate to the `org.easybatch.tutorials.advanced.cbrd.fruits` package
-* Run the `org.easybatch.tutorials.advanced.cbrd.fruits.FruitsParallelProcessingTutorial` class without any argument
+* Run the `org.easybatch.tutorials.advanced.cbrd.fruits.Launcher` class without any argument

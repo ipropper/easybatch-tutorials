@@ -31,7 +31,7 @@ import java.net.InetSocketAddress;
 
 import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
 
-public class RestEndpointRecordDispatcherLauncher {
+public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
