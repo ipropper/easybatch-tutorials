@@ -66,7 +66,7 @@ public class Launcher {
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
                 .validator(new BeanValidationRecordValidator<Tweet>())
-                .processor(new HibernateRecordWriter(session))
+                .writer(new HibernateRecordWriter(session))
                 .recordProcessorEventListener(new HibernateTransactionStepListener(session, COMMIT_INTERVAL))
                 .jobEventListener(new HibernateTransactionJobListener(session, true))
                 .build().call();
