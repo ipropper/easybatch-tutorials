@@ -37,5 +37,5 @@ $>mvn exec:java -PrunHibernateTutorial
 
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
-* Navigate to the `org.easybatch.tutorials.intermediate.load` package
+* Navigate to the `org.easybatch.tutorials.intermediate.hibernate` package
 * Run the `org.easybatch.tutorials.intermediate.hibernate.Launcher` class without any argument

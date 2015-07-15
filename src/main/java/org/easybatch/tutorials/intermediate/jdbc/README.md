@@ -37,5 +37,5 @@ $>mvn exec:java -PrunJdbcTutorial
 
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
-* Navigate to the `org.easybatch.tutorials.intermediate.load` package
+* Navigate to the `org.easybatch.tutorials.intermediate.jdbc` package
 * Run the `org.easybatch.tutorials.intermediate.jdbc.Launcher` class without any argument
