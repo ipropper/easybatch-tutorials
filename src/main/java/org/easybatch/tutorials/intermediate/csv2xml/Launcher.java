@@ -1,13 +1,11 @@
 package org.easybatch.tutorials.intermediate.csv2xml;
 
-import com.thoughtworks.xstream.XStream;
-import org.easybatch.core.api.RecordProcessingException;
-import org.easybatch.core.api.RecordProcessor;
 import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.writer.FileRecordWriter;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tutorials.common.Tweet;
+import org.easybatch.xml.XmlRecordMarshaller;
 import org.easybatch.xml.XmlWrapperTagWriter;
 
 import java.io.File;
@@ -33,25 +31,11 @@ public class Launcher {
                 .reader(new FlatFileRecordReader(csvTweets))
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
-                .processor(new TweetToXmlTransformer())
+                .processor(new XmlRecordMarshaller(Tweet.class))
                 .writer(new FileRecordWriter(xmlTweetsWriter))
                 .jobEventListener(new XmlWrapperTagWriter(xmlTweetsWriter, "tweets"))
                 .build().call();
 
     }
 
-    private static class TweetToXmlTransformer implements RecordProcessor<Tweet, String> {
-
-        private XStream xStream;
-
-        public TweetToXmlTransformer() {
-            xStream = new XStream();
-            xStream.alias("tweet", Tweet.class);
-        }
-
-        @Override
-        public String processRecord(Tweet tweet) throws RecordProcessingException {
-            return xStream.toXML(tweet);
-        }
-    }
 }
