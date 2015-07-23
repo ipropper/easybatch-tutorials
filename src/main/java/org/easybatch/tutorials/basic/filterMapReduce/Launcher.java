@@ -38,7 +38,7 @@ import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class FilterMapReduceTutorial {
+public class Launcher {
 
     public static void main(String[] args) throws Exception {
 

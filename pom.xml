@@ -308,7 +308,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.basic.filterMapReduce.FilterMapReduceTutorial</mainClass>
+                            <mainClass>org.easybatch.tutorials.basic.filterMapReduce.Launcher</mainClass>
                             <systemProperties>
                                 <systemProperty>
                                     <key>java.util.logging.SimpleFormatter.format</key>

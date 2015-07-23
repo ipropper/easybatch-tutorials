@@ -38,4 +38,4 @@ $>mvn exec:java -PrunFilterMapReduceTutorial
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
 * Navigate to the `org.easybatch.tutorials.basic.pipeline.filterMapReduce` package
-* Run the `org.easybatch.tutorials.basic.pipeline.filterMapReduce.FilterMapReduceTutorial` class without any argument
+* Run the `org.easybatch.tutorials.basic.pipeline.filterMapReduce.Launcher` class without any argument
