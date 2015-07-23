@@ -26,7 +26,7 @@ public class Launcher {
         List<String> dataSource = Arrays.asList("foo", "bar", "baz", "toto", "titi");
 
         aNewEngine()
-                .reader(new IterableMultiRecordReader<String>(CHUNK_SIZE, dataSource))
+                .reader(new IterableMultiRecordReader<String>(dataSource, CHUNK_SIZE))
                 .processor(new MultiRecordProcessor())
                 .build().call();
     }
