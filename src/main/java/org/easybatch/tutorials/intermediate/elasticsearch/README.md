@@ -38,4 +38,4 @@ $>mvn exec:java -PrunElasticSearchTutorial
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
 * Navigate to the `org.easybatch.tutorials.intermediate.elasticsearch` package
-* Run the `org.easybatch.tutorials.intermediate.elasticsearch.ElasticSearchTutorial` class without any argument
+* Run the `org.easybatch.tutorials.intermediate.elasticsearch.Launcher` class without any argument

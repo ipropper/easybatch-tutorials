@@ -16,7 +16,7 @@
         <property name="current_session_context_class">thread</property>
 
         <!-- mapping files -->
-        <mapping resource="org/easybatch/tutorials/intermediate/load/Tweet.hbm.xml"/>
+        <mapping resource="org/easybatch/tutorials/intermediate/hibernate/Tweet.hbm.xml"/>
 
     </session-factory>
 

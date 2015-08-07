@@ -22,11 +22,12 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.intermediate.load;
+package org.easybatch.tutorials.common;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 
 import java.io.File;
 import java.sql.*;
@@ -37,6 +38,8 @@ import java.sql.*;
 public class DatabaseUtil {
 
     private static final String DATABASE_URL = "jdbc:hsqldb:mem";
+    private static final String USER = "sa";
+    private static final String PASSWORD = "pwd";
 
     /*
      * Hibernate related utilities
@@ -48,18 +51,22 @@ public class DatabaseUtil {
     }
 
     public static void initializeSessionFactory() {
-        sessionFactory = new Configuration()
-                .configure("/org/easybatch/tutorials/intermediate/load/hibernate.cfg.xml")
-                .buildSessionFactory();
-    }
-
-    public static Session getCurrentSession() {
-        return sessionFactory.getCurrentSession();
+        Configuration configuration = new Configuration();
+        configuration.configure("/org/easybatch/tutorials/intermediate/hibernate/hibernate.cfg.xml");
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                .applySettings(configuration.getProperties()).build();
+        sessionFactory = configuration.buildSessionFactory(serviceRegistry);
     }
 
     public static void closeSessionFactory() {
-        sessionFactory.close();
+        if (sessionFactory != null) {
+            sessionFactory.close();
+        }
     }
+
+    /*
+     * HSQL utility methods
+     */
 
     public static void cleanUpWorkingDirectory() {
         //delete hsqldb tmp files
@@ -69,22 +76,23 @@ public class DatabaseUtil {
         new File("mem.tmp").delete();
     }
 
-    /*
-     * HSQL utility methods
-     */
-
-    public static Connection startEmbeddedDatabase() throws Exception {
-        //do not let hsqldb reconfigure java.util.logging used by easy batch
-        System.setProperty("hsqldb.reconfig_logging", "false");
-        Connection connection = DriverManager.getConnection(DATABASE_URL, "sa", "pwd");
-        createTweetTable(connection);
-        return connection;
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
     }
 
-    public static void createTweetTable(Connection connection) throws Exception{
+    public static void startEmbeddedDatabase() throws Exception {
+        //do not let hsqldb reconfigure java.util.logging used by easy batch
+        System.setProperty("hsqldb.reconfig_logging", "false");
+        createTweetTable();
+    }
+
+    public static void createTweetTable() throws Exception {
+        Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
-        String query = "CREATE TABLE if not exists tweet (\n" +
+        String query = "DROP TABLE IF EXISTS tweet";
+        statement.executeUpdate(query);
+        query = "CREATE TABLE if not exists tweet (\n" +
                 "  id integer NOT NULL PRIMARY KEY,\n" +
                 "  user varchar(32) NOT NULL,\n" +
                 "  message varchar(140) NOT NULL,\n" +
@@ -92,47 +100,43 @@ public class DatabaseUtil {
 
         statement.executeUpdate(query);
         statement.close();
+        connection.close();
     }
 
     public static void dumpTweetTable() throws Exception {
         System.out.println("Loading tweets from the database...");
-            Connection connection = DriverManager.getConnection(DATABASE_URL, "sa", "pwd");
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from tweet");
+        Connection connection = getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("select * from tweet");
 
-            while (resultSet.next()) {
-                System.out.println(
-                        "Tweet : id= " + resultSet.getString("id") + " | " +
-                                "user= " + resultSet.getString("user") + " | " +
-                                "message= " + resultSet.getString("message")
-                );
-            }
+        while (resultSet.next()) {
+            System.out.println(
+                    "Tweet : id= " + resultSet.getString("id") + " | " +
+                            "user= " + resultSet.getString("user") + " | " +
+                            "message= " + resultSet.getString("message")
+            );
+        }
 
-            resultSet.close();
-            statement.close();
-            connection.close();
+        resultSet.close();
+        statement.close();
+        connection.close();
     }
 
-    public static void populateTweetTable(Connection connection) throws Exception {
+    public static void populateTweetTable() throws Exception {
+        Connection connection = getConnection();
         executeQuery(connection,
                 "INSERT INTO tweet VALUES (1,'foo','easy batch rocks! #EasyBatch');");
         executeQuery(connection,
                 "INSERT INTO tweet VALUES (2,'bar','@foo I do confirm :-)');");
-
+        connection.close();
     }
 
     public static void executeQuery(Connection connection, String query) throws SQLException {
-
-        Statement statement;
-        statement = connection.createStatement();
+        Statement statement = connection.createStatement();
         int i = statement.executeUpdate(query);
         if (i == -1) {
             System.err.println("database error : " + query);
         }
         statement.close();
-    }
-
-    public static void shutDown(Connection connection) throws SQLException {
-        connection.close();
     }
 }

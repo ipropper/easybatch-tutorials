@@ -1,9 +1,8 @@
-# Content-Based record dispatcher Tutorial 2
+# Database Tutorial
 
 ## Description
 
-This tutorial is a show case of the `ContentBasedRecordDispatcher` to dispatch fruits based on their type.
-Fruits are processed in parallel using multiple queues.
+This tutorial is an application that reads tweets from flat file and load them in a relational database using JDBC.
 
 ## Pre-requisite
 
@@ -31,12 +30,12 @@ Open a terminal in the directory where you have extracted the source code of the
 ```
 $>cd easybatch-tutorials
 $>mvn install
-$>mvn exec:java -PrunFruitsParallelProcessingTutorial
+$>mvn exec:java -PrunJdbcTutorial
 ```
 
 ### From Your IDE
 
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
-* Navigate to the `org.easybatch.tutorials.advanced.cbrd.fruits` package
-* Run the `org.easybatch.tutorials.advanced.cbrd.fruits.Launcher` class without any argument
+* Navigate to the `org.easybatch.tutorials.intermediate.jdbc` package
+* Run the `org.easybatch.tutorials.intermediate.jdbc.Launcher` class without any argument

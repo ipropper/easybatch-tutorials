@@ -30,15 +30,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * A batch event listener to write a wrapper tag around tweets and close the output stream.
+ * A job event listener to write a wrapper tag around tweets and close the output stream.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class TweetExporterBatchEventListener implements JobEventListener {
+public class TweetExporterJobEventListener implements JobEventListener {
 
     private OutputStream outputStream;
 
-    public TweetExporterBatchEventListener(OutputStream outputStream) {
+    public TweetExporterJobEventListener(OutputStream outputStream) {
         this.outputStream = outputStream;
     }
 

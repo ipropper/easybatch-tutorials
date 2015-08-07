@@ -49,7 +49,7 @@ import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
  *
 * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
 */
-public class FilesParallelProcessingTutorial {
+public class Launcher {
 
     private static final int THREAD_POOL_SIZE = 3;
 

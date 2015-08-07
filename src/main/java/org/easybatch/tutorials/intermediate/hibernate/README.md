@@ -2,7 +2,7 @@
 
 ## Description
 
-This tutorial is an application that reads tweets from flat file and load them in a relational database.
+This tutorial is an application that reads tweets from flat file and load them in a relational database using Hibernate.
 
 ## Pre-requisite
 
@@ -30,12 +30,12 @@ Open a terminal in the directory where you have extracted the source code of the
 ```
 $>cd easybatch-tutorials
 $>mvn install
-$>mvn exec:java -PrunLoadDataTutorial
+$>mvn exec:java -PrunHibernateTutorial
 ```
 
 ### From Your IDE
 
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
-* Navigate to the `org.easybatch.tutorials.intermediate.load` package
-* Run the `org.easybatch.tutorials.intermediate.load.Launcher` class without any argument
+* Navigate to the `org.easybatch.tutorials.intermediate.hibernate` package
+* Run the `org.easybatch.tutorials.intermediate.hibernate.Launcher` class without any argument

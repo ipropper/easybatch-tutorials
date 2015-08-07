@@ -24,12 +24,14 @@
 
 package org.easybatch.tutorials.intermediate.mongodb.load;
 
+import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import org.easybatch.core.api.Engine;
 import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
+import org.easybatch.integration.mongodb.MongoDBRecordWriter;
 import org.easybatch.tutorials.common.Tweet;
 
 import java.io.File;
@@ -45,6 +47,7 @@ public class Launcher {
 
         // create a mongo client, mongod should be up and running on default port (27017)
         MongoClient mongoClient = new MongoClient();
+        DBCollection tweetsCollection = mongoClient.getDB("test").getCollection("tweets");
 
         //load tweets from tweets.csv
         File tweets = new File(Launcher.class
@@ -54,7 +57,8 @@ public class Launcher {
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
-                .processor(new TweetLoader(mongoClient, "test", "tweets"))
+                .processor(new TweetToDBObjectTransformer())
+                .processor(new MongoDBRecordWriter(tweetsCollection))
                 .build();
 
         // Run easy batch engine

@@ -22,32 +22,26 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.advanced.distributed;
+package org.easybatch.tutorials.intermediate.mongodb.load;
 
-import com.sun.net.httpserver.HttpServer;
-import org.easybatch.tutorials.advanced.jms.JMSUtil;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.tutorials.common.Tweet;
 
-import java.net.InetSocketAddress;
+/**
+ * A record processor that transforms a tweet into a MongoDB Object.
+ *
+ * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
+ */
+public class TweetToDBObjectTransformer implements RecordProcessor<Tweet, DBObject> {
 
-public class RestEndpointRecordDispatcherLauncher {
+    @Override
+    public DBObject processRecord(Tweet tweet) {
 
-    public static void main(String[] args) throws Exception {
-
-        JMSUtil.initJMSFactory();
-
-        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-        server.createContext("/api/orders", new RestEndpointRecordDispatcher());
-        server.setExecutor(null); // create a default executor
-        server.start();
-
-        System.out.println("Record dispatcher started.\n" +
-                "Listening for incoming records on http://localhost:8000/api/orders\n" +
-                "Hit enter to stop the application...");
-
-        System.in.read();
-        server.stop(0);
-        JMSUtil.sendPoisonRecord();
-        System.exit(0);
+        return new BasicDBObject()
+                .append("_id", tweet.getId())
+                .append("user", tweet.getUser())
+                .append("message", tweet.getMessage());
     }
-
 }

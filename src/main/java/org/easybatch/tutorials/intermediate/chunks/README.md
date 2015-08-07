@@ -1,9 +1,8 @@
-# Content-Based record dispatcher Tutorial 2
+# Database Tutorial
 
 ## Description
 
-This tutorial is a show case of the `ContentBasedRecordDispatcher` to dispatch fruits based on their type.
-Fruits are processed in parallel using multiple queues.
+This tutorial shows the usage of the `IterableMultiRecordReader` to read records in chunks (multi-records) from an iterable data source.
 
 ## Pre-requisite
 
@@ -31,12 +30,12 @@ Open a terminal in the directory where you have extracted the source code of the
 ```
 $>cd easybatch-tutorials
 $>mvn install
-$>mvn exec:java -PrunFruitsParallelProcessingTutorial
+$>mvn exec:java -PrunMultiRecordTutorial
 ```
 
 ### From Your IDE
 
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
-* Navigate to the `org.easybatch.tutorials.advanced.cbrd.fruits` package
-* Run the `org.easybatch.tutorials.advanced.cbrd.fruits.Launcher` class without any argument
+* Navigate to the `org.easybatch.tutorials.intermediate.chunks` package
+* Run the `org.easybatch.tutorials.intermediate.chunks.Launcher` class without any argument

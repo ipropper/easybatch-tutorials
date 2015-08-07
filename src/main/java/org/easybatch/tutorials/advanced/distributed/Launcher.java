@@ -22,38 +22,34 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.intermediate.mongodb.load;
+package org.easybatch.tutorials.advanced.distributed;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import org.easybatch.core.api.RecordProcessor;
-import org.easybatch.tutorials.common.Tweet;
+import com.sun.net.httpserver.HttpServer;
+import org.easybatch.tutorials.advanced.jms.JMSUtil;
 
-/**
- * A record processor that inserts tweets in MongoDB.
- *
- * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
- */
-public class TweetLoader implements RecordProcessor<Tweet, Tweet> {
+import java.net.InetSocketAddress;
 
-    private DBCollection tweetsCollection;
+import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
 
-    public TweetLoader(MongoClient client, String database,  String collection) {
-        tweetsCollection = client.getDB(database).getCollection(collection);
+public class Launcher {
+
+    public static void main(String[] args) throws Exception {
+
+        JMSUtil.initJMSFactory();
+
+        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+        server.createContext("/api/orders", new RestEndpointRecordDispatcher());
+        server.setExecutor(null); // create a default executor
+        server.start();
+
+        System.out.println("Record dispatcher started.\n" +
+                "Listening for incoming records on http://localhost:8000/api/orders\n" +
+                "Hit enter to stop the application...");
+
+        System.in.read();
+        server.stop(0);
+        JMSUtil.sendPoisonRecord();
+        System.exit(0);
     }
 
-    @Override
-    public Tweet processRecord(Tweet tweet) {
-
-        DBObject dbObject = new BasicDBObject()
-                .append("_id", tweet.getId())
-                .append("user", tweet.getUser())
-                .append("message", tweet.getMessage());
-
-        tweetsCollection.insert(dbObject);
-
-        return tweet;
-    }
 }

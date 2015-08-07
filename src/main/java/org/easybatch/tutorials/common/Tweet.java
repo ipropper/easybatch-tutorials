@@ -26,12 +26,14 @@ package org.easybatch.tutorials.common;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Java bean representing a tweet.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
+@XmlRootElement
 public class Tweet {
 
     private int id;
