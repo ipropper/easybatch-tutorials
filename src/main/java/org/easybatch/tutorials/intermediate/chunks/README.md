@@ -2,7 +2,11 @@
 
 ## Description
 
-This tutorial shows the usage of the `IterableMultiRecordReader` to read records in chunks (multi-records) from an iterable data source.
+This tutorial is an introduction to the MultiRecord API. A multi-record represents a chunk of records.
+ Easy Batch provides several MultiRecordReaders and MultiRecordWriters to read and write records in chunks.
+ 
+This tutorial shows the usage of the `IterableMultiRecordReader` to read multi-records from an iterable data source
+and the `CollectionMultiRecordWriter` to write multi-records to a collection.
 
 ## Pre-requisite
 
