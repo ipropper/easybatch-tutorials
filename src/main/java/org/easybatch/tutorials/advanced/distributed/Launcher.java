@@ -42,7 +42,7 @@ public class Launcher {
         server.setExecutor(null); // create a default executor
         server.start();
 
-        System.out.println("Record dispatcher started.\n" +
+        System.out.println("Record dispatcher started." + LINE_SEPARATOR +
                 "Listening for incoming records on http://localhost:8000/api/orders\n" +
                 "Hit enter to stop the application...");
 
