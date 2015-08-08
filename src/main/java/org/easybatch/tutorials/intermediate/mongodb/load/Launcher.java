@@ -58,7 +58,7 @@ public class Launcher {
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
                 .processor(new TweetToDBObjectTransformer())
-                .processor(new MongoDBRecordWriter(tweetsCollection))
+                .writer(new MongoDBRecordWriter(tweetsCollection))
                 .build();
 
         // Run easy batch engine
