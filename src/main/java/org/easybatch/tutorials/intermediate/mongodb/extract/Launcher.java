@@ -27,14 +27,15 @@ package org.easybatch.tutorials.intermediate.mongodb.extract;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.impl.EngineBuilder;
+import org.easybatch.core.writer.FileRecordWriter;
 import org.easybatch.integration.mongodb.MongoDBRecordMapper;
 import org.easybatch.integration.mongodb.MongoDBRecordReader;
+import org.easybatch.integration.xstream.XstreamRecordMarshaller;
+import org.easybatch.xml.XmlWrapperTagWriter;
 
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.FileWriter;
 
+import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
 import static org.easybatch.core.util.Utils.FILE_SEPARATOR;
 import static org.easybatch.core.util.Utils.JAVA_IO_TMPDIR;
 
@@ -56,17 +57,15 @@ public class Launcher {
         // create output file tweets.xml
         String outputDirectory = JAVA_IO_TMPDIR + FILE_SEPARATOR;
         String fileName = outputDirectory + "tweets.xml";
-        OutputStream tweets = new FileOutputStream(fileName);
+        FileWriter tweets = new FileWriter(fileName);
 
-        Engine engine = new EngineBuilder()
+        aNewEngine()
                 .reader(new MongoDBRecordReader(tweetsCollection, new BasicDBObject()))
                 .mapper(new MongoDBRecordMapper<Tweet>(Tweet.class))
-                .processor(new TweetExporter(tweets))
-                .jobEventListener(new TweetExporterJobEventListener(tweets))
-                .build();
-
-        // run easy batch engine
-        engine.call();
+                .processor(new XstreamRecordMarshaller("tweet", Tweet.class))
+                .processor(new FileRecordWriter(tweets))
+                .jobEventListener(new XmlWrapperTagWriter(tweets, "tweets"))
+                .build().call();
 
         System.out.println("Successfully exported tweets in : " + fileName);
 
