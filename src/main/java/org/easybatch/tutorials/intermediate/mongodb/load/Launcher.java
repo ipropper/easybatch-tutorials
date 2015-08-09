@@ -26,15 +26,16 @@ package org.easybatch.tutorials.intermediate.mongodb.load;
 
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
-import org.easybatch.core.api.Engine;
 import org.easybatch.core.filter.HeaderRecordFilter;
-import org.easybatch.core.impl.EngineBuilder;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.integration.mongodb.MongoDBRecordWriter;
 import org.easybatch.tutorials.common.Tweet;
+import org.easybatch.validation.BeanValidationRecordValidator;
 
 import java.io.File;
+
+import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
 
 /**
  * Main class to run MongoDB tutorial.
@@ -53,16 +54,14 @@ public class Launcher {
         File tweets = new File(Launcher.class
                 .getResource("/org/easybatch/tutorials/basic/keyapis/tweets.csv").toURI());
 
-        Engine engine = new EngineBuilder()
+        aNewEngine()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
+                .validator(new BeanValidationRecordValidator<Tweet>())
                 .processor(new TweetToDBObjectTransformer())
                 .writer(new MongoDBRecordWriter(tweetsCollection))
-                .build();
-
-        // Run easy batch engine
-        engine.call();
+                .build().call();
 
         mongoClient.close();
 
