@@ -63,7 +63,7 @@ public class Launcher {
                 .reader(new MongoDBRecordReader(tweetsCollection, new BasicDBObject()))
                 .mapper(new MongoDBRecordMapper<Tweet>(Tweet.class))
                 .processor(new XstreamRecordMarshaller("tweet", Tweet.class))
-                .processor(new FileRecordWriter(tweets))
+                .writer(new FileRecordWriter(tweets))
                 .jobEventListener(new XmlWrapperTagWriter(tweets, "tweets"))
                 .build().call();
 
