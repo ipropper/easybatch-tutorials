@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.basic.keyapis;
 
-import org.easybatch.core.api.ComputationalRecordProcessor;
+import org.easybatch.core.processor.ComputationalRecordProcessor;
 import org.easybatch.tutorials.common.Tweet;
 
 /**

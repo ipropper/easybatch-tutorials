@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.common;
 
-import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.processor.RecordProcessor;
 
 /**
  * A processor that prints out tweets to the console.

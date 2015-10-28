@@ -24,14 +24,15 @@
 
 package org.easybatch.tutorials.basic.filterMapReduce;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.api.Report;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.job.JobReport;
 import org.easybatch.core.reader.IterableRecordReader;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
+import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
  * Main class to run the filter-map-reduce tutorial.
@@ -52,30 +53,30 @@ public class Launcher {
          * Example 1: find the youngest french person's age from the list of persons
          */
 
-        // Build a batch engine
-        Engine engine = aNewEngine()
+        // Build a batch job
+        Job job = aNewJob()
                 .reader(new IterableRecordReader<Person>(dataSource))
                 .filter(new CountryFilter("france"))
                 .mapper(new AgeMapper())
                 .processor(new MinCalculator())
                 .build();
 
-        // Run the batch engine
-        Report report = engine.call();
+        // Run the job
+        JobReport report = JobExecutor.execute(job);
 
-        // Print the batch execution report
-        System.out.println("The youngest french person's age is: " + report.getBatchResult());
+        // Print the job execution report
+        System.out.println("The youngest french person's age is: " + report.getResult());
 
         /*
          * Example 2: group persons by country
          */
 
-        report = aNewEngine()
+        report = aNewJob()
                 .reader(new IterableRecordReader<Person>(dataSource))
                 .processor(new GroupByCountry())
-                .build().call();
+                .call();
 
-        System.out.println("Persons grouped by country: " + report.getBatchResult());
+        System.out.println("Persons grouped by country: " + report.getResult());
 
     }
 

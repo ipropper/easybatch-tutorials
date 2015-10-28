@@ -24,10 +24,11 @@
 
 package org.easybatch.tutorials.basic.pipeline;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.api.Report;
 import org.easybatch.core.filter.GrepFilter;
-import org.easybatch.core.impl.EngineBuilder;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.job.JobReport;
 import org.easybatch.flatfile.FlatFileRecordReader;
 
 import java.io.File;
@@ -44,19 +45,19 @@ public class Launcher {
         // Input file tweets.csv
         File tweets = new File(Launcher.class.getResource("/org/easybatch/tutorials/basic/keyapis/tweets.csv").toURI());
 
-        // Build a batch engine
-        Engine engine = new EngineBuilder()
+        // Build a batch job
+        Job job = new JobBuilder()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new GrepFilter("#EasyBatch"))
                 .processor(new CutProcessor(",", 2))
                 .processor(new WordCountProcessor())
                 .build();
 
-        // Run the batch engine
-        Report report = engine.call();
+        // Execute the job
+        JobReport report = JobExecutor.execute(job);
 
         // Print the batch execution result
-        System.out.println("The number of words in tweets containing #EasyBatch = " + report.getBatchResult());
+        System.out.println("The number of words in tweets containing #EasyBatch = " + report.getResult());
 
     }
 

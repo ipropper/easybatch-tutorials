@@ -25,11 +25,11 @@
 package org.easybatch.tutorials.intermediate.hibernate;
 
 import org.easybatch.core.filter.HeaderRecordFilter;
+import org.easybatch.extensions.hibernate.HibernateRecordWriter;
+import org.easybatch.extensions.hibernate.HibernateSessionListener;
+import org.easybatch.extensions.hibernate.HibernateTransactionListener;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
-import org.easybatch.integration.hibernate.HibernateRecordWriter;
-import org.easybatch.integration.hibernate.HibernateTransactionJobListener;
-import org.easybatch.integration.hibernate.HibernateTransactionStepListener;
 import org.easybatch.tutorials.common.DatabaseUtil;
 import org.easybatch.tutorials.common.Tweet;
 import org.easybatch.validation.BeanValidationRecordValidator;
@@ -37,7 +37,7 @@ import org.hibernate.Session;
 
 import java.io.File;
 
-import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
+import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
 * Main class to run the Hibernate tutorial.
@@ -45,8 +45,6 @@ import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
 * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
 */
 public class Launcher {
-
-    public static final int COMMIT_INTERVAL = 2;
 
     public static void main(String[] args) throws Exception {
 
@@ -60,16 +58,16 @@ public class Launcher {
 
         Session session = DatabaseUtil.getSessionFactory().openSession();
 
-        // Build and run a batch engine
-        aNewEngine()
+        // Build and run a batch job
+        aNewJob()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
+                .mapper(new DelimitedRecordMapper(Tweet.class, new String[]{"id", "user", "message"}))
                 .validator(new BeanValidationRecordValidator<Tweet>())
                 .writer(new HibernateRecordWriter(session))
-                .recordProcessorEventListener(new HibernateTransactionStepListener(session, COMMIT_INTERVAL))
-                .jobEventListener(new HibernateTransactionJobListener(session, true))
-                .build().call();
+                .pipelineListener(new HibernateTransactionListener(session))
+                .jobListener(new HibernateSessionListener(session))
+                .call();
 
         // Dump tweet table to check inserted data
         DatabaseUtil.dumpTweetTable();

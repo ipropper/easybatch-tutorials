@@ -33,17 +33,13 @@
     <!-- configure record processor -->
     <bean id="tweetProcessor" class="org.easybatch.tutorials.common.TweetProcessor"/>
 
-    <!-- configure Easy Batch engine -->
-    <bean id="engine" class="org.easybatch.integration.spring.EngineFactoryBean">
+    <!-- configure Easy Batch job -->
+    <bean id="job" class="org.easybatch.extensions.spring.JobFactoryBean">
         <property name="recordReader" ref="tweetReader"/>
-        <property name="filterChain">
-            <list>
-                <ref bean="headerRecordFilter"/>
-            </list>
-        </property>
-        <property name="recordMapper" ref="tweetMapper"/>
         <property name="processingPipeline">
             <list>
+                <ref bean="headerRecordFilter"/>
+                <ref bean="tweetMapper"/>
                 <ref bean="tweetProcessor"/>
             </list>
         </property>

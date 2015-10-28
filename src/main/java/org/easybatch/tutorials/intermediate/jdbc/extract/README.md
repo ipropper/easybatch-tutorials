@@ -2,11 +2,11 @@
 
 ## Description
 
-This tutorial is an application that reads tweets from flat file and load them in a relational database using JDBC.
+This tutorial is an application that reads tweets from a relational database using JDBC and export them to a flat file.
 
 ## Pre-requisite
 
-* JDK 1.6+
+* JDK 1.7+
 * Maven
 * Git (optional)
 * Your favorite IDE (optional)
@@ -30,12 +30,12 @@ Open a terminal in the directory where you have extracted the source code of the
 ```
 $>cd easybatch-tutorials
 $>mvn install
-$>mvn exec:java -PrunJdbcTutorial
+$>mvn exec:java -PrunJdbcExportDataTutorial
 ```
 
 ### From Your IDE
 
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
-* Navigate to the `org.easybatch.tutorials.intermediate.jdbc` package
-* Run the `org.easybatch.tutorials.intermediate.jdbc.Launcher` class without any argument
+* Navigate to the `org.easybatch.tutorials.intermediate.jdbc.extract` package
+* Run the `org.easybatch.tutorials.intermediate.jdbc.extract.Launcher` class without any argument

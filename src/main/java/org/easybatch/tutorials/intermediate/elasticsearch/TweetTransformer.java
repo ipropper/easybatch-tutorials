@@ -24,8 +24,8 @@
 
 package org.easybatch.tutorials.intermediate.elasticsearch;
 
-import org.easybatch.core.api.RecordProcessingException;
-import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.processor.RecordProcessingException;
+import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.tutorials.common.Tweet;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 

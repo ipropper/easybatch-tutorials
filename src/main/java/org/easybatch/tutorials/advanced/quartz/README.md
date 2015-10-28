@@ -2,12 +2,12 @@
 
 ## Description
 
-This tutorial is an application that schedule a batch job to run repeatedly every minute.
+This tutorial is an application that schedule a batch job to run repeatedly 10 seconds.
 The goal is to show how to use `easybatch-quartz` module APIs.
 
 ## Pre-requisite
 
-* JDK 1.6+
+* JDK 1.7+
 * Maven
 * Git (optional)
 * Your favorite IDE (optional)
@@ -34,7 +34,7 @@ $>mvn install
 $>mvn exec:java -PrunQuartzTutorial
 ```
 
-If everything is ok, you will see in the console that Easy Batch engine will run every minute.
+If everything is ok, you will see in the console that the job will run every 10 seconds.
 
 ### From Your IDE
 
@@ -43,4 +43,4 @@ If everything is ok, you will see in the console that Easy Batch engine will run
 * Navigate to the `org.easybatch.tutorials.advanced.quartz` package
 * Run the `org.easybatch.tutorials.advanced.quartz.Launcher` class without any argument
 
-If everything is ok, you will see in the console that Easy Batch engine will run every minute.
+If everything is ok, you will see in the console that the job will run every 10 seconds.

@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.advanced.cbrd.files;
 
-import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.record.FileRecord;
 
 /**

@@ -1,7 +1,7 @@
 package org.easybatch.tutorials.basic.filterMapReduce;
 
-import org.easybatch.core.api.ComputationalRecordProcessor;
-import org.easybatch.core.api.Record;
+import org.easybatch.core.processor.ComputationalRecordProcessor;
+import org.easybatch.core.record.Record;
 
 import java.util.HashMap;
 import java.util.HashSet;

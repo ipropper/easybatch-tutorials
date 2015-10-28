@@ -7,7 +7,7 @@ The goal of the tutorial is to show how to write a custom record reader to read 
 
 ## Pre-requisite
 
-* JDK 1.6+
+* JDK 1.7+
 * Maven
 * Git (optional)
 * Your favorite IDE (optional)

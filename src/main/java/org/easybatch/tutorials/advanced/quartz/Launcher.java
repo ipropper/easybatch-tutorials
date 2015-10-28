@@ -24,22 +24,22 @@
 
 package org.easybatch.tutorials.advanced.quartz;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.impl.EngineBuilder;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
 import org.easybatch.core.reader.StringRecordReader;
-import org.easybatch.integration.quartz.BatchJobScheduler;
-import org.easybatch.tutorials.basic.helloworld.TweetProcessor;
+import org.easybatch.extensions.quartz.JobScheduler;
+import org.easybatch.tutorials.common.TweetProcessor;
 
 import java.util.Date;
 
 /**
- * Main class to run the Hello World tutorial repeatedly every minute using easy batch - quartz integration module.<br/>
+ * Main class to run the Hello World tutorial repeatedly every minute using quartz extension module.<br/>
  *
- * The {@link org.easybatch.integration.quartz.BatchJobScheduler} API lets you schedule easy batch executions as follows :
+ * The {@link org.easybatch.extensions.quartz.JobScheduler} API lets you schedule easy batch executions as follows :
  * <ul>
- * <li>At a fixed point of time using {@link org.easybatch.integration.quartz.BatchJobScheduler#scheduleAt(Engine, java.util.Date)}</li>
- * <li>Repeatedly with predefined interval using {@link org.easybatch.integration.quartz.BatchJobScheduler#scheduleAtWithInterval(Engine, java.util.Date, int)}</li>
- * <li>Using unix cron-like expression with {@link org.easybatch.integration.quartz.BatchJobScheduler#scheduleCron(Engine, String)}</li>
+ * <li>At a fixed point of time using {@link org.easybatch.extensions.quartz.JobScheduler#scheduleAt(Job, java.util.Date)}</li>
+ * <li>Repeatedly with predefined interval using {@link org.easybatch.extensions.quartz.JobScheduler#scheduleAtWithInterval(Job, java.util.Date, int)}</li>
+ * <li>Using unix cron-like expression with {@link org.easybatch.extensions.quartz.JobScheduler#scheduleCron(Job, String)}</li>
  * </ul>
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
@@ -53,15 +53,15 @@ public class Launcher {
                 "1,foo,easy batch rocks! #EasyBatch\n" +
                 "2,bar,@foo I do confirm :-)";
 
-        // Build a batch engine
-        Engine engine = new EngineBuilder()
+        // Build a batch job
+        Job job = new JobBuilder()
                 .reader(new StringRecordReader(dataSource))
                 .processor(new TweetProcessor())
                 .build();
 
-        // Schedule the engine to start now and run every 10 seconds
-        BatchJobScheduler scheduler = BatchJobScheduler.getInstance();
-        scheduler.scheduleAtWithInterval(engine, new Date(), 10);
+        // Schedule the job to start now and run every 10 seconds
+        JobScheduler scheduler = JobScheduler.getInstance();
+        scheduler.scheduleAtWithInterval(job, new Date(), 10);
         scheduler.start();
 
         System.out.println("Hit enter to stop the application");

@@ -22,25 +22,29 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.intermediate.jdbc;
+package org.easybatch.tutorials.intermediate.jdbc.load;
 
 import org.easybatch.core.filter.HeaderRecordFilter;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.job.JobReport;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.jdbc.JdbcRecordWriter;
 import org.easybatch.jdbc.PreparedStatementProvider;
 import org.easybatch.tutorials.common.DatabaseUtil;
 import org.easybatch.tutorials.common.Tweet;
+import org.easybatch.validation.BeanValidationRecordValidator;
 
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
+import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
- * Main class to run the JDBC tutorial.
+ * Main class to run the JDBC import data tutorial.
  *
  * The goal is to read tweets from a CSV file and load them in a relational database.
  *
@@ -69,46 +73,24 @@ public class Launcher {
             }
         });
 
-        // Build and run a batch engine
-        aNewEngine()
+        // Build a batch job
+        Job job = aNewJob()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
+                .mapper(new DelimitedRecordMapper(Tweet.class, new String[]{"id", "user", "message"}))
+                .validator(new BeanValidationRecordValidator<Tweet>())
                 .writer(jdbcRecordWriter)
-                .build().call();
+                .build();
+        
+        // Execute the job
+        JobReport jobReport = JobExecutor.execute(job);
+        System.out.println(jobReport);
 
         // Dump tweet table to check inserted data
         DatabaseUtil.dumpTweetTable();
 
         // Shutdown embedded database server and delete temporary files
         DatabaseUtil.cleanUpWorkingDirectory();
-
-        /*
-         * The example above creates and commits a database transaction for every written record.
-         * If your application is performance sensitive, you may consider to commit a transaction for every X records.
-         * Here is how to do that:
-         *
-         * 1. Disable the autocommit in the connection : connection.setAutoCommit(false);
-         * 2. Register a JdbcTransactionStepListener to commit a transaction after every X records
-         * 3. Register a JdbcTransactionJobListener to commit the last records if any
-         *
-         * Putting it all together:
-         *
-         * Connection connection = DatabaseUtil.getConnection();
-         * connection.setAutoCommit(false);
-         * int commitInterval = 2;
-         *
-         * //Setup of the JDBC writer remains the same
-         *
-         * aNewEngine()
-                .reader(new FlatFileRecordReader(tweets))
-                .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
-                .writer(jdbcRecordWriter)
-                .recordProcessorEventListener(new JdbcTransactionStepListener(connection, commitInterval))
-                .jobEventListener(new JdbcTransactionJobListener(connection, true))
-                .build().call();
-         */
 
     }
 

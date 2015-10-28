@@ -24,8 +24,8 @@
 
 package org.easybatch.tutorials.advanced.cbrd.fruits;
 
-import org.easybatch.core.api.Record;
 import org.easybatch.core.dispatcher.Predicate;
+import org.easybatch.core.record.Record;
 import org.easybatch.core.record.StringRecord;
 
 /**
@@ -33,7 +33,7 @@ import org.easybatch.core.record.StringRecord;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class OrangeRecordPredicate implements Predicate {
+public class OrangeRecordPredicate implements Predicate<Record> {
 
     @Override
     public boolean matches(Record record) {

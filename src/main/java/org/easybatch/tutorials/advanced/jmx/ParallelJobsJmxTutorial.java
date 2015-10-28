@@ -24,11 +24,11 @@
 
 package org.easybatch.tutorials.advanced.jmx;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.api.RecordFilter;
+import org.easybatch.core.filter.RecordFilter;
 import org.easybatch.core.filter.RecordNumberGreaterThanFilter;
 import org.easybatch.core.filter.RecordNumberLowerThanFilter;
-import org.easybatch.core.impl.EngineBuilder;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
 import org.easybatch.core.reader.StringRecordReader;
 
 import java.util.concurrent.ExecutorService;
@@ -41,7 +41,7 @@ import static java.util.Arrays.asList;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class ParallelEngineJmxTutorial {
+public class ParallelJobsJmxTutorial {
 
     private static final int THREAD_POOL_SIZE = 2;
 
@@ -60,28 +60,28 @@ public class ParallelEngineJmxTutorial {
                 "9,md_benhassine,@foo yep check them out here: https://github.com/EasyBatch/easybatch-benchmarks\n" +
                 "10,foo,@md_benhassine I'll see there thx!";
 
-        // Build worker engines
-        // worker engine 1: process records 1-5 and filters records 6-10
-        Engine engine1 = buildEngine(dataSource, new RecordNumberGreaterThanFilter(5), "worker-engine1");
-        // worker engine 2: process 6-10 and filters records 1-5
-        Engine engine2 = buildEngine(dataSource, new RecordNumberLowerThanFilter(6), "worker-engine2");
+        // Build worker jobs
+        // worker job 1: process records 1-5 and filters records 6-10
+        Job job1 = buildJob(dataSource, new RecordNumberGreaterThanFilter(5), "worker-job1");
+        // worker job 2: process 6-10 and filters records 1-5
+        Job job2 = buildJob(dataSource, new RecordNumberLowerThanFilter(6), "worker-job2");
 
-        //create a 2 threads pool to call worker engines in parallel
+        //create a 2 threads pool to call worker jobs in parallel
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
-        executorService.invokeAll(asList(engine1, engine2));
+        executorService.invokeAll(asList(job1, job2));
 
         executorService.shutdown();
 
     }
 
-    private static Engine buildEngine(String dataSource, RecordFilter recordFilter, String engineName) {
-        return EngineBuilder.aNewEngine()
-                .named(engineName)
+    private static Job buildJob(String dataSource, RecordFilter recordFilter, String jobName) {
+        return JobBuilder.aNewJob()
+                .named(jobName)
                 .reader(new StringRecordReader(dataSource))
                 .filter(recordFilter)
                 .processor(new TweetSlowProcessor())
-                .enableJMX(true)
+                .jmxMode(true)
                 .build();
     }
 

@@ -6,7 +6,7 @@ This tutorial is a simple batch application that counts the number of occurrence
 
 ## Pre-requisite
 
-* JDK 1.6+
+* JDK 1.7+
 * Maven
 * Git (optional)
 * Your favorite IDE (optional)

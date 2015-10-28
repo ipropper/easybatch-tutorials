@@ -24,16 +24,16 @@
 
 package org.easybatch.tutorials.advanced.cbrd.files;
 
-import org.easybatch.core.api.Record;
 import org.easybatch.core.dispatcher.Predicate;
 import org.easybatch.core.record.FileRecord;
+import org.easybatch.core.record.Record;
 
 /**
  * A predicate that matches csv files.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class XmlFilePredicate implements Predicate {
+public class XmlFilePredicate implements Predicate<Record> {
 
     @Override
     public boolean matches(Record record) {

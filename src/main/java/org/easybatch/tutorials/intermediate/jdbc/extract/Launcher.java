@@ -22,24 +22,29 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.intermediate.elasticsearch;
+package org.easybatch.tutorials.intermediate.jdbc.extract;
 
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.job.JobReport;
+import org.easybatch.core.writer.FileRecordWriter;
+import org.easybatch.flatfile.DelimitedRecordMarshaller;
+import org.easybatch.jdbc.JdbcConnectionListener;
 import org.easybatch.jdbc.JdbcRecordMapper;
 import org.easybatch.jdbc.JdbcRecordReader;
 import org.easybatch.tutorials.common.DatabaseUtil;
 import org.easybatch.tutorials.common.Tweet;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.node.Node;
-import org.elasticsearch.search.SearchHit;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.sql.Connection;
 
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
- * Main class to launch Elastic search tutorial.
+ * Main class to run the JDBC export data tutorial.
+ *
+ * The goal is to read tweets from a relational database and export them to a flat file.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
@@ -47,43 +52,32 @@ public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
-        /*
-         * Start embedded database server
-         */
+        // Output file
+        FileWriter tweets = new FileWriter(new File("tweets.csv"));
+        
+        //Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
         DatabaseUtil.populateTweetTable();
-
-        //start embedded elastic search node
-        Node node = ElasticSearchUtils.startEmbeddedNode();
-        Client client = node.client();
 
         // get a connection to the database
         Connection connection = DatabaseUtil.getConnection();
 
-        // Build and run the batch job
-        aNewJob()
+        // Build a batch job
+        Job job = aNewJob()
                 .reader(new JdbcRecordReader(connection, "select * from tweet"))
                 .mapper(new JdbcRecordMapper(Tweet.class, new String[]{"id", "user", "message"}))
-                .processor(new TweetTransformer())
-                .processor(new TweetIndexer(client))
-                .call();
+                .marshaller(new DelimitedRecordMarshaller(Tweet.class, new String[]{"id", "user", "message"}))
+                .writer(new FileRecordWriter(tweets))
+                .jobListener(new JdbcConnectionListener(connection))
+                .build();
+        
+        // Execute the job
+        JobReport jobReport = JobExecutor.execute(job);
+        System.out.println(jobReport);
 
-        //check if tweets have been successfully indexed in elastic search
-        node.client().admin().indices().prepareRefresh().execute().actionGet();
-        SearchResponse searchResponse = node.client().prepareSearch()
-                .setQuery(QueryBuilders.matchAllQuery())
-                .execute().actionGet();
-
-        System.out.println("Total tweets = " + searchResponse.getHits().totalHits());
-        for (SearchHit searchHitFields : searchResponse.getHits().getHits()) {
-            System.out.println("tweet: " + searchHitFields.getSourceAsString());
-        }
-
-        //shutdown elastic search node
-        ElasticSearchUtils.stopEmbeddedNode(node);
-
-        //shutdown embedded database
+        // Shutdown embedded database server and delete temporary files
         DatabaseUtil.cleanUpWorkingDirectory();
+
     }
 
 }

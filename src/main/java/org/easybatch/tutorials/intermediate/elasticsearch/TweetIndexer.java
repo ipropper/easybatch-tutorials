@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.intermediate.elasticsearch;
 
-import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.processor.RecordProcessor;
 import org.elasticsearch.client.Client;
 
 /**

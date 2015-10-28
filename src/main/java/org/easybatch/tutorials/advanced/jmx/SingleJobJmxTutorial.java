@@ -24,9 +24,10 @@
 
 package org.easybatch.tutorials.advanced.jmx;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.api.Report;
-import org.easybatch.core.impl.EngineBuilder;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.job.JobReport;
 import org.easybatch.core.reader.StringRecordReader;
 
 /**
@@ -34,7 +35,7 @@ import org.easybatch.core.reader.StringRecordReader;
  *
 * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
 */
-public class SingleEngineJmxTutorial {
+public class SingleJobJmxTutorial {
 
     public static void main(String[] args) throws Exception {
 
@@ -51,15 +52,15 @@ public class SingleEngineJmxTutorial {
                 "9,md_benhassine,@foo yep check them out here: https://github.com/EasyBatch/easybatch-benchmarks\n" +
                 "10,foo,@md_benhassine I'll see there thx!";
 
-        // Build a batch engine
-        Engine engine = new EngineBuilder()
+        // Build a batch job
+        Job job = new JobBuilder()
                 .reader(new StringRecordReader(dataSource))
                 .processor(new TweetSlowProcessor())
-                .enableJMX(true)
+                .jmxMode(true)
                 .build();
 
-        // Run the batch engine
-        Report report = engine.call();
+        // Run the job and get execution report
+        JobReport report = JobExecutor.execute(job);
 
         System.out.println("report = " + report);
 

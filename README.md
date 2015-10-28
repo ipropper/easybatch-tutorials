@@ -30,6 +30,7 @@ Here is the tutorials list:
 * [Loading data in a relational database using JDBC][]: A batch application that imports data from a flat file into a relational database using JDBC
 * [Loading data in a relational database using Hibernate][]: A batch application that imports data from a flat file into a relational database using Hibernate
 * [Loading data in a NoSQL database][]: A batch application that loads data from a flat file into a MongoDB server
+* [Extracting data from a relational database using JDBC][]: A batch application that exports data from a relational database to a flat file
 * [Extracting data from a NoSQL database][]: A batch application that extracts data from a MongoDB collection and export it in a XML file
 * [Transforming a CSV file to Xml format][]: A typical ETL application that transforms a CSV file to XML format
 * [Chunk processing][]: A show case of the chunk processing support through the `MultiRecord` abstraction
@@ -38,7 +39,7 @@ Here is the tutorials list:
 
 ### Advanced tutorials
 
-* [Spring][]: A tutorial to show how to use configure an Easy Batch engine as a Spring bean
+* [Spring][]: A tutorial to show how to use configure an Easy Batch job as a Spring bean
 * [Quartz][]: Learn how to schedule Easy Batch jobs with Quartz
 * [JMX][]: Learn how to monitor Easy Batch jobs with JMX
 * [JMS][]: Learn how to create asynchronous batch applications using Easy Batch and JMS
@@ -53,9 +54,10 @@ Here is the tutorials list:
 [Filter-Map-Reduce]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/basic/filterMapReduce
 [Word Count]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/basic/wordcount
 
-[Loading data in a relational database using JDBC]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/jdbc
+[Loading data in a relational database using JDBC]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/jdbc/load
 [Loading data in a relational database using Hibernate]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/hibernate
 [Loading data in a NoSQL database]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/mongodb/load
+[Extracting data from a relational database using JDBC]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/jdbc/extract
 [Extracting data from a NoSQL database]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/mongodb/extract
 [Transforming a CSV file to Xml format]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/csv2xml
 [Chunk processing]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/chunks

@@ -24,10 +24,10 @@
 
 package org.easybatch.tutorials.intermediate.recipes;
 
-import org.easybatch.core.api.Header;
-import org.easybatch.core.api.Record;
-import org.easybatch.core.api.RecordReader;
-import org.easybatch.core.api.RecordReaderOpeningException;
+import org.easybatch.core.reader.RecordReader;
+import org.easybatch.core.reader.RecordReaderOpeningException;
+import org.easybatch.core.record.Header;
+import org.easybatch.core.record.Record;
 
 import java.io.File;
 import java.io.FileNotFoundException;

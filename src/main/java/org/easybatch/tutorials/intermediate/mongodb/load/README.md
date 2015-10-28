@@ -6,7 +6,7 @@ This tutorial is an application that reads tweets from flat file and import them
 
 ## Pre-requisite
 
-* JDK 1.6+
+* JDK 1.7+
 * Maven
 * MongoDB up and running on default port (27017)
 * Git (optional)

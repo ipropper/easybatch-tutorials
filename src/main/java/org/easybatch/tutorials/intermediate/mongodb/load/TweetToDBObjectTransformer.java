@@ -26,7 +26,7 @@ package org.easybatch.tutorials.intermediate.mongodb.load;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.tutorials.common.Tweet;
 
 /**

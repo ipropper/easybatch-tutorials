@@ -1,13 +1,13 @@
 package org.easybatch.tutorials.basic.wordcount;
 
-import org.easybatch.core.api.ComputationalRecordProcessor;
+import org.easybatch.core.processor.ComputationalRecordProcessor;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * This processor counts the number of occurrences of each word.
+ * Processor that counts the number of occurrences of each word.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */

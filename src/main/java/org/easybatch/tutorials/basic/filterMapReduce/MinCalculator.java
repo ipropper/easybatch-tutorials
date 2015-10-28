@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.basic.filterMapReduce;
 
-import org.easybatch.core.api.ComputationalRecordProcessor;
+import org.easybatch.core.processor.ComputationalRecordProcessor;
 
 /**
  * Record processor that calculates min value.

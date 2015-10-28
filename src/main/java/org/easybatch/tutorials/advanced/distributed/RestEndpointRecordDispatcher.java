@@ -27,10 +27,10 @@ package org.easybatch.tutorials.advanced.distributed;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.io.IOUtils;
-import org.easybatch.core.api.Header;
-import org.easybatch.core.api.Record;
 import org.easybatch.core.dispatcher.AbstractRecordDispatcher;
 import org.easybatch.core.dispatcher.RecordDispatchingException;
+import org.easybatch.core.record.Header;
+import org.easybatch.core.record.Record;
 import org.easybatch.core.record.StringRecord;
 import org.easybatch.tutorials.advanced.jms.JMSUtil;
 
@@ -43,7 +43,7 @@ import static java.lang.String.format;
 
 /**
  * Record dispatcher listening to incoming rest requests.
- * Each PUT request with a new record will be dispatched to a worker engine.
+ * Each PUT request with a new record will be dispatched to a worker job.
  *
  * <strong>
  * This class is kept simple for demonstration purpose.
@@ -53,7 +53,7 @@ import static java.lang.String.format;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class RestEndpointRecordDispatcher extends AbstractRecordDispatcher implements HttpHandler {
+public class RestEndpointRecordDispatcher extends AbstractRecordDispatcher<Record> implements HttpHandler {
 
     private long recordNumber;
 
@@ -63,7 +63,7 @@ public class RestEndpointRecordDispatcher extends AbstractRecordDispatcher imple
             JMSUtil.sendStringRecord((StringRecord)record);
         } catch (JMSException e) {
             String message = format("Unable to dispatch record %s", record);
-            throw new RecordDispatchingException(message);
+            throw new RecordDispatchingException(message, e);
         }
     }
 

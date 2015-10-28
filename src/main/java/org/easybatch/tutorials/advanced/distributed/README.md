@@ -3,11 +3,11 @@
 ## Description
 
 This tutorial is a show case of how to implement a custom `RecordDispatcher` in order to dispatch records to
- a set of distributed worker engines.
+ a set of distributed worker jobs.
 
 ## Pre-requisite
 
-* JDK 1.6+
+* JDK 1.7+
 * Maven
 * Git (optional)
 * Your favorite IDE (optional)
@@ -34,7 +34,7 @@ $>mvn install
 $>mvn exec:java -PrunJmsTutorial
 ```
 
-This will launch an embedded broker with a JMS queue to which records will be dispatched and processed by a worker engine.
+This will launch an embedded broker with a JMS queue to which records will be dispatched and processed by a worker job.
 
 Now, you should launch the REST endpoint serving as record dispatcher. Open a separate terminal and run the following command:
 
@@ -48,13 +48,13 @@ Listening for incoming records on http://localhost:8000/api/orders
 Hit enter to stop the application...
 ```
 
-You can send arbitrary requests to `http://localhost:8000/api/orders` using `curl -XPUT http://localhost:8000/api/orders -d '{orderData}'` for example and see that the worker engine has processed the record.
+You can send arbitrary requests to `http://localhost:8000/api/orders` using `curl -XPUT http://localhost:8000/api/orders -d '{orderData}'` for example and see that the worker job has processed the record.
 
 ### From Your IDE
 
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
 * Navigate to the `org.easybatch.tutorials.advanced.jms` package
-* Run the `org.easybatch.tutorials.advanced.jms.Launcher` class without any argument to launch the engine.
+* Run the `org.easybatch.tutorials.advanced.jms.Launcher` class without any argument to launch the job.
 * Navigate to the `org.easybatch.tutorials.advanced.distributed` package
 * Run the `org.easybatch.tutorials.advanced.distributed.Launcher` class without any argument to launch the rest endpoint listener.

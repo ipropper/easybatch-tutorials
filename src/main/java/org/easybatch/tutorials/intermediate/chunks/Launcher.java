@@ -1,7 +1,7 @@
 package org.easybatch.tutorials.intermediate.chunks;
 
-import org.easybatch.core.api.RecordProcessingException;
-import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.processor.RecordProcessingException;
+import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.reader.IterableMultiRecordReader;
 import org.easybatch.core.record.MultiRecord;
 import org.easybatch.core.writer.CollectionMultiRecordWriter;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
+import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
  * Main class to launch the chunk processing tutorial.
@@ -29,11 +29,11 @@ public class Launcher {
         List<String> dataSource = Arrays.asList("foo", "bar", "baz", "toto", "titi");
         List<String> dataSink = new ArrayList<String>();
 
-        aNewEngine()
+        aNewJob()
                 .reader(new IterableMultiRecordReader<String>(dataSource, CHUNK_SIZE))
                 .processor(new MultiRecordProcessor())
                 .writer(new CollectionMultiRecordWriter(dataSink))
-                .build().call();
+                .call();
 
         System.out.println("dataSink = " + dataSink);
     }

@@ -11,11 +11,11 @@ import org.easybatch.xml.XmlWrapperTagWriter;
 import java.io.File;
 import java.io.FileWriter;
 
-import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
+import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
  * Main class to launch the CSV to XML tutorial.
- * <p/>
+ * <p>
  * The goal is to read tweets from a CSV file and transform them to XML format.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
@@ -27,14 +27,14 @@ public class Launcher {
         File csvTweets = new File(Launcher.class.getResource("/org/easybatch/tutorials/basic/keyapis/tweets.csv").toURI());
         FileWriter xmlTweetsWriter = new FileWriter(new File("tweets.xml"));
 
-        aNewEngine()
+        aNewJob()
                 .reader(new FlatFileRecordReader(csvTweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
-                .processor(new XmlRecordMarshaller(Tweet.class))
+                .mapper(new DelimitedRecordMapper(Tweet.class, new String[]{"id", "user", "message"}))
+                .marshaller(new XmlRecordMarshaller(Tweet.class))
                 .writer(new FileRecordWriter(xmlTweetsWriter))
-                .jobEventListener(new XmlWrapperTagWriter(xmlTweetsWriter, "tweets"))
-                .build().call();
+                .jobListener(new XmlWrapperTagWriter(xmlTweetsWriter, "tweets"))
+                .call();
 
     }
 
