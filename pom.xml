@@ -319,7 +319,7 @@
 
         <!-- profiles to run intermediate tutorials -->
         <profile>
-            <id>runMultiRecordTutorial</id>
+            <id>runBatchProcessingTutorial</id>
             <build>
                 <defaultGoal>exec:java</defaultGoal>
                 <plugins>
@@ -328,7 +328,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.intermediate.chunks.Launcher</mainClass>
+                            <mainClass>org.easybatch.tutorials.intermediate.batches.Launcher</mainClass>
                             <systemProperties>
                                 <systemProperty>
                                     <key>java.util.logging.SimpleFormatter.format</key>

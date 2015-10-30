@@ -29,7 +29,7 @@ import org.easybatch.core.job.JobBuilder;
 import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.job.JobReport;
 import org.easybatch.jms.JmsPoisonRecordFilter;
-import org.easybatch.jms.JmsRecordReader;
+import org.easybatch.jms.JmsQueueRecordReader;
 
 /**
 * Main class to run the JMS tutorial.
@@ -46,7 +46,7 @@ public class Launcher {
 
         // Build a batch job
         Job job = new JobBuilder()
-                .reader(new JmsRecordReader(JMSUtil.queueConnectionFactory, JMSUtil.queue))
+                .reader(new JmsQueueRecordReader(JMSUtil.queueConnectionFactory, JMSUtil.queue))
                 .filter(new JmsPoisonRecordFilter())
                 .processor(new JmsRecordProcessor())
                 .build();

@@ -31,7 +31,7 @@ The `org.easybatch.tutorials.common` package contains main classes that are comm
 * [Extracting data from a relational database using JDBC][]: A batch application that exports data from a relational database to a flat file
 * [Extracting data from a NoSQL database][]: A batch application that extracts data from a MongoDB collection and export it in a XML file
 * [Transforming a CSV file to Xml format][]: A typical ETL application that transforms a CSV file to XML format
-* [Chunk processing][]: A show case of the chunk processing support through the `MultiRecord` abstraction
+* [Batch processing][]: A show case of the batch processing support through the `Batch` abstraction
 * [Elastic Search][]: A sample application that extracts data from a relational database and index it in a ElasticSearch server
 * [Recipes][]: A showcase of how to write a custom reader to read data in a non standard format
 
@@ -58,7 +58,7 @@ The `org.easybatch.tutorials.common` package contains main classes that are comm
 [Extracting data from a relational database using JDBC]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/jdbc/extract
 [Extracting data from a NoSQL database]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/mongodb/extract
 [Transforming a CSV file to Xml format]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/csv2xml
-[Chunk processing]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/chunks
+[Batch processing]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/batches
 [Elastic Search]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/elasticsearch
 [Recipes]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/recipes
 

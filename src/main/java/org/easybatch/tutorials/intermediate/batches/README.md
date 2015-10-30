@@ -34,12 +34,12 @@ Open a terminal in the directory where you have extracted the source code of the
 ```
 $>cd easybatch-tutorials
 $>mvn install
-$>mvn exec:java -PrunMultiRecordTutorial
+$>mvn exec:java -PrunBatchProcessingTutorial
 ```
 
 ### From Your IDE
 
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
-* Navigate to the `org.easybatch.tutorials.intermediate.chunks` package
-* Run the `org.easybatch.tutorials.intermediate.chunks.Launcher` class without any argument
+* Navigate to the `org.easybatch.tutorials.intermediate.batches` package
+* Run the `org.easybatch.tutorials.intermediate.batches.Launcher` class without any argument
