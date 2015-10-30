@@ -58,8 +58,8 @@ public class Launcher {
         File directory = new File(path);
 
         // Create queues
-        BlockingQueue<Record> csvQueue = new LinkedBlockingQueue<Record>();
-        BlockingQueue<Record> xmlQueue = new LinkedBlockingQueue<Record>();
+        BlockingQueue<Record> csvQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<Record> xmlQueue = new LinkedBlockingQueue<>();
 
         // Create a content based record dispatcher to dispatch records based on their content
         ContentBasedRecordDispatcher<Record> recordDispatcher = new ContentBasedRecordDispatcherBuilder<Record>()
@@ -94,7 +94,7 @@ public class Launcher {
     public static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
         return aNewJob()
                 .named(jobName)
-                .reader(new BlockingQueueRecordReader<Record>(queue))
+                .reader(new BlockingQueueRecordReader<>(queue))
                 .filter(new PoisonRecordFilter())
                 .processor(new DummyFileProcessor())
                 .build();

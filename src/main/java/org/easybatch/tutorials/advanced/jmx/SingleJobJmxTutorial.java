@@ -28,7 +28,9 @@ import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobBuilder;
 import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.job.JobReport;
-import org.easybatch.core.reader.StringRecordReader;
+import org.easybatch.flatfile.FlatFileRecordReader;
+
+import java.io.File;
 
 /**
 * Main class to run the JMX tutorial.
@@ -39,22 +41,12 @@ public class SingleJobJmxTutorial {
 
     public static void main(String[] args) throws Exception {
 
-        // Create the String data source
-        String dataSource =
-                "1,foo,easy batch rocks! #EasyBatch\n" +
-                "2,bar,@foo I do confirm :-)\n" +
-                "3,baz,@foo @bar what are you talking about? Am I in trouble?\n" +
-                "4,foo,@baz yes you are in trouble!\n" +
-                "5,bar,@baz It's about easy batch. See in here: http://www.easybatch.org cc @md_benhassine\n" +
-                "6,baz,@foo @bar @md_benhassine Oh damn that's really easy!\n" +
-                "7,md_benhassine,Thank you all! your feedback is welcome :-)\n" +
-                "8,foo,@md_benhassine Have you some benchmarks out there?\n" +
-                "9,md_benhassine,@foo yep check them out here: https://github.com/EasyBatch/easybatch-benchmarks\n" +
-                "10,foo,@md_benhassine I'll see there thx!";
-
-        // Build a batch job
+        // Create the  data source
+        File dataSource = new File("src/main/resources/data/tweets.csv");
+        
+        // Build the batch job
         Job job = new JobBuilder()
-                .reader(new StringRecordReader(dataSource))
+                .reader(new FlatFileRecordReader(dataSource))
                 .processor(new TweetSlowProcessor())
                 .jmxMode(true)
                 .build();

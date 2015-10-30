@@ -55,9 +55,9 @@ public class Launcher {
         String fruits = "1,apple\n2,orange\n3,banana\n4,apple\n5,pear";
 
         // Create queues
-        BlockingQueue<Record> appleQueue = new LinkedBlockingQueue<Record>();
-        BlockingQueue<Record> orangeQueue = new LinkedBlockingQueue<Record>();
-        BlockingQueue<Record> defaultQueue = new LinkedBlockingQueue<Record>();
+        BlockingQueue<Record> appleQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<Record> orangeQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<Record> defaultQueue = new LinkedBlockingQueue<>();
 
         // Create a content based record dispatcher to dispatch records to according queues based on their content
         ContentBasedRecordDispatcher<Record> recordDispatcher = new ContentBasedRecordDispatcherBuilder<Record>()
@@ -93,7 +93,7 @@ public class Launcher {
     public static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
         return aNewJob()
                 .named(jobName)
-                .reader(new BlockingQueueRecordReader(queue))
+                .reader(new BlockingQueueRecordReader<>(queue))
                 .filter(new PoisonRecordFilter())
                 .processor(new FruitProcessor())
                 .build();

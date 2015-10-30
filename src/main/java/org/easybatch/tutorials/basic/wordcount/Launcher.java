@@ -24,6 +24,8 @@
 
 package org.easybatch.tutorials.basic.wordcount;
 
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.job.JobReport;
 import org.easybatch.core.reader.StringRecordReader;
 
@@ -43,16 +45,19 @@ public class Launcher {
 
         // Create a data source
         String dataSource =
-                "Spring batch is cool but a bit complex\n" +
-                "Easy batch is cool too, but easier";
+                "big data is often\n" +
+                "not so big";
 
         // Build a batch job
-        JobReport report = aNewJob()
+        Job job = aNewJob()
                 .reader(new StringRecordReader(dataSource))
                 .mapper(new LineTokenizer())
                 .processor(new WordCounter())
-                .call();
+                .build();
 
+        // Execute the job
+        JobReport report = JobExecutor.execute(job);
+        
         // Get result
         Map<String, Integer> words = (Map<String, Integer>) report.getResult();
 

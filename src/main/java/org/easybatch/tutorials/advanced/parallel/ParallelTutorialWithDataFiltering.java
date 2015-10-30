@@ -56,14 +56,13 @@ public class ParallelTutorialWithDataFiltering {
     public static void main(String[] args) throws Exception {
 
         // Input file tweets.csv
-        File tweets = new File(ParallelTutorialWithDataFiltering.class
-                            .getResource("/org/easybatch/tutorials/advanced/parallel/tweets.csv").toURI());
+        File tweets = new File("src/main/resources/data/tweets.csv");
 
         // Build worker jobs
-        // worker job 1: process data from tweets.csv, filter records 6-10
-        Job job1 = buildJob(tweets, new RecordNumberGreaterThanFilter(5), "worker-job1");
-        // worker job 2: process data from tweets.csv, filter records 1-5
-        Job job2 = buildJob(tweets, new RecordNumberLowerThanFilter(6), "worker-job2");
+        // worker job 1: process records 1-3 and filters records 4+
+        Job job1 = buildJob(tweets, new RecordNumberGreaterThanFilter(3), "worker-job1");
+        // worker job 2: process 4+ and filters records 1-3
+        Job job2 = buildJob(tweets, new RecordNumberLowerThanFilter(4), "worker-job2");
 
         //create a 2 threads pool to call worker jobs in parallel
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);

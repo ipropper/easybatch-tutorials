@@ -36,8 +36,6 @@ import org.easybatch.xml.XmlWrapperTagWriter;
 import java.io.FileWriter;
 
 import static org.easybatch.core.job.JobBuilder.aNewJob;
-import static org.easybatch.core.util.Utils.FILE_SEPARATOR;
-import static org.easybatch.core.util.Utils.JAVA_IO_TMPDIR;
 
 /**
  * Main class to export tweets from MongoDB to an XML file.
@@ -50,24 +48,23 @@ public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
-        // create a mongo client
+        // Create a mongo client
         MongoClient mongoClient = new MongoClient();
         DBCollection tweetsCollection = mongoClient.getDB("test").getCollection("tweets");
 
-        // create output file tweets.xml
-        String outputDirectory = JAVA_IO_TMPDIR + FILE_SEPARATOR;
-        String fileName = outputDirectory + "tweets.xml";
-        FileWriter tweets = new FileWriter(fileName);
+        // Create output file tweets.xml
+        FileWriter tweets = new FileWriter("tweets.xml");
 
+        // Build and run the batch job
         aNewJob()
                 .reader(new MongoDBRecordReader(tweetsCollection, new BasicDBObject()))
-                .mapper(new MongoDBRecordMapper<Tweet>(Tweet.class))
+                .mapper(new MongoDBRecordMapper<>(Tweet.class))
                 .processor(new XstreamRecordMarshaller("tweet", Tweet.class))
                 .writer(new FileRecordWriter(tweets))
                 .jobListener(new XmlWrapperTagWriter(tweets, "tweets"))
                 .call();
 
-        System.out.println("Successfully exported tweets in : " + fileName);
+        System.out.println("Successfully exported tweets.");
 
         mongoClient.close();
     }

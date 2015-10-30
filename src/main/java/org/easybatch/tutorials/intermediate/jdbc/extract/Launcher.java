@@ -63,10 +63,11 @@ public class Launcher {
         Connection connection = DatabaseUtil.getConnection();
 
         // Build a batch job
+        String[] fields = {"id", "user", "message"};
         Job job = aNewJob()
                 .reader(new JdbcRecordReader(connection, "select * from tweet"))
-                .mapper(new JdbcRecordMapper(Tweet.class, new String[]{"id", "user", "message"}))
-                .marshaller(new DelimitedRecordMarshaller(Tweet.class, new String[]{"id", "user", "message"}))
+                .mapper(new JdbcRecordMapper(Tweet.class, fields))
+                .marshaller(new DelimitedRecordMarshaller(Tweet.class, fields))
                 .writer(new FileRecordWriter(tweets))
                 .jobListener(new JdbcConnectionListener(connection))
                 .build();

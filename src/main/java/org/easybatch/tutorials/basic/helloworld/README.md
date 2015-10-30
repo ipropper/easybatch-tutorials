@@ -2,7 +2,7 @@
 
 ## Description
 
-This tutorial is a simple batch application that reads tweets from a String and prints them out to the standard output.
+This tutorial is a simple batch application that reads tweets from a flat file and prints them out to the standard output.
 
 ## Pre-requisite
 

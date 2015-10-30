@@ -42,7 +42,7 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
 
         // Initialize input file recipes.txt
-        File recipes = new File(Launcher.class.getResource("/org/easybatch/tutorials/intermediate/recipes/recipes.txt").toURI());
+        File recipes = new File("src/main/resources/data/recipes.txt");
 
         // Build a batch job
         Job job = new JobBuilder()

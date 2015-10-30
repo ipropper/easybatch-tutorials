@@ -48,11 +48,10 @@ public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
-        //load tweets from tweets.csv
-        File tweets = new File(Launcher.class
-                .getResource("/org/easybatch/tutorials/basic/keyapis/tweets.csv").toURI());
+        // Load tweets from tweets.csv
+        File tweets = new File("src/main/resources/data/tweets.csv");
 
-        //Start embedded database server
+        // Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
         DatabaseUtil.initializeSessionFactory();
 
@@ -62,7 +61,7 @@ public class Launcher {
         aNewJob()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper(Tweet.class, new String[]{"id", "user", "message"}))
+                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .validator(new BeanValidationRecordValidator<Tweet>())
                 .writer(new HibernateRecordWriter(session))
                 .pipelineListener(new HibernateTransactionListener(session))

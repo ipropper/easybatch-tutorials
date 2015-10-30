@@ -46,13 +46,13 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
 
         // Input file tweets.csv
-        File tweets = new File(Launcher.class.getResource("/org/easybatch/tutorials/basic/keyapis/tweets.csv").toURI());
+        File tweets = new File("src/main/resources/data/tweets.csv");
 
         // Build a batch job
         Job job = new JobBuilder()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper(Tweet.class, new String[]{"id", "user", "message"}))
+                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .validator(new BeanValidationRecordValidator<Tweet>())
                 .processor(new TweetCountProcessor())
                 .build();

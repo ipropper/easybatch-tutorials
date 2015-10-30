@@ -30,7 +30,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * Main class to run the Hello World tutorial using easy batch - spring extension module.<br/>
+ * Main class to run the Hello World tutorial using easy batch - spring extension module.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */

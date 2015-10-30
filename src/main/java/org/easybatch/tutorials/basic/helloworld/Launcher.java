@@ -28,8 +28,10 @@ import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobBuilder;
 import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.job.JobReport;
-import org.easybatch.core.reader.StringRecordReader;
 import org.easybatch.core.writer.StandardOutputRecordWriter;
+import org.easybatch.flatfile.FlatFileRecordReader;
+
+import java.io.File;
 
 /**
 * Main class to run the hello world tutorial.
@@ -38,16 +40,15 @@ import org.easybatch.core.writer.StandardOutputRecordWriter;
 */
 public class Launcher {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
-        // Create the String data source
-        String dataSource =
-                "1,foo,easy batch rocks! #EasyBatch\n" +
-                "2,bar,@foo I do confirm :-)";
-
+        // Create the data source
+        File dataSource = new File("src/main/resources/data/tweets.csv");
+        
         // Build a batch job
         Job job = new JobBuilder()
-                .reader(new StringRecordReader(dataSource))
+                .named("hello world job")
+                .reader(new FlatFileRecordReader(dataSource))
                 .writer(new StandardOutputRecordWriter())
                 .build();
 

@@ -26,16 +26,17 @@ package org.easybatch.tutorials.advanced.quartz;
 
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobBuilder;
-import org.easybatch.core.reader.StringRecordReader;
 import org.easybatch.extensions.quartz.JobScheduler;
+import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tutorials.common.TweetProcessor;
 
+import java.io.File;
 import java.util.Date;
 
 /**
- * Main class to run the Hello World tutorial repeatedly every minute using quartz extension module.<br/>
+ * Main class to run the Hello World tutorial repeatedly every 10 seconds using quartz extension module.
  *
- * The {@link org.easybatch.extensions.quartz.JobScheduler} API lets you schedule easy batch executions as follows :
+ * The {@link org.easybatch.extensions.quartz.JobScheduler} API lets you schedule easy batch jobs as follows :
  * <ul>
  * <li>At a fixed point of time using {@link org.easybatch.extensions.quartz.JobScheduler#scheduleAt(Job, java.util.Date)}</li>
  * <li>Repeatedly with predefined interval using {@link org.easybatch.extensions.quartz.JobScheduler#scheduleAtWithInterval(Job, java.util.Date, int)}</li>
@@ -49,13 +50,11 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
 
         // Create the data source
-        String dataSource =
-                "1,foo,easy batch rocks! #EasyBatch\n" +
-                "2,bar,@foo I do confirm :-)";
+        File dataSource = new File("src/main/resources/data/tweets.csv");
 
         // Build a batch job
         Job job = new JobBuilder()
-                .reader(new StringRecordReader(dataSource))
+                .reader(new FlatFileRecordReader(dataSource))
                 .processor(new TweetProcessor())
                 .build();
 

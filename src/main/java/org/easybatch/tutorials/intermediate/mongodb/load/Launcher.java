@@ -53,17 +53,16 @@ public class Launcher {
         DBCollection tweetsCollection = mongoClient.getDB("test").getCollection("tweets");
 
         //load tweets from tweets.csv
-        File tweets = new File(Launcher.class
-                .getResource("/org/easybatch/tutorials/basic/keyapis/tweets.csv").toURI());
+        File tweets = new File("src/main/resources/data/tweets.csv");
 
         aNewJob()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper(Tweet.class, new String[]{"id", "user", "message"}))
+                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .validator(new BeanValidationRecordValidator<Tweet>())
                 .processor(new TweetToDBObjectTransformer())
                 .writer(new MongoDBRecordWriter(tweetsCollection))
-                .build().call();
+                .call();
 
         mongoClient.close();
 

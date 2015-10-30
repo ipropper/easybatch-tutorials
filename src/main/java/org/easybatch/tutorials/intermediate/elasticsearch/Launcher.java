@@ -47,28 +47,26 @@ public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
-        /*
-         * Start embedded database server
-         */
+        // Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
         DatabaseUtil.populateTweetTable();
 
-        //start embedded elastic search node
+        // Start embedded elastic search node
         Node node = ElasticSearchUtils.startEmbeddedNode();
         Client client = node.client();
 
-        // get a connection to the database
+        // Get a connection to the database
         Connection connection = DatabaseUtil.getConnection();
 
         // Build and run the batch job
         aNewJob()
                 .reader(new JdbcRecordReader(connection, "select * from tweet"))
-                .mapper(new JdbcRecordMapper(Tweet.class, new String[]{"id", "user", "message"}))
+                .mapper(new JdbcRecordMapper(Tweet.class, "id", "user", "message"))
                 .processor(new TweetTransformer())
                 .processor(new TweetIndexer(client))
                 .call();
 
-        //check if tweets have been successfully indexed in elastic search
+        // Check if tweets have been successfully indexed in elastic search
         node.client().admin().indices().prepareRefresh().execute().actionGet();
         SearchResponse searchResponse = node.client().prepareSearch()
                 .setQuery(QueryBuilders.matchAllQuery())
@@ -79,10 +77,10 @@ public class Launcher {
             System.out.println("tweet: " + searchHitFields.getSourceAsString());
         }
 
-        //shutdown elastic search node
+        // Shutdown elastic search node
         ElasticSearchUtils.stopEmbeddedNode(node);
 
-        //shutdown embedded database
+        // Shutdown embedded database
         DatabaseUtil.cleanUpWorkingDirectory();
     }
 

@@ -43,7 +43,7 @@ public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
-        List<Person> dataSource = new ArrayList<Person>();
+        List<Person> dataSource = new ArrayList<>();
         dataSource.add(new Person("jean", "france", 10));
         dataSource.add(new Person("foo", "usa", 30));
         dataSource.add(new Person("bar", "belgium", 20));
@@ -55,7 +55,7 @@ public class Launcher {
 
         // Build a batch job
         Job job = aNewJob()
-                .reader(new IterableRecordReader<Person>(dataSource))
+                .reader(new IterableRecordReader<>(dataSource))
                 .filter(new CountryFilter("france"))
                 .mapper(new AgeMapper())
                 .processor(new MinCalculator())
@@ -72,7 +72,7 @@ public class Launcher {
          */
 
         report = aNewJob()
-                .reader(new IterableRecordReader<Person>(dataSource))
+                .reader(new IterableRecordReader<>(dataSource))
                 .processor(new GroupByCountry())
                 .call();
 

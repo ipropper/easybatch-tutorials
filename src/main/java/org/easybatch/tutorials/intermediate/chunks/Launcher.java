@@ -27,10 +27,10 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
 
         List<String> dataSource = Arrays.asList("foo", "bar", "baz", "toto", "titi");
-        List<String> dataSink = new ArrayList<String>();
+        List<String> dataSink = new ArrayList<>();
 
         aNewJob()
-                .reader(new IterableMultiRecordReader<String>(dataSource, CHUNK_SIZE))
+                .reader(new IterableMultiRecordReader<>(dataSource, CHUNK_SIZE))
                 .processor(new MultiRecordProcessor())
                 .writer(new CollectionMultiRecordWriter(dataSink))
                 .call();

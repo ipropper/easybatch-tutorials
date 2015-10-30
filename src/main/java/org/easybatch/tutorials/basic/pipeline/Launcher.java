@@ -42,8 +42,8 @@ public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
-        // Input file tweets.csv
-        File tweets = new File(Launcher.class.getResource("/org/easybatch/tutorials/basic/keyapis/tweets.csv").toURI());
+        // Data source tweets.csv
+        File tweets = new File("src/main/resources/data/tweets.csv");
 
         // Build a batch job
         Job job = new JobBuilder()

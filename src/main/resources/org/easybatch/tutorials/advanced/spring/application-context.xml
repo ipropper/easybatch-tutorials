@@ -47,7 +47,7 @@
 
     <!--utility beans to create a classpath resource for input file-->
     <bean id="resource" class="org.springframework.core.io.ClassPathResource">
-        <constructor-arg value="/org/easybatch/tutorials/basic/keyapis/tweets.csv" />
+        <constructor-arg value="data/tweets.csv" />
     </bean>
 
     <util:property-path id="uri" path="resource.URI"/>
