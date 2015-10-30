@@ -2,7 +2,7 @@
 
 You will find here several tutorials of different levels that will introduce you to all APIs of the framework.
 
-The tutorials are organised in 3 levels:
+Tutorials are organised in 3 levels:
 
 * Basic
 * Intermediate
@@ -14,8 +14,6 @@ Navigate to the package you are interested in and you will be able to get starte
 main class to launch it. To run a tutorial, just import the `easybatch-tutorials` project in your favorite IDE and launch the main class.
 
 The `org.easybatch.tutorials.common` package contains main classes that are common to all tutorials.
-
-Here is the tutorials list:
 
 ### Basic tutorials
 
