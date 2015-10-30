@@ -12,16 +12,16 @@
     <url>http://www.easybatch.org</url>
 
     <properties>
-        <exec-maven-plugin-version>1.3.2</exec-maven-plugin-version>
-        <hsqldb.version>2.3.2</hsqldb.version>
-        <hibernate-core.version>4.3.7.Final</hibernate-core.version>
+        <exec-maven-plugin-version>1.4.0</exec-maven-plugin-version>
+        <hsqldb.version>2.3.3</hsqldb.version>
+        <hibernate-core.version>4.3.11.Final</hibernate-core.version>
         <javax.json.version>1.0.4</javax.json.version>
-        <gson.version>2.3.1</gson.version>
+        <gson.version>2.4</gson.version>
         <activemq-core.version>5.7.0</activemq-core.version>
-        <elasticsearch.version>1.4.0</elasticsearch.version>
+        <elasticsearch.version>1.7.3</elasticsearch.version>
         <commons-io.version>2.4</commons-io.version>
-        <mongo-java-driver.version>2.10.1</mongo-java-driver.version>
-        <maven-dependency-plugin.version>2.9</maven-dependency-plugin.version>
+        <mongodb-driver.version>3.1.0</mongodb-driver.version>
+        <maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
     </properties>
 
     <developers>
@@ -167,8 +167,8 @@
 
         <dependency>
             <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>${mongo-java-driver.version}</version>
+            <artifactId>mongodb-driver</artifactId>
+            <version>${mongodb-driver.version}</version>
         </dependency>
 
     </dependencies>
@@ -181,8 +181,8 @@
                 <version>3.3</version>
                 <configuration>
                     <verbose>true</verbose>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <showWarnings>true</showWarnings>
                 </configuration>
             </plugin>
@@ -228,7 +228,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runWordCountTutorial</id>
             <build>
@@ -251,7 +250,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runKeyAPIsTutorial</id>
             <build>
@@ -274,7 +272,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runPipelineTutorial</id>
             <build>
@@ -297,7 +294,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runFilterMapReduceTutorial</id>
             <build>
@@ -388,7 +384,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runJdbcImportDataTutorial</id>
             <build>
@@ -411,7 +406,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runJdbcExportDataTutorial</id>
             <build>
@@ -434,7 +428,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runMongoDBImportDataTutorial</id>
             <build>
@@ -457,7 +450,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runMongoDBExportDataTutorial</id>
             <build>
@@ -481,7 +473,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runElasticSearchTutorial</id>
             <build>
@@ -504,7 +495,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runRecipesTutorial</id>
             <build>
@@ -551,7 +541,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runParallelTutorialWithDataFiltering</id>
             <build>
@@ -574,7 +563,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runParallelTutorialWithDataSplitting</id>
             <build>
@@ -597,8 +585,6 @@
                 </plugins>
             </build>
         </profile>
-
-
         <profile>
             <id>runFruitsParallelProcessingTutorial</id>
             <build>
@@ -621,7 +607,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runFilesParallelProcessingTutorial</id>
             <build>
@@ -644,7 +629,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runQuartzTutorial</id>
             <build>
@@ -667,7 +651,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runSpringTutorial</id>
             <build>
@@ -690,7 +673,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runSingleJobJmxTutorial</id>
             <build>
@@ -713,7 +695,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runParallelJobsJmxTutorial</id>
             <build>
@@ -736,7 +717,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runJmsTutorial</id>
             <build>
@@ -759,7 +739,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runJmsSender</id>
             <build>
@@ -782,7 +761,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>runDistributedTutorial</id>
             <build>
