@@ -1,4 +1,4 @@
-package org.easybatch.tutorials.intermediate.csv2xml;
+package org.easybatch.tutorials.basic.csv2xml;
 
 import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.writer.FileRecordWriter;

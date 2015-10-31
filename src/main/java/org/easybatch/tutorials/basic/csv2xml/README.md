@@ -37,5 +37,5 @@ $>mvn exec:java -PrunCsv2xmlTutorial
 
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
-* Navigate to the `org.easybatch.tutorials.intermediate.csv2xml` package
-* Run the `org.easybatch.tutorials.intermediate.csv2xml.Launcher` class without any argument
+* Navigate to the `org.easybatch.tutorials.basic.csv2xml` package
+* Run the `org.easybatch.tutorials.basic.csv2xml.Launcher` class without any argument

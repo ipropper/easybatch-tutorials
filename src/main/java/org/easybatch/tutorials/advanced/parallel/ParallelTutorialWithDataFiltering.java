@@ -30,9 +30,11 @@ import org.easybatch.core.filter.RecordNumberLowerThanFilter;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobBuilder;
 import org.easybatch.core.job.JobReport;
+import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tools.reporting.DefaultJobReportMerger;
 import org.easybatch.tools.reporting.JobReportMerger;
+import org.easybatch.tutorials.common.Tweet;
 import org.easybatch.tutorials.common.TweetProcessor;
 
 import java.io.File;
@@ -86,6 +88,7 @@ public class ParallelTutorialWithDataFiltering {
                 .named(jobName)
                 .reader(new FlatFileRecordReader(file))
                 .filter(recordFilter)
+                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .processor(new TweetProcessor())
                 .build();
     }

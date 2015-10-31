@@ -75,6 +75,7 @@ public class Launcher {
 
         // Build a batch job
         Job job = aNewJob()
+                .skip(1)
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))

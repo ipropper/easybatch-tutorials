@@ -26,11 +26,15 @@ package org.easybatch.tutorials.advanced.parallel;
 
 import org.easybatch.core.dispatcher.PoisonRecordBroadcaster;
 import org.easybatch.core.dispatcher.RoundRobinRecordDispatcher;
+import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.filter.PoisonRecordFilter;
 import org.easybatch.core.job.Job;
+import org.easybatch.core.mapper.GenericRecordMapper;
 import org.easybatch.core.reader.BlockingQueueRecordReader;
 import org.easybatch.core.record.Record;
+import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
+import org.easybatch.tutorials.common.Tweet;
 import org.easybatch.tutorials.common.TweetProcessor;
 
 import java.io.File;
@@ -67,6 +71,8 @@ public class ParallelTutorialWithRecordDispatching {
         Job masterJob = aNewJob()
                 .named("master-job")
                 .reader(new FlatFileRecordReader(tweets))
+                .filter(new HeaderRecordFilter())
+                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .processor(roundRobinRecordDispatcher)
                 .jobListener(new PoisonRecordBroadcaster(roundRobinRecordDispatcher))
                 .build();
@@ -90,6 +96,7 @@ public class ParallelTutorialWithRecordDispatching {
         return aNewJob()
                 .named(jobName)
                 .reader(new BlockingQueueRecordReader<>(queue))
+                .mapper(new GenericRecordMapper())
                 .filter(new PoisonRecordFilter())
                 .processor(new TweetProcessor())
                 .build();
