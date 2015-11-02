@@ -1,7 +1,7 @@
 package org.easybatch.tutorials.basic.wordcount;
 
 import org.easybatch.core.mapper.RecordMapper;
-import org.easybatch.core.record.Record;
+import org.easybatch.core.record.StringRecord;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,10 +11,10 @@ import java.util.List;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class LineTokenizer implements RecordMapper<Record, List<String>> {
+public class LineTokenizer implements RecordMapper<StringRecord, List<String>> {
 
-    public List<String> processRecord(Record record) {
-        String payload = (String) record.getPayload();
+    public List<String> processRecord(StringRecord record) {
+        String payload = record.getPayload();
         return Arrays.asList(payload.split(" "));
     }
 
