@@ -36,7 +36,7 @@ import java.util.TreeSet;
  */
 public class SortProcessor implements ComputationalRecordProcessor<String, String, Set<String>> {
 
-    private Set<String> sortedStrings = new TreeSet<String>();
+    private Set<String> sortedStrings = new TreeSet<>();
 
 
     @Override

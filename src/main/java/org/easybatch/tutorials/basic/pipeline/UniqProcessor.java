@@ -36,7 +36,7 @@ import java.util.Set;
  */
 public class UniqProcessor implements ComputationalRecordProcessor<String, String, Set<String>> {
 
-    private Set<String> uniqueStrings = new HashSet<String>();
+    private Set<String> uniqueStrings = new HashSet<>();
 
 
     @Override

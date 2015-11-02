@@ -34,11 +34,7 @@ public class Recipe {
 
     private String name;
 
-    private List<Ingredient> ingredients = new ArrayList<Ingredient>();
-
-    public String getName() {
-        return name;
-    }
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     public void setName(String name) {
         this.name = name;
@@ -46,10 +42,6 @@ public class Recipe {
 
     public List<Ingredient> getIngredients() {
         return ingredients;
-    }
-
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
     }
 
     @Override

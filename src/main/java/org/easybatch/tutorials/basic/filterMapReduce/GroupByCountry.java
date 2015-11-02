@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class GroupByCountry implements ComputationalRecordProcessor<Record, Record, Map<String, Set<Person>>> {
 
-    private  Map<String, Set<Person>> personsByCountry = new HashMap<String, Set<Person>>();
+    private  Map<String, Set<Person>> personsByCountry = new HashMap<>();
 
     @Override
     public Record processRecord(Record record) {

@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class WordCounter implements ComputationalRecordProcessor<List<String>, List<String>, Map<String, Integer>> {
 
-    private Map<String, Integer> words = new HashMap<String, Integer>();
+    private Map<String, Integer> words = new HashMap<>();
 
     public Map<String, Integer> getComputationResult() {
         return words;
