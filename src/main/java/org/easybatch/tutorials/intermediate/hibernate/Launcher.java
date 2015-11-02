@@ -75,6 +75,21 @@ public class Launcher {
         DatabaseUtil.closeSessionFactory();
         DatabaseUtil.cleanUpWorkingDirectory();
 
+        /*
+         * Load data in batch mode sample:
+
+         int batchSize = 2;
+         aNewJob()
+                .reader(new FlatFileBatchReader(tweets, batchSize))
+                .filter(new BatchFilter(new HeaderRecordFilter()))
+                .mapper(new BatchMapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message")))
+                .writer(new HibernateBatchWriter(session))
+                .pipelineListener(new HibernateTransactionListener(session)) // commit/rollback transaction after each batch
+                .jobListener(new HibernateSessionListener(session)) // close session after job end
+                .call();
+
+         */
+
     }
 
 }
