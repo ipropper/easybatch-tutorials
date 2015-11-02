@@ -30,6 +30,7 @@ import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.job.JobReport;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
+import org.easybatch.jdbc.JdbcConnectionListener;
 import org.easybatch.jdbc.JdbcRecordWriter;
 import org.easybatch.jdbc.PreparedStatementProvider;
 import org.easybatch.tutorials.common.DatabaseUtil;
@@ -81,6 +82,7 @@ public class Launcher {
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .validator(new BeanValidationRecordValidator<Tweet>())
                 .writer(jdbcRecordWriter)
+                .jobListener(new JdbcConnectionListener(connection))
                 .build();
         
         // Execute the job
@@ -92,6 +94,41 @@ public class Launcher {
 
         // Shutdown embedded database server and delete temporary files
         DatabaseUtil.cleanUpWorkingDirectory();
+
+        /*
+         * Load data in batch mode sample:
+
+        // Disable autocommit
+        Connection connection = DatabaseUtil.getConnection();
+        connection.setAutoCommit(false);
+
+        // Setup the JDBC batch writer
+        String query = "INSERT INTO tweet VALUES (?,?,?);";
+        JdbcBatchWriter jdbcBatchWriter = new JdbcBatchWriter(connection, query, new PreparedStatementProvider() {
+            @Override
+            public void prepareStatement(PreparedStatement preparedStatement, Object record) throws SQLException {
+                Tweet tweet = (Tweet) record;
+                preparedStatement.setInt(1, tweet.getId());
+                preparedStatement.setString(2, tweet.getUser());
+                preparedStatement.setString(3, tweet.getMessage());
+            }
+        });
+
+        // Build the job in batch mode
+        int batchSize = 2;
+        Job job = aNewJob()
+                .reader(new FlatFileBatchReader(tweets, batchSize))
+                .filter(new BatchFilter(new HeaderRecordFilter()))
+                .mapper(new BatchMapper<Tweet>(new DelimitedRecordMapper(Tweet.class, "id", "user", "message")))
+                .writer(jdbcBatchWriter)
+                .pipelineListener(new JdbcTransactionListener(connection)) // commit/rollback transaction after each batch
+                .jobListener(new JdbcConnectionListener(connection)) // close JDBC connection after job end
+                .build();
+
+        // Execute the job
+        JobReport jobReport = JobExecutor.execute(job);
+
+        */
 
     }
 
