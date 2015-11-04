@@ -30,11 +30,13 @@ import org.easybatch.core.dispatcher.PoisonRecordBroadcaster;
 import org.easybatch.core.filter.FileExtensionFilter;
 import org.easybatch.core.filter.PoisonRecordFilter;
 import org.easybatch.core.job.Job;
+import org.easybatch.core.mapper.GenericRecordMapper;
 import org.easybatch.core.reader.BlockingQueueRecordReader;
 import org.easybatch.core.reader.FileRecordReader;
 import org.easybatch.core.record.Record;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -73,7 +75,7 @@ public class Launcher {
                 .reader(new FileRecordReader(directory))
                 .filter(new FileExtensionFilter(".log", ".tmp"))
                 .processor(recordDispatcher)
-                .jobListener(new PoisonRecordBroadcaster(recordDispatcher))
+                .jobListener(new PoisonRecordBroadcaster(Arrays.<BlockingQueue>asList(csvQueue, xmlQueue)))
                 .build();
 
         // Build jobs
@@ -95,6 +97,7 @@ public class Launcher {
         return aNewJob()
                 .named(jobName)
                 .reader(new BlockingQueueRecordReader<>(queue))
+                .mapper(new GenericRecordMapper())
                 .filter(new PoisonRecordFilter())
                 .processor(new DummyFileProcessor())
                 .build();

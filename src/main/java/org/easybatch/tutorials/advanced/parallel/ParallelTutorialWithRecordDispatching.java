@@ -38,6 +38,7 @@ import org.easybatch.tutorials.common.Tweet;
 import org.easybatch.tutorials.common.TweetProcessor;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -74,7 +75,7 @@ public class ParallelTutorialWithRecordDispatching {
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .processor(roundRobinRecordDispatcher)
-                .jobListener(new PoisonRecordBroadcaster(roundRobinRecordDispatcher))
+                .jobListener(new PoisonRecordBroadcaster(Arrays.<BlockingQueue>asList(queue1, queue2)))
                 .build();
 
         // Build worker jobs
