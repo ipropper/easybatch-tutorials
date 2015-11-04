@@ -32,7 +32,7 @@ import org.easybatch.core.job.Job;
 import org.easybatch.core.mapper.GenericRecordMapper;
 import org.easybatch.core.reader.BlockingQueueRecordReader;
 import org.easybatch.core.reader.StringRecordReader;
-import org.easybatch.core.record.Record;
+import org.easybatch.core.record.StringRecord;
 
 import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
@@ -57,12 +57,12 @@ public class Launcher {
         String fruits = "1,apple\n2,orange\n3,banana\n4,apple\n5,pear";
 
         // Create queues
-        BlockingQueue<Record> appleQueue = new LinkedBlockingQueue<>();
-        BlockingQueue<Record> orangeQueue = new LinkedBlockingQueue<>();
-        BlockingQueue<Record> defaultQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<StringRecord> appleQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<StringRecord> orangeQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<StringRecord> defaultQueue = new LinkedBlockingQueue<>();
 
         // Create a content based record dispatcher to dispatch records to according queues based on their content
-        ContentBasedRecordDispatcher<Record> recordDispatcher = new ContentBasedRecordDispatcherBuilder<Record>()
+        ContentBasedRecordDispatcher<StringRecord> recordDispatcher = new ContentBasedRecordDispatcherBuilder<StringRecord>()
                 .when(new AppleRecordPredicate()).dispatchTo(appleQueue)
                 .when(new OrangeRecordPredicate()).dispatchTo(orangeQueue)
                 .otherwise(defaultQueue)
@@ -72,7 +72,7 @@ public class Launcher {
         Job masterJob = aNewJob()
                 .named("master-job")
                 .reader(new StringRecordReader(fruits))
-                .processor(recordDispatcher)
+                .dispatcher(recordDispatcher)
                 .jobListener(new PoisonRecordBroadcaster(Arrays.<BlockingQueue>asList(appleQueue, orangeQueue, defaultQueue)))
                 .build();
 
@@ -92,7 +92,7 @@ public class Launcher {
 
     }
 
-    public static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
+    public static Job buildWorkerJob(BlockingQueue<StringRecord> queue, String jobName) {
         return aNewJob()
                 .named(jobName)
                 .reader(new BlockingQueueRecordReader<>(queue))

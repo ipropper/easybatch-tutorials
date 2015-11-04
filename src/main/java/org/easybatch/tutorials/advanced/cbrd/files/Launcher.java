@@ -33,7 +33,7 @@ import org.easybatch.core.job.Job;
 import org.easybatch.core.mapper.GenericRecordMapper;
 import org.easybatch.core.reader.BlockingQueueRecordReader;
 import org.easybatch.core.reader.FileRecordReader;
-import org.easybatch.core.record.Record;
+import org.easybatch.core.record.FileRecord;
 
 import java.io.File;
 import java.util.Arrays;
@@ -60,11 +60,11 @@ public class Launcher {
         File directory = new File(path);
 
         // Create queues
-        BlockingQueue<Record> csvQueue = new LinkedBlockingQueue<>();
-        BlockingQueue<Record> xmlQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<FileRecord> csvQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<FileRecord> xmlQueue = new LinkedBlockingQueue<>();
 
         // Create a content based record dispatcher to dispatch records based on their content
-        ContentBasedRecordDispatcher<Record> recordDispatcher = new ContentBasedRecordDispatcherBuilder<Record>()
+        ContentBasedRecordDispatcher<FileRecord> recordDispatcher = new ContentBasedRecordDispatcherBuilder<FileRecord>()
                 .when(new CsvFilePredicate()).dispatchTo(csvQueue)
                 .when(new XmlFilePredicate()).dispatchTo(xmlQueue)
                 .build();
@@ -74,7 +74,7 @@ public class Launcher {
                 .named("master-job")
                 .reader(new FileRecordReader(directory))
                 .filter(new FileExtensionFilter(".log", ".tmp"))
-                .processor(recordDispatcher)
+                .dispatcher(recordDispatcher)
                 .jobListener(new PoisonRecordBroadcaster(Arrays.<BlockingQueue>asList(csvQueue, xmlQueue)))
                 .build();
 
@@ -93,7 +93,7 @@ public class Launcher {
 
     }
 
-    public static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
+    public static Job buildWorkerJob(BlockingQueue<FileRecord> queue, String jobName) {
         return aNewJob()
                 .named(jobName)
                 .reader(new BlockingQueueRecordReader<>(queue))

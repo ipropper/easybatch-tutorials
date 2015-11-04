@@ -31,7 +31,6 @@ import org.easybatch.core.filter.PoisonRecordFilter;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.mapper.GenericRecordMapper;
 import org.easybatch.core.reader.BlockingQueueRecordReader;
-import org.easybatch.core.record.Record;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tutorials.common.Tweet;
@@ -62,11 +61,11 @@ public class ParallelTutorialWithRecordDispatching {
         File tweets = new File("src/main/resources/data/tweets.csv");
 
         // Create queues
-        BlockingQueue<Record> queue1 = new LinkedBlockingQueue<>();
-        BlockingQueue<Record> queue2 = new LinkedBlockingQueue<>();
+        BlockingQueue<Tweet> queue1 = new LinkedBlockingQueue<>();
+        BlockingQueue<Tweet> queue2 = new LinkedBlockingQueue<>();
 
         // Create a round robin record dispatcher to distribute records to worker jobs
-        RoundRobinRecordDispatcher<Record> roundRobinRecordDispatcher = new RoundRobinRecordDispatcher<>(asList(queue1, queue2));
+        RoundRobinRecordDispatcher<Tweet> roundRobinRecordDispatcher = new RoundRobinRecordDispatcher<>(asList(queue1, queue2));
 
         // Build a master job to read records from the data source and dispatch them to worker jobs
         Job masterJob = aNewJob()
@@ -74,7 +73,7 @@ public class ParallelTutorialWithRecordDispatching {
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
-                .processor(roundRobinRecordDispatcher)
+                .dispatcher(roundRobinRecordDispatcher)
                 .jobListener(new PoisonRecordBroadcaster(Arrays.<BlockingQueue>asList(queue1, queue2)))
                 .build();
 
@@ -93,7 +92,7 @@ public class ParallelTutorialWithRecordDispatching {
 
     }
 
-    public static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
+    public static Job buildWorkerJob(BlockingQueue<Tweet> queue, String jobName) {
         return aNewJob()
                 .named(jobName)
                 .reader(new BlockingQueueRecordReader<>(queue))
