@@ -41,7 +41,7 @@ public class Launcher {
         List<String> dataSink = new ArrayList<>();
 
         aNewJob()
-                .reader(new IterableBatchReader<>(dataSource, BATCH_SIZE))
+                .reader(new IterableBatchReader(dataSource, BATCH_SIZE))
                 .processor(new BatchProcessor())
                 .writer(new CollectionBatchWriter(dataSink))
                 .call();

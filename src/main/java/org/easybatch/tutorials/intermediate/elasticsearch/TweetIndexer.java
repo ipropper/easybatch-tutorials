@@ -25,6 +25,7 @@
 package org.easybatch.tutorials.intermediate.elasticsearch;
 
 import org.easybatch.core.processor.RecordProcessor;
+import org.easybatch.core.record.StringRecord;
 import org.elasticsearch.client.Client;
 
 /**
@@ -34,7 +35,7 @@ import org.elasticsearch.client.Client;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class TweetIndexer implements RecordProcessor<String, String>{
+public class TweetIndexer implements RecordProcessor<StringRecord, StringRecord>{
 
     private Client client;
 
@@ -43,15 +44,15 @@ public class TweetIndexer implements RecordProcessor<String, String>{
     }
 
     @Override
-    public String processRecord(String tweet) {
-
+    public StringRecord processRecord(StringRecord record) {
+        String tweet = record.getPayload();
         //index the tweet in the twitter index
         client.prepareIndex("twitter", "tweet")
                 .setSource(tweet)
                 .execute()
                 .actionGet();
 
-        return tweet;
+        return record;
     }
 
 }

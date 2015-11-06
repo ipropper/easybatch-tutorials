@@ -29,7 +29,6 @@ import org.easybatch.core.dispatcher.ContentBasedRecordDispatcherBuilder;
 import org.easybatch.core.dispatcher.PoisonRecordBroadcaster;
 import org.easybatch.core.filter.PoisonRecordFilter;
 import org.easybatch.core.job.Job;
-import org.easybatch.core.mapper.GenericRecordMapper;
 import org.easybatch.core.reader.BlockingQueueRecordReader;
 import org.easybatch.core.reader.StringRecordReader;
 import org.easybatch.core.record.StringRecord;
@@ -96,7 +95,6 @@ public class Launcher {
         return aNewJob()
                 .named(jobName)
                 .reader(new BlockingQueueRecordReader<>(queue))
-                .mapper(new GenericRecordMapper())
                 .filter(new PoisonRecordFilter())
                 .processor(new FruitProcessor())
                 .build();

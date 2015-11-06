@@ -43,7 +43,7 @@ public class Launcher {
         server.start();
 
         System.out.println("Record dispatcher started." + LINE_SEPARATOR +
-                "Listening for incoming records on http://localhost:8000/api/orders\n" +
+                "Listening to incoming records on http://localhost:8000/api/orders\n" +
                 "Hit enter to stop the application...");
 
         System.in.read();

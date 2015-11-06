@@ -27,7 +27,6 @@ package org.easybatch.tutorials.intermediate.recipes;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobBuilder;
 import org.easybatch.core.job.JobExecutor;
-import org.easybatch.core.mapper.GenericRecordMapper;
 import org.easybatch.core.writer.StandardOutputRecordWriter;
 
 import java.io.File;
@@ -47,7 +46,6 @@ public class Launcher {
         // Build a batch job
         Job job = new JobBuilder()
                 .reader(new RecipeRecordReader(recipes))
-                .mapper(new GenericRecordMapper())
                 .writer(new StandardOutputRecordWriter())
                 .build();
 

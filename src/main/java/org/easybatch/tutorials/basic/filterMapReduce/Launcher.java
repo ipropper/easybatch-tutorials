@@ -55,7 +55,7 @@ public class Launcher {
 
         // Build a batch job
         Job job = aNewJob()
-                .reader(new IterableRecordReader<>(dataSource))
+                .reader(new IterableRecordReader(dataSource))
                 .filter(new CountryFilter("france"))
                 .mapper(new AgeMapper())
                 .processor(new MinCalculator())
@@ -72,7 +72,7 @@ public class Launcher {
          */
 
         report = aNewJob()
-                .reader(new IterableRecordReader<>(dataSource))
+                .reader(new IterableRecordReader(dataSource))
                 .processor(new GroupByCountry())
                 .call();
 

@@ -25,13 +25,14 @@
 package org.easybatch.tutorials.basic.pipeline;
 
 import org.easybatch.core.processor.ComputationalRecordProcessor;
+import org.easybatch.core.record.StringRecord;
 
 /**
  * A processor that mimics "wc -w" unix command.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class WordCountProcessor implements ComputationalRecordProcessor<String, String, Integer> {
+public class WordCountProcessor implements ComputationalRecordProcessor<StringRecord, StringRecord, Integer> {
 
     private Integer count = 0;
 
@@ -41,8 +42,8 @@ public class WordCountProcessor implements ComputationalRecordProcessor<String, 
     }
 
     @Override
-    public String processRecord(String record) {
-        count += record.split(" ").length;
+    public StringRecord processRecord(StringRecord record) {
+        count += record.getPayload().split(" ").length;
         return record;
     }
 

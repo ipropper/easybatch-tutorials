@@ -27,6 +27,7 @@ package org.easybatch.tutorials.intermediate.mongodb.load;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.easybatch.core.processor.RecordProcessor;
+import org.easybatch.core.record.GenericRecord;
 import org.easybatch.tutorials.common.Tweet;
 
 /**
@@ -34,14 +35,15 @@ import org.easybatch.tutorials.common.Tweet;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class TweetToDBObjectTransformer implements RecordProcessor<Tweet, DBObject> {
+public class TweetToDBObjectTransformer implements RecordProcessor<GenericRecord<Tweet>, GenericRecord<DBObject>> {
 
     @Override
-    public DBObject processRecord(Tweet tweet) {
-
-        return new BasicDBObject()
+    public GenericRecord<DBObject> processRecord(GenericRecord<Tweet> record) {
+        Tweet tweet = record.getPayload();
+        DBObject payload = new BasicDBObject()
                 .append("_id", tweet.getId())
                 .append("user", tweet.getUser())
                 .append("message", tweet.getMessage());
+        return new GenericRecord<>(record.getHeader(), payload);
     }
 }
