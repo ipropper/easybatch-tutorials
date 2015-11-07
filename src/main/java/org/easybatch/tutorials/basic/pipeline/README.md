@@ -6,7 +6,7 @@ This tutorial is a unix-like pipeline application that operates on a list of twe
 
 ## Pre-requisite
 
-* JDK 1.6+
+* JDK 1.7+
 * Maven
 * Git (optional)
 * Your favorite IDE (optional)

@@ -1,30 +1,33 @@
 package org.easybatch.tutorials.basic.wordcount;
 
-import org.easybatch.core.api.ComputationalRecordProcessor;
+import org.easybatch.core.processor.ComputationalRecordProcessor;
+import org.easybatch.core.record.GenericRecord;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * This processor counts the number of occurrences of each word.
+ * Processor that counts the number of occurrences of each word.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class WordCounter implements ComputationalRecordProcessor<List<String>, List<String>, Map<String, Integer>> {
+public class WordCounter implements ComputationalRecordProcessor<GenericRecord, GenericRecord, Map<String, Integer>> {
 
-    private Map<String, Integer> words = new HashMap<String, Integer>();
+    private Map<String, Integer> words = new HashMap<>();
 
     public Map<String, Integer> getComputationResult() {
         return words;
     }
 
-    public List<String> processRecord(List<String> tokens) {
+    @SuppressWarnings("unchecked")
+    public GenericRecord processRecord(GenericRecord record) {
+        List<String> tokens = (List<String>) record.getPayload();
         for (String token : tokens) {
             Integer count = words.get(token);
             count = (count == null) ? 1 : count + 1;
             words.put(token, count);
         }
-        return tokens;
+        return record;
     }
 }

@@ -1,8 +1,8 @@
-# Key APIs Tutorial
+# Database Tutorial
 
 ## Description
 
-This tutorial is a simple batch application that reads tweets from a flat file and calculates some statistics on these tweets.
+This tutorial is an application that reads tweets from a flat file and load them in a relational database using JDBC.
 
 ## Pre-requisite
 
@@ -30,12 +30,12 @@ Open a terminal in the directory where you have extracted the source code of the
 ```
 $>cd easybatch-tutorials
 $>mvn install
-$>mvn exec:java -PrunKeyAPIsTutorial
+$>mvn exec:java -PrunJdbcImportDataTutorial
 ```
 
 ### From Your IDE
 
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
-* Navigate to the `org.easybatch.tutorials.basic.keyapis` package
-* Run the `org.easybatch.tutorials.basic.keyapis.Launcher` class without any argument
+* Navigate to the `org.easybatch.tutorials.intermediate.jdbc.load` package
+* Run the `org.easybatch.tutorials.intermediate.jdbc.load.Launcher` class without any argument

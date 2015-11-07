@@ -22,20 +22,29 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.basic.filterMapReduce;
+package org.easybatch.tutorials.intermediate.jdbc.extract;
 
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.job.JobReport;
-import org.easybatch.core.reader.IterableRecordReader;
+import org.easybatch.core.writer.FileRecordWriter;
+import org.easybatch.flatfile.DelimitedRecordMarshaller;
+import org.easybatch.jdbc.JdbcConnectionListener;
+import org.easybatch.jdbc.JdbcRecordMapper;
+import org.easybatch.jdbc.JdbcRecordReader;
+import org.easybatch.tutorials.common.DatabaseUtil;
+import org.easybatch.tutorials.common.Tweet;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.FileWriter;
+import java.sql.Connection;
 
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
- * Main class to run the filter-map-reduce tutorial.
+ * Main class to run the JDBC export data tutorial.
+ *
+ * The goal is to read tweets from a relational database and export them to a flat file.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
@@ -43,40 +52,32 @@ public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
-        List<Person> dataSource = new ArrayList<>();
-        dataSource.add(new Person("jean", "france", 10));
-        dataSource.add(new Person("foo", "usa", 30));
-        dataSource.add(new Person("bar", "belgium", 20));
-        dataSource.add(new Person("jacques", "france", 40));
+        // Output file
+        FileWriter tweets = new FileWriter(new File("tweets.csv"));
+        
+        //Start embedded database server
+        DatabaseUtil.startEmbeddedDatabase();
+        DatabaseUtil.populateTweetTable();
 
-        /*
-         * Example 1: find the youngest french person's age from the list of persons
-         */
+        // get a connection to the database
+        Connection connection = DatabaseUtil.getConnection();
 
         // Build a batch job
+        String[] fields = {"id", "user", "message"};
         Job job = aNewJob()
-                .reader(new IterableRecordReader(dataSource))
-                .filter(new CountryFilter("france"))
-                .mapper(new AgeMapper())
-                .processor(new MinCalculator())
+                .reader(new JdbcRecordReader(connection, "select * from tweet"))
+                .mapper(new JdbcRecordMapper(Tweet.class, fields))
+                .marshaller(new DelimitedRecordMarshaller(Tweet.class, fields))
+                .writer(new FileRecordWriter(tweets))
+                .jobListener(new JdbcConnectionListener(connection))
                 .build();
+        
+        // Execute the job
+        JobReport jobReport = JobExecutor.execute(job);
+        System.out.println(jobReport);
 
-        // Run the job
-        JobReport report = JobExecutor.execute(job);
-
-        // Print the job execution report
-        System.out.println("The youngest french person's age is: " + report.getResult());
-
-        /*
-         * Example 2: group persons by country
-         */
-
-        report = aNewJob()
-                .reader(new IterableRecordReader(dataSource))
-                .processor(new GroupByCountry())
-                .call();
-
-        System.out.println("Persons grouped by country: " + report.getResult());
+        // Shutdown embedded database server and delete temporary files
+        DatabaseUtil.cleanUpWorkingDirectory();
 
     }
 

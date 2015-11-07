@@ -24,19 +24,20 @@
 
 package org.easybatch.tutorials.common;
 
-import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.processor.RecordProcessor;
+import org.easybatch.core.record.Record;
 
 /**
  * A processor that prints out tweets to the console.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class TweetProcessor implements RecordProcessor<Tweet, Tweet> {
+public class TweetProcessor implements RecordProcessor<Record, Record> {
 
     @Override
-    public Tweet processRecord(Tweet tweet) {
-        System.out.println(tweet);
-        return tweet;
+    public Record processRecord(Record record) {
+        System.out.println(record.getPayload());
+        return record;
     }
 
 }

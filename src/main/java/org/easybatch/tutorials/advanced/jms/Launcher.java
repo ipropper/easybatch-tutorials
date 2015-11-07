@@ -24,11 +24,12 @@
 
 package org.easybatch.tutorials.advanced.jms;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.api.Report;
-import org.easybatch.core.impl.EngineBuilder;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.job.JobReport;
 import org.easybatch.jms.JmsPoisonRecordFilter;
-import org.easybatch.jms.JmsRecordReader;
+import org.easybatch.jms.JmsQueueRecordReader;
 
 /**
 * Main class to run the JMS tutorial.
@@ -43,15 +44,15 @@ public class Launcher {
 
         JMSUtil.initJMSFactory();
 
-        // Build easy batch engines
-        Engine engine = new EngineBuilder()
-                .reader(new JmsRecordReader(JMSUtil.queueConnectionFactory, JMSUtil.queue))
+        // Build a batch job
+        Job job = new JobBuilder()
+                .reader(new JmsQueueRecordReader(JMSUtil.queueConnectionFactory, JMSUtil.queue))
                 .filter(new JmsPoisonRecordFilter())
                 .processor(new JmsRecordProcessor())
                 .build();
 
-        //run engine and get report
-        Report report = engine.call();
+        // Execute the job and get report
+        JobReport report = JobExecutor.execute(job);
 
         System.out.println(report);
 

@@ -1,7 +1,7 @@
 package org.easybatch.tutorials.advanced.cbrd.fruits;
 
-import org.easybatch.core.api.RecordProcessingException;
-import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.processor.RecordProcessingException;
+import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.record.StringRecord;
 
 public class FruitProcessor implements RecordProcessor<StringRecord, StringRecord> {

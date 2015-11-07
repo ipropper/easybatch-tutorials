@@ -24,12 +24,14 @@
 
 package org.easybatch.tutorials.basic.wordcount;
 
-import org.easybatch.core.api.Report;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.job.JobReport;
 import org.easybatch.core.reader.StringRecordReader;
 
 import java.util.Map;
 
-import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
+import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
 * Main class to run the word count tutorial.
@@ -39,22 +41,25 @@ import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
 @SuppressWarnings("unchecked")
 public class Launcher {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         // Create a data source
         String dataSource =
-                "Spring batch is cool but a bit complex\n" +
-                "Easy batch is cool too, but easier";
+                "big data is often\n" +
+                "not so big";
 
-        // Build and run a batch engine
-        Report report = aNewEngine()
+        // Build a batch job
+        Job job = aNewJob()
                 .reader(new StringRecordReader(dataSource))
                 .mapper(new LineTokenizer())
                 .processor(new WordCounter())
-                .build().call();
+                .build();
 
+        // Execute the job
+        JobReport report = JobExecutor.execute(job);
+        
         // Get result
-        Map<String, Integer> words = (Map<String, Integer>) report.getBatchResult();
+        Map<String, Integer> words = (Map<String, Integer>) report.getResult();
 
         System.out.println(words);
 

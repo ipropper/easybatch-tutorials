@@ -24,13 +24,15 @@
 
 package org.easybatch.tutorials.advanced.parallel;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.api.Report;
-import org.easybatch.core.impl.EngineBuilder;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
+import org.easybatch.core.job.JobReport;
+import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
-import org.easybatch.tools.reporting.DefaultReportMerger;
-import org.easybatch.tools.reporting.ReportMerger;
-import org.easybatch.tutorials.basic.helloworld.TweetProcessor;
+import org.easybatch.tools.reporting.DefaultJobReportMerger;
+import org.easybatch.tools.reporting.JobReportMerger;
+import org.easybatch.tutorials.common.Tweet;
+import org.easybatch.tutorials.common.TweetProcessor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,7 +44,7 @@ import java.util.concurrent.Future;
 import static java.util.Arrays.asList;
 
 /**
- * Main class to run the parallel tutorial with data source splitting.
+ * Main class to run the parallel jobs tutorial with data source splitting.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
@@ -53,38 +55,37 @@ public class ParallelTutorialWithDataSplitting {
     public static void main(String[] args) throws Exception {
 
         // Input file tweets-part1.csv
-        File tweetsPart1 = new File(ParallelTutorialWithDataSplitting.class
-                .getResource("/org/easybatch/tutorials/advanced/parallel/tweets-part1.csv").toURI());
+        File tweetsPart1 = new File("src/main/resources/data/tweets-part1.csv");
 
         // Input file tweets-part2.csv
-        File tweetsPart2 = new File(ParallelTutorialWithDataSplitting.class
-                .getResource("/org/easybatch/tutorials/advanced/parallel/tweets-part2.csv").toURI());
+        File tweetsPart2 = new File("src/main/resources/data/tweets-part2.csv");
 
-        // Build worker engines
-        Engine engine1 = buildEngine(tweetsPart1, "worker-engine1");
-        Engine engine2 = buildEngine(tweetsPart2, "worker-engine2");
+        // Build worker jobs
+        Job job1 = buildJob(tweetsPart1, "worker-job1");
+        Job job2 = buildJob(tweetsPart2, "worker-job2");
 
-        //create a 2 threads pool to call worker engines in parallel
+        //create a 2 threads pool to call worker jobs in parallel
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
-        List<Future<Report>> partialReports = executorService.invokeAll(asList(engine1, engine2));
+        List<Future<JobReport>> partialReports = executorService.invokeAll(asList(job1, job2));
 
         //merge partial reports into a global one
-        Report report1 = partialReports.get(0).get();
-        Report report2 = partialReports.get(1).get();
+        JobReport report1 = partialReports.get(0).get();
+        JobReport report2 = partialReports.get(1).get();
 
-        ReportMerger reportMerger = new DefaultReportMerger();
-        Report finalReport = reportMerger.mergerReports(report1, report2);
+        JobReportMerger reportMerger = new DefaultJobReportMerger();
+        JobReport finalReport = reportMerger.mergerReports(report1, report2);
         System.out.println(finalReport);
 
         executorService.shutdown();
 
     }
 
-    private static Engine buildEngine(File file, String engineName) throws FileNotFoundException {
-        return EngineBuilder.aNewEngine()
-                .named(engineName)
+    private static Job buildJob(File file, String jobName) throws FileNotFoundException {
+        return JobBuilder.aNewJob()
+                .named(jobName)
                 .reader(new FlatFileRecordReader(file))
+                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .processor(new TweetProcessor())
                 .build();
     }

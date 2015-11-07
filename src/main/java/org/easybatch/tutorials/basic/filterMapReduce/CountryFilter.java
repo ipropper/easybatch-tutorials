@@ -24,15 +24,15 @@
 
 package org.easybatch.tutorials.basic.filterMapReduce;
 
-import org.easybatch.core.api.Record;
-import org.easybatch.core.api.RecordFilter;
+import org.easybatch.core.filter.RecordFilter;
+import org.easybatch.core.record.Record;
 
 /**
  * A record filter that filter persons by country.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class CountryFilter implements RecordFilter {
+public class CountryFilter implements RecordFilter<Record> {
 
     private String country;
 
@@ -41,9 +41,9 @@ public class CountryFilter implements RecordFilter {
     }
 
     @Override
-    public boolean filterRecord(Record record) {
+    public Record processRecord(Record record) {
         Person person = (Person) record.getPayload();
-        return !country.equalsIgnoreCase(person.getCountry());
+        return !country.equalsIgnoreCase(person.getCountry()) ? null : record;
     }
 
 }

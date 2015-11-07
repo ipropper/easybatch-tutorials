@@ -24,14 +24,15 @@
 
 package org.easybatch.tutorials.basic.pipeline;
 
-import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.processor.RecordProcessor;
+import org.easybatch.core.record.StringRecord;
 
 /**
  * A processor that mimics "tr" unix command.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class TranslateProcessor implements RecordProcessor<String, String> {
+public class TranslateProcessor implements RecordProcessor<StringRecord, StringRecord> {
 
     private String regexp;
 
@@ -43,8 +44,8 @@ public class TranslateProcessor implements RecordProcessor<String, String> {
     }
 
     @Override
-    public String processRecord(String record) {
-        return record.replaceAll(regexp, replacement);
+    public StringRecord processRecord(StringRecord record) {
+        return new StringRecord(record.getHeader(), record.getPayload().replaceAll(regexp, replacement));
     }
 
 }

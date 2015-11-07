@@ -24,13 +24,15 @@
 
 package org.easybatch.tutorials.advanced.jmx;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.api.RecordFilter;
+import org.easybatch.core.filter.RecordFilter;
 import org.easybatch.core.filter.RecordNumberGreaterThanFilter;
 import org.easybatch.core.filter.RecordNumberLowerThanFilter;
-import org.easybatch.core.impl.EngineBuilder;
-import org.easybatch.core.reader.StringRecordReader;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
+import org.easybatch.flatfile.FlatFileRecordReader;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -41,47 +43,37 @@ import static java.util.Arrays.asList;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class ParallelEngineJmxTutorial {
+public class ParallelJobsJmxTutorial {
 
     private static final int THREAD_POOL_SIZE = 2;
 
     public static void main(String[] args) throws Exception {
 
-        // Create the String data source
-        String dataSource =
-                "1,foo,easy batch rocks! #EasyBatch\n" +
-                "2,bar,@foo I do confirm :-)\n" +
-                "3,baz,@foo @bar what are you talking about? Am I in trouble?\n" +
-                "4,foo,@baz yes you are in trouble!\n" +
-                "5,bar,@baz It's about easy batch. See in here: http://www.easybatch.org cc @md_benhassine\n" +
-                "6,baz,@foo @bar @md_benhassine Oh damn that's really easy!\n" +
-                "7,md_benhassine,Thank you all! your feedback is welcome :-)\n" +
-                "8,foo,@md_benhassine Have you some benchmarks out there?\n" +
-                "9,md_benhassine,@foo yep check them out here: https://github.com/EasyBatch/easybatch-benchmarks\n" +
-                "10,foo,@md_benhassine I'll see there thx!";
+        // Create the  data source
+        File dataSource = new File("src/main/resources/data/tweets.csv");
 
-        // Build worker engines
-        // worker engine 1: process records 1-5 and filters records 6-10
-        Engine engine1 = buildEngine(dataSource, new RecordNumberGreaterThanFilter(5), "worker-engine1");
-        // worker engine 2: process 6-10 and filters records 1-5
-        Engine engine2 = buildEngine(dataSource, new RecordNumberLowerThanFilter(6), "worker-engine2");
+        // Build worker jobs
+        // worker job 1: process records 1-3 and filters records 4+
+        Job job1 = buildJob(dataSource, new RecordNumberGreaterThanFilter(3), "worker-job1");
+        // worker job 2: process 4+ and filters records 1-3
+        Job job2 = buildJob(dataSource, new RecordNumberLowerThanFilter(4), "worker-job2");
 
-        //create a 2 threads pool to call worker engines in parallel
+        //create a 2 threads pool to call worker jobs in parallel
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
-        executorService.invokeAll(asList(engine1, engine2));
+        executorService.invokeAll(asList(job1, job2));
 
         executorService.shutdown();
 
     }
 
-    private static Engine buildEngine(String dataSource, RecordFilter recordFilter, String engineName) {
-        return EngineBuilder.aNewEngine()
-                .named(engineName)
-                .reader(new StringRecordReader(dataSource))
+    private static Job buildJob(File dataSource, RecordFilter recordFilter, String jobName) throws FileNotFoundException {
+        return JobBuilder.aNewJob()
+                .named(jobName)
+                .reader(new FlatFileRecordReader(dataSource))
                 .filter(recordFilter)
                 .processor(new TweetSlowProcessor())
-                .enableJMX(true)
+                .jmxMode(true)
                 .build();
     }
 

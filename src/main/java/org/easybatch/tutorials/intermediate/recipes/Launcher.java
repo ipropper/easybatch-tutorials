@@ -24,9 +24,10 @@
 
 package org.easybatch.tutorials.intermediate.recipes;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.impl.EngineBuilder;
-import org.easybatch.core.mapper.GenericRecordMapper;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.writer.StandardOutputRecordWriter;
 
 import java.io.File;
 
@@ -40,17 +41,16 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
 
         // Initialize input file recipes.txt
-        File recipes = new File(Launcher.class.getResource("/org/easybatch/tutorials/intermediate/recipes/recipes.txt").toURI());
+        File recipes = new File("src/main/resources/data/recipes.txt");
 
-        // Build a batch engine
-        Engine engine = new EngineBuilder()
+        // Build a batch job
+        Job job = new JobBuilder()
                 .reader(new RecipeRecordReader(recipes))
-                .mapper(new GenericRecordMapper())
-                .processor(new RecipeProcessor())
+                .writer(new StandardOutputRecordWriter())
                 .build();
 
-        // Run the batch engine
-        engine.call();
+        // Execute the batch job
+        JobExecutor.execute(job);
 
     }
 

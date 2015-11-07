@@ -24,16 +24,18 @@
 
 package org.easybatch.tutorials.advanced.parallel;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.api.RecordFilter;
-import org.easybatch.core.api.Report;
+import org.easybatch.core.filter.RecordFilter;
 import org.easybatch.core.filter.RecordNumberGreaterThanFilter;
 import org.easybatch.core.filter.RecordNumberLowerThanFilter;
-import org.easybatch.core.impl.EngineBuilder;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
+import org.easybatch.core.job.JobReport;
+import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
-import org.easybatch.tools.reporting.DefaultReportMerger;
-import org.easybatch.tools.reporting.ReportMerger;
-import org.easybatch.tutorials.basic.helloworld.TweetProcessor;
+import org.easybatch.tools.reporting.DefaultJobReportMerger;
+import org.easybatch.tools.reporting.JobReportMerger;
+import org.easybatch.tutorials.common.Tweet;
+import org.easybatch.tutorials.common.TweetProcessor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,7 +47,7 @@ import java.util.concurrent.Future;
 import static java.util.Arrays.asList;
 
 /**
- * Main class to run the parallel tutorial with data source filtering.
+ * Main class to run the parallel jobs tutorial with data source filtering.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
@@ -56,37 +58,37 @@ public class ParallelTutorialWithDataFiltering {
     public static void main(String[] args) throws Exception {
 
         // Input file tweets.csv
-        File tweets = new File(ParallelTutorialWithDataFiltering.class
-                            .getResource("/org/easybatch/tutorials/advanced/parallel/tweets.csv").toURI());
+        File tweets = new File("src/main/resources/data/tweets.csv");
 
-        // Build worker engines
-        // worker engine 1: process data from tweets.csv, filter records 6-10
-        Engine engine1 = buildEngine(tweets, new RecordNumberGreaterThanFilter(5), "worker-engine1");
-        // worker engine 2: process data from tweets.csv, filter records 1-5
-        Engine engine2 = buildEngine(tweets, new RecordNumberLowerThanFilter(6), "worker-engine2");
+        // Build worker jobs
+        // worker job 1: process records 1-3 and filters records 4+
+        Job job1 = buildJob(tweets, new RecordNumberGreaterThanFilter(3), "worker-job1");
+        // worker job 2: process 4+ and filters records 1-3
+        Job job2 = buildJob(tweets, new RecordNumberLowerThanFilter(4), "worker-job2");
 
-        //create a 2 threads pool to call worker engines in parallel
+        //create a 2 threads pool to call worker jobs in parallel
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
-        List<Future<Report>> partialReports = executorService.invokeAll(asList(engine1, engine2));
+        List<Future<JobReport>> partialReports = executorService.invokeAll(asList(job1, job2));
 
         //merge partial reports into a global one
-        Report report1 = partialReports.get(0).get();
-        Report report2 = partialReports.get(1).get();
+        JobReport report1 = partialReports.get(0).get();
+        JobReport report2 = partialReports.get(1).get();
 
-        ReportMerger reportMerger = new DefaultReportMerger();
-        Report finalReport = reportMerger.mergerReports(report1, report2);
+        JobReportMerger reportMerger = new DefaultJobReportMerger();
+        JobReport finalReport = reportMerger.mergerReports(report1, report2);
         System.out.println(finalReport);
 
         executorService.shutdown();
 
     }
 
-    private static Engine buildEngine(File file, RecordFilter recordFilter, String engineName) throws FileNotFoundException {
-        return EngineBuilder.aNewEngine()
-                .named(engineName)
+    private static Job buildJob(File file, RecordFilter recordFilter, String jobName) throws FileNotFoundException {
+        return JobBuilder.aNewJob()
+                .named(jobName)
                 .reader(new FlatFileRecordReader(file))
                 .filter(recordFilter)
+                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .processor(new TweetProcessor())
                 .build();
     }

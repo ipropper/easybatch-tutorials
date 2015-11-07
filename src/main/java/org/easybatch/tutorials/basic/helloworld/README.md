@@ -2,11 +2,11 @@
 
 ## Description
 
-This tutorial is a simple batch application that reads tweets from a String and prints them out to the standard output.
+This tutorial is a simple batch application that reads tweets from a flat file and prints them out to the standard output.
 
 ## Pre-requisite
 
-* JDK 1.6+
+* JDK 1.7+
 * Maven
 * Git (optional)
 * Your favorite IDE (optional)

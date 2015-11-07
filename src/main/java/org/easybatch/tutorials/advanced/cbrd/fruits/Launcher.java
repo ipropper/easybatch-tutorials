@@ -24,22 +24,23 @@
 
 package org.easybatch.tutorials.advanced.cbrd.fruits;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.api.Record;
 import org.easybatch.core.dispatcher.ContentBasedRecordDispatcher;
 import org.easybatch.core.dispatcher.ContentBasedRecordDispatcherBuilder;
 import org.easybatch.core.dispatcher.PoisonRecordBroadcaster;
 import org.easybatch.core.filter.PoisonRecordFilter;
-import org.easybatch.core.reader.QueueRecordReader;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.reader.BlockingQueueRecordReader;
 import org.easybatch.core.reader.StringRecordReader;
+import org.easybatch.core.record.StringRecord;
 
+import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static java.util.Arrays.asList;
-import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
+import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
 * Main class to run the content based record dispatching tutorial.
@@ -55,45 +56,45 @@ public class Launcher {
         String fruits = "1,apple\n2,orange\n3,banana\n4,apple\n5,pear";
 
         // Create queues
-        BlockingQueue<Record> appleQueue = new LinkedBlockingQueue<Record>();
-        BlockingQueue<Record> orangeQueue = new LinkedBlockingQueue<Record>();
-        BlockingQueue<Record> defaultQueue = new LinkedBlockingQueue<Record>();
+        BlockingQueue<StringRecord> appleQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<StringRecord> orangeQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<StringRecord> defaultQueue = new LinkedBlockingQueue<>();
 
         // Create a content based record dispatcher to dispatch records to according queues based on their content
-        ContentBasedRecordDispatcher recordDispatcher = new ContentBasedRecordDispatcherBuilder()
+        ContentBasedRecordDispatcher<StringRecord> recordDispatcher = new ContentBasedRecordDispatcherBuilder<StringRecord>()
                 .when(new AppleRecordPredicate()).dispatchTo(appleQueue)
                 .when(new OrangeRecordPredicate()).dispatchTo(orangeQueue)
                 .otherwise(defaultQueue)
                 .build();
 
-        // Build a master engine that will read records from the data source and dispatch them to worker engines
-        Engine masterEngine = aNewEngine()
-                .named("master-engine")
+        // Build a master job that will read records from the data source and dispatch them to worker jobs
+        Job masterJob = aNewJob()
+                .named("master-job")
                 .reader(new StringRecordReader(fruits))
-                .processor(recordDispatcher)
-                .jobEventListener(new PoisonRecordBroadcaster(recordDispatcher))
+                .dispatcher(recordDispatcher)
+                .jobListener(new PoisonRecordBroadcaster(Arrays.<BlockingQueue>asList(appleQueue, orangeQueue, defaultQueue)))
                 .build();
 
-        // Build easy batch engines
-        Engine workerEngine1 = buildWorkerEngine(appleQueue, "apple-worker-engine");
-        Engine workerEngine2 = buildWorkerEngine(orangeQueue, "orange-worker-engine");
-        Engine workerEngine3 = buildWorkerEngine(defaultQueue, "default-worker-engine");
+        // Build worker jobs
+        Job workerJob1 = buildWorkerJob(appleQueue, "apple-worker-job");
+        Job workerJob2 = buildWorkerJob(orangeQueue, "orange-worker-job");
+        Job workerJob3 = buildWorkerJob(defaultQueue, "default-worker-job");
 
-        // Create a threads pool to call Easy Batch engines in parallel
+        // Create a threads pool to call jobs in parallel
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
-        // Submit master and worker engines to executor service
-        executorService.invokeAll(asList(masterEngine, workerEngine1, workerEngine2, workerEngine3));
+        // Submit master and worker jobs to executor service
+        executorService.invokeAll(asList(masterJob, workerJob1, workerJob2, workerJob3));
 
         // Shutdown executor service
         executorService.shutdown();
 
     }
 
-    public static Engine buildWorkerEngine(BlockingQueue<Record> queue, String engineName) {
-        return aNewEngine()
-                .named(engineName)
-                .reader(new QueueRecordReader(queue))
+    public static Job buildWorkerJob(BlockingQueue<StringRecord> queue, String jobName) {
+        return aNewJob()
+                .named(jobName)
+                .reader(new BlockingQueueRecordReader<>(queue))
                 .filter(new PoisonRecordFilter())
                 .processor(new FruitProcessor())
                 .build();

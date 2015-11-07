@@ -6,7 +6,7 @@ This tutorial is an application that reads tweets from flat file and load them i
 
 ## Pre-requisite
 
-* JDK 1.6+
+* JDK 1.7+
 * Maven
 * Git (optional)
 * Your favorite IDE (optional)

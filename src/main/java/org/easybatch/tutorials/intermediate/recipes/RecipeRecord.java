@@ -24,8 +24,8 @@
 
 package org.easybatch.tutorials.intermediate.recipes;
 
-import org.easybatch.core.api.Header;
 import org.easybatch.core.record.GenericRecord;
+import org.easybatch.core.record.Header;
 
 /**
  * Recipe record. This logical record represents a set of physical records in recipes.txt file.

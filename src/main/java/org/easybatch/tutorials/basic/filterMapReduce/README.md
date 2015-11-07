@@ -6,7 +6,7 @@ This tutorial is a filter-map-reduce application that operates on a list of pers
 
 ## Pre-requisite
 
-* JDK 1.6+
+* JDK 1.7+
 * Maven
 * Git (optional)
 * Your favorite IDE (optional)

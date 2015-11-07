@@ -24,10 +24,14 @@
 
 package org.easybatch.tutorials.basic.helloworld;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.api.Report;
-import org.easybatch.core.impl.EngineBuilder;
-import org.easybatch.core.reader.StringRecordReader;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.job.JobReport;
+import org.easybatch.core.writer.StandardOutputRecordWriter;
+import org.easybatch.flatfile.FlatFileRecordReader;
+
+import java.io.File;
 
 /**
 * Main class to run the hello world tutorial.
@@ -38,21 +42,20 @@ public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
-        // Create the String data source
-        String dataSource =
-                "1,foo,easy batch rocks! #EasyBatch\n" +
-                "2,bar,@foo I do confirm :-)";
-
-        // Build a batch engine
-        Engine engine = new EngineBuilder()
-                .reader(new StringRecordReader(dataSource))
-                .processor(new TweetProcessor())
+        // Create the data source
+        File dataSource = new File("src/main/resources/data/tweets.csv");
+        
+        // Build a batch job
+        Job job = new JobBuilder()
+                .named("hello world job")
+                .reader(new FlatFileRecordReader(dataSource))
+                .writer(new StandardOutputRecordWriter())
                 .build();
 
-        // Run the batch engine
-        Report report = engine.call();
+        // Execute the job
+        JobReport report = JobExecutor.execute(job);
 
-        // Print the batch execution report
+        // Print the job execution report
         System.out.println(report);
 
     }

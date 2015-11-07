@@ -24,12 +24,13 @@
 
 package org.easybatch.tutorials.advanced.spring;
 
-import org.easybatch.core.api.Engine;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * Main class to run the Hello World tutorial using easy batch - spring integration module.<br/>
+ * Main class to run the Hello World tutorial using easy batch - spring extension module.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
@@ -38,8 +39,8 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
 
         ApplicationContext context = new ClassPathXmlApplicationContext("org/easybatch/tutorials/advanced/spring/application-context.xml");
-        Engine engine = (Engine) context.getBean("engine");
-        engine.call();
+        Job job = (Job) context.getBean("job");
+        JobExecutor.execute(job);
 
     }
 

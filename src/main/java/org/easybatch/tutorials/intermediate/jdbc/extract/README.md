@@ -2,15 +2,11 @@
 
 ## Description
 
-This tutorial is an introduction to the MultiRecord API. A multi-record represents a chunk of records.
- Easy Batch provides several MultiRecordReaders and MultiRecordWriters to read and write records in chunks.
- 
-This tutorial shows the usage of the `IterableMultiRecordReader` to read multi-records from an iterable data source
-and the `CollectionMultiRecordWriter` to write multi-records to a collection.
+This tutorial is an application that reads tweets from a relational database using JDBC and export them to a flat file.
 
 ## Pre-requisite
 
-* JDK 1.6+
+* JDK 1.7+
 * Maven
 * Git (optional)
 * Your favorite IDE (optional)
@@ -34,12 +30,12 @@ Open a terminal in the directory where you have extracted the source code of the
 ```
 $>cd easybatch-tutorials
 $>mvn install
-$>mvn exec:java -PrunMultiRecordTutorial
+$>mvn exec:java -PrunJdbcExportDataTutorial
 ```
 
 ### From Your IDE
 
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
-* Navigate to the `org.easybatch.tutorials.intermediate.chunks` package
-* Run the `org.easybatch.tutorials.intermediate.chunks.Launcher` class without any argument
+* Navigate to the `org.easybatch.tutorials.intermediate.jdbc.extract` package
+* Run the `org.easybatch.tutorials.intermediate.jdbc.extract.Launcher` class without any argument

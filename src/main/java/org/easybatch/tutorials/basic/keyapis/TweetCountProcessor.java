@@ -24,7 +24,8 @@
 
 package org.easybatch.tutorials.basic.keyapis;
 
-import org.easybatch.core.api.ComputationalRecordProcessor;
+import org.easybatch.core.processor.ComputationalRecordProcessor;
+import org.easybatch.core.record.GenericRecord;
 import org.easybatch.tutorials.common.Tweet;
 
 /**
@@ -32,16 +33,17 @@ import org.easybatch.tutorials.common.Tweet;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class TweetCountProcessor implements ComputationalRecordProcessor<Tweet, Tweet, Integer> {
+public class TweetCountProcessor implements ComputationalRecordProcessor<GenericRecord<Tweet>, GenericRecord<Tweet>, Integer> {
 
     private int count;
 
     @Override
-    public Tweet processRecord(Tweet tweet) {
+    public GenericRecord<Tweet> processRecord(GenericRecord<Tweet> record) {
+        Tweet tweet = record.getPayload();
         if (tweet.getMessage().contains("#EasyBatch")) {
             count++;
         }
-        return tweet;
+        return record;
     }
 
     @Override

@@ -22,38 +22,40 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.basic.pipeline;
+package org.easybatch.tutorials.advanced.jmx;
 
-import org.easybatch.core.api.RecordProcessingException;
-import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.job.JobReport;
+import org.easybatch.flatfile.FlatFileRecordReader;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
+import java.io.File;
 
 /**
- * A record processor that prints input records to an output stream.
+* Main class to run the JMX tutorial.
  *
- * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
- */
-public class OutputProcessor implements RecordProcessor<String, String> {
+* @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
+*/
+public class SingleJobJmxTutorial {
 
-    private OutputStream outputStream;
+    public static void main(String[] args) throws Exception {
 
-    public OutputProcessor(OutputStream outputStream) {
-        this.outputStream = outputStream;
-    }
+        // Create the  data source
+        File dataSource = new File("src/main/resources/data/tweets.csv");
+        
+        // Build the batch job
+        Job job = new JobBuilder()
+                .reader(new FlatFileRecordReader(dataSource))
+                .processor(new TweetSlowProcessor())
+                .jmxMode(true)
+                .build();
 
-    @Override
-    public String processRecord(String record) throws RecordProcessingException {
-        try {
-            outputStream.write(record.getBytes());
-            outputStream.write(LINE_SEPARATOR.getBytes());
-        } catch (IOException e) {
-            throw new RecordProcessingException("Unable to write record to output stream", e);
-        }
-        return record;
+        // Run the job and get execution report
+        JobReport report = JobExecutor.execute(job);
+
+        System.out.println("report = " + report);
+
     }
 
 }

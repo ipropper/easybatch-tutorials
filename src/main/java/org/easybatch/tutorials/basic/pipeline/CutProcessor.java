@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.basic.pipeline;
 
-import org.easybatch.core.api.RecordProcessor;
+import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.record.StringRecord;
 
 /**
@@ -32,7 +32,7 @@ import org.easybatch.core.record.StringRecord;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class CutProcessor implements RecordProcessor<StringRecord, String> {
+public class CutProcessor implements RecordProcessor<StringRecord, StringRecord> {
 
     private String delimiter;
 
@@ -44,8 +44,8 @@ public class CutProcessor implements RecordProcessor<StringRecord, String> {
     }
 
     @Override
-    public String processRecord(StringRecord record) {
-        return record.getPayload().split(delimiter)[fieldNumber];
+    public StringRecord processRecord(StringRecord record) {
+        return new StringRecord(record.getHeader(), record.getPayload().split(delimiter)[fieldNumber]);
     }
 
 }

@@ -27,41 +27,42 @@ package org.easybatch.tutorials.intermediate.mongodb.load;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import org.easybatch.core.filter.HeaderRecordFilter;
+import org.easybatch.extensions.mongodb.MongoDBRecordWriter;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
-import org.easybatch.integration.mongodb.MongoDBRecordWriter;
 import org.easybatch.tutorials.common.Tweet;
 import org.easybatch.validation.BeanValidationRecordValidator;
 
 import java.io.File;
 
-import static org.easybatch.core.impl.EngineBuilder.aNewEngine;
+import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
  * Main class to run MongoDB tutorial.
  *
+ * <strong>Pre requisite: mongod should be up and running on default port (27017)</strong>
+ * 
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
 public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
-        // create a mongo client, mongod should be up and running on default port (27017)
+        // create a mongo client
         MongoClient mongoClient = new MongoClient();
         DBCollection tweetsCollection = mongoClient.getDB("test").getCollection("tweets");
 
         //load tweets from tweets.csv
-        File tweets = new File(Launcher.class
-                .getResource("/org/easybatch/tutorials/basic/keyapis/tweets.csv").toURI());
+        File tweets = new File("src/main/resources/data/tweets.csv");
 
-        aNewEngine()
+        aNewJob()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
+                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .validator(new BeanValidationRecordValidator<Tweet>())
                 .processor(new TweetToDBObjectTransformer())
                 .writer(new MongoDBRecordWriter(tweetsCollection))
-                .build().call();
+                .call();
 
         mongoClient.close();
 

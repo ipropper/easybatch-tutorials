@@ -24,20 +24,20 @@
 
 package org.easybatch.tutorials.basic.filterMapReduce;
 
-import org.easybatch.core.api.Record;
-import org.easybatch.core.api.RecordMapper;
+import org.easybatch.core.mapper.RecordMapper;
+import org.easybatch.core.record.GenericRecord;
 
 /**
  * A custom mapper that maps a person to it's age.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class AgeMapper implements RecordMapper<Integer> {
+public class AgeMapper implements RecordMapper<GenericRecord<Person>, GenericRecord<Integer>> {
 
     @Override
-    public Integer mapRecord(Record record) {
-        Person person = (Person) record.getPayload();
-        return person.getAge();
+    public GenericRecord<Integer> processRecord(GenericRecord<Person> record) {
+        Person person = record.getPayload();
+        return new GenericRecord<>(record.getHeader(), person.getAge());
     }
 
 }

@@ -1,21 +1,21 @@
 package org.easybatch.tutorials.basic.wordcount;
 
-import org.easybatch.core.api.Record;
-import org.easybatch.core.api.RecordMapper;
+import org.easybatch.core.mapper.RecordMapper;
+import org.easybatch.core.record.GenericRecord;
+import org.easybatch.core.record.StringRecord;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
- * This mapper splits each line into a list of words.
+ * Mapper that splits each line into a list of words.
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class LineTokenizer implements RecordMapper<List<String>> {
+public class LineTokenizer implements RecordMapper<StringRecord, GenericRecord> {
 
-    public List<String> mapRecord(Record record) {
-        String payload = (String) record.getPayload();
-        return Arrays.asList(payload.split(" "));
+    public GenericRecord processRecord(StringRecord record) {
+        String payload = record.getPayload();
+        return new GenericRecord<>(record.getHeader(), Arrays.asList(payload.split(" ")));
     }
 
 }

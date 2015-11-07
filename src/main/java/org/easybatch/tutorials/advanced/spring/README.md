@@ -2,11 +2,11 @@
 
 ## Description
 
-This tutorial is a show case of how to configure Easy Batch using Spring framework using the provided `org.easybatch.integration.spring.BatchFactoryBean`.
+This tutorial is a show case of how to configure Easy Batch jobs using Spring framework with the `org.easybatch.integration.spring.JobFactoryBean`.
 
 ## Pre-requisite
 
-* JDK 1.6+
+* JDK 1.7+
 * Maven
 * Git (optional)
 * Your favorite IDE (optional)

@@ -24,10 +24,11 @@
 
 package org.easybatch.tutorials.basic.keyapis;
 
-import org.easybatch.core.api.Engine;
-import org.easybatch.core.api.Report;
 import org.easybatch.core.filter.HeaderRecordFilter;
-import org.easybatch.core.impl.EngineBuilder;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.job.JobReport;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tutorials.common.Tweet;
@@ -45,22 +46,22 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
 
         // Input file tweets.csv
-        File tweets = new File(Launcher.class.getResource("/org/easybatch/tutorials/basic/keyapis/tweets.csv").toURI());
+        File tweets = new File("src/main/resources/data/tweets.csv");
 
-        // Build a batch engine
-        Engine engine = new EngineBuilder()
+        // Build a batch job
+        Job job = new JobBuilder()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper<Tweet>(Tweet.class, new String[]{"id", "user", "message"}))
+                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .validator(new BeanValidationRecordValidator<Tweet>())
                 .processor(new TweetCountProcessor())
                 .build();
 
-        // Run the batch engine
-        Report report = engine.call();
+        // Execute the job
+        JobReport report = JobExecutor.execute(job);
 
-        // Print the batch execution report
-        System.out.println("Total tweets containing #EasyBatch = " + report.getBatchResult());
+        // Print the job execution report
+        System.out.println("Total tweets containing #EasyBatch = " + report.getResult());
 
     }
 

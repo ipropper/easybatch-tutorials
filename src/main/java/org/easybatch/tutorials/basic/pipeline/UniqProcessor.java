@@ -24,7 +24,8 @@
 
 package org.easybatch.tutorials.basic.pipeline;
 
-import org.easybatch.core.api.ComputationalRecordProcessor;
+import org.easybatch.core.processor.ComputationalRecordProcessor;
+import org.easybatch.core.record.StringRecord;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,15 +35,16 @@ import java.util.Set;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class UniqProcessor implements ComputationalRecordProcessor<String, String, Set<String>> {
+public class UniqProcessor implements ComputationalRecordProcessor<StringRecord, StringRecord, Set<String>> {
 
-    private Set<String> uniqueStrings = new HashSet<String>();
+    private Set<String> uniqueStrings = new HashSet<>();
 
 
     @Override
-    public String processRecord(String record) {
-        if (!uniqueStrings.contains(record)) {
-            uniqueStrings.add(record);
+    public StringRecord processRecord(StringRecord record) {
+        String payload = record.getPayload();
+        if (!uniqueStrings.contains(payload)) {
+            uniqueStrings.add(payload);
         }
         return record;
     }

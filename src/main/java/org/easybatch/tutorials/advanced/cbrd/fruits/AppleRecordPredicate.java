@@ -24,7 +24,6 @@
 
 package org.easybatch.tutorials.advanced.cbrd.fruits;
 
-import org.easybatch.core.api.Record;
 import org.easybatch.core.dispatcher.Predicate;
 import org.easybatch.core.record.StringRecord;
 
@@ -33,12 +32,11 @@ import org.easybatch.core.record.StringRecord;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class AppleRecordPredicate implements Predicate {
+public class AppleRecordPredicate implements Predicate<StringRecord> {
 
     @Override
-    public boolean matches(Record record) {
-        StringRecord stringRecord = (StringRecord) record;
-        return stringRecord.getPayload().contains("apple");
+    public boolean matches(StringRecord record) {
+        return record.getPayload().contains("apple");
     }
 
 }
