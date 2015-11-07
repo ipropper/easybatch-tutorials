@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
  */
-public class WordCounter implements ComputationalRecordProcessor<GenericRecord<List<String>>, GenericRecord<List<String>>, Map<String, Integer>> {
+public class WordCounter implements ComputationalRecordProcessor<GenericRecord, GenericRecord, Map<String, Integer>> {
 
     private Map<String, Integer> words = new HashMap<>();
 
@@ -20,8 +20,9 @@ public class WordCounter implements ComputationalRecordProcessor<GenericRecord<L
         return words;
     }
 
-    public GenericRecord<List<String>> processRecord(GenericRecord<List<String>> record) {
-        List<String> tokens = record.getPayload();
+    @SuppressWarnings("unchecked")
+    public GenericRecord processRecord(GenericRecord record) {
+        List<String> tokens = (List<String>) record.getPayload();
         for (String token : tokens) {
             Integer count = words.get(token);
             count = (count == null) ? 1 : count + 1;
