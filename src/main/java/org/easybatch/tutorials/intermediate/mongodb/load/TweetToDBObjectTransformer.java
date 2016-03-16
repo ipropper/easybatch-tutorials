@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- *  Copyright (c) 2015, Mahmoud Ben Hassine (mahmoud@benhassine.fr)
+ *  Copyright (c) 2016, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ import org.easybatch.tutorials.common.Tweet;
 /**
  * A record processor that transforms a tweet into a MongoDB Object.
  *
- * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
+ * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
 public class TweetToDBObjectTransformer implements RecordProcessor<GenericRecord<Tweet>, GenericRecord<DBObject>> {
 

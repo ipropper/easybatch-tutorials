@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * Mapper that splits each line into a list of words.
  *
- * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
+ * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
 public class LineTokenizer implements RecordMapper<StringRecord, GenericRecord> {
 

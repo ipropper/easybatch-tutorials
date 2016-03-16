@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Processor that counts the number of occurrences of each word.
  *
- * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
+ * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
 public class WordCounter implements ComputationalRecordProcessor<GenericRecord, GenericRecord, Map<String, Integer>> {
 

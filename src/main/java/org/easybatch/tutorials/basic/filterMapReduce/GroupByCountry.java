@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * A processor that groups persons by country.
  *
- * @author Mahmoud Ben Hassine (mahmoud@benhassine.fr)
+ * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
 public class GroupByCountry implements ComputationalRecordProcessor<Record, Record, Map<String, Set<Person>>> {
 
