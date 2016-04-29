@@ -22,6 +22,7 @@ The `org.easybatch.tutorials.common` package contains main classes that are comm
 * [Unix-like pipeline][]: A sample application to process data in pipeline the unix-way
 * [Filter-Map-Reduce][]: A filter-map-reduce example using Easy Batch
 * [Word Count][]: The classic word count example using Easy Batch
+* [Transforming a CSV file to Xml format][]: A typical ETL application that transforms a CSV file to XML format
 
 ### Intermediate tutorials
 
@@ -30,7 +31,6 @@ The `org.easybatch.tutorials.common` package contains main classes that are comm
 * [Loading data in a NoSQL database][]: A batch application that loads data from a flat file into a MongoDB server
 * [Extracting data from a relational database using JDBC][]: A batch application that exports data from a relational database to a flat file
 * [Extracting data from a NoSQL database][]: A batch application that extracts data from a MongoDB collection and export it in a XML file
-* [Transforming a CSV file to Xml format][]: A typical ETL application that transforms a CSV file to XML format
 * [Batch processing][]: A show case of the batch processing support through the `Batch` abstraction
 * [Elastic Search][]: A sample application that extracts data from a relational database and index it in a ElasticSearch server
 * [Recipes][]: A showcase of how to write a custom reader to read data in a non standard format
@@ -51,13 +51,13 @@ The `org.easybatch.tutorials.common` package contains main classes that are comm
 [Unix-like pipeline]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/basic/pipeline
 [Filter-Map-Reduce]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/basic/filterMapReduce
 [Word Count]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/basic/wordcount
+[Transforming a CSV file to Xml format]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/basic/csv2xml
 
 [Loading data in a relational database using JDBC]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/jdbc/load
 [Loading data in a relational database using Hibernate]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/hibernate
 [Loading data in a NoSQL database]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/mongodb/load
 [Extracting data from a relational database using JDBC]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/jdbc/extract
 [Extracting data from a NoSQL database]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/mongodb/extract
-[Transforming a CSV file to Xml format]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/csv2xml
 [Batch processing]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/batches
 [Elastic Search]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/elasticsearch
 [Recipes]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/intermediate/recipes
