@@ -36,6 +36,8 @@ $> # Launch the data source splitting tutorial
 $>mvn exec:java -PrunParallelTutorialWithDataSplitting
 $> # Launch the data source filtering tutorial
 $>mvn exec:java -PrunParallelTutorialWithDataFiltering
+$> # Launch the fork/join tutorial
+$>mvn exec:java -PrunForkJoinTutorial
 ```
 
 ### From Your IDE
@@ -46,3 +48,4 @@ $>mvn exec:java -PrunParallelTutorialWithDataFiltering
 * Run the `org.easybatch.tutorials.advanced.parallel.ParallelTutorialWithDataFiltering` class without any argument
 * Run the `org.easybatch.tutorials.advanced.parallel.ParallelTutorialWithDataSplitting` class without any argument
 * Run the `org.easybatch.tutorials.advanced.parallel.ParallelTutorialWithRecordDispatching` class without any argument
+* Run the `org.easybatch.tutorials.advanced.parallel.ForkJoinTutorial` class without any argument
