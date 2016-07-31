@@ -24,13 +24,9 @@
 
 package org.easybatch.tutorials.advanced.parallel;
 
-import org.easybatch.core.job.Job;
-import org.easybatch.core.job.JobBuilder;
-import org.easybatch.core.job.JobReport;
+import org.easybatch.core.job.*;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
-import org.easybatch.tools.reporting.DefaultJobReportMerger;
-import org.easybatch.tools.reporting.JobReportMerger;
 import org.easybatch.tutorials.common.Tweet;
 import org.easybatch.tutorials.common.TweetProcessor;
 
