@@ -25,18 +25,21 @@
 package org.easybatch.tutorials.advanced.cbrd.files;
 
 import org.easybatch.core.dispatcher.Predicate;
-import org.easybatch.core.record.FileRecord;
+import org.easybatch.core.record.Record;
+
+import java.io.File;
 
 /**
  * A predicate that matches csv files.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class CsvFilePredicate implements Predicate<FileRecord> {
+public class CsvFilePredicate implements Predicate<Record> {
 
     @Override
-    public boolean matches(FileRecord record) {
-        return record.getPayload().getAbsolutePath().endsWith("csv");
+    public boolean matches(Record record) {
+        File payload = (File) record.getPayload();
+        return payload.getAbsolutePath().endsWith("csv");
     }
 
 }

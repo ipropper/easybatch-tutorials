@@ -53,7 +53,7 @@ public class Launcher {
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
-                .validator(new BeanValidationRecordValidator<Tweet>())
+                .validator(new BeanValidationRecordValidator())
                 .processor(new TweetCountProcessor())
                 .build();
 

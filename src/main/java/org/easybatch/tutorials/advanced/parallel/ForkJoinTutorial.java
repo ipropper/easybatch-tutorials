@@ -96,16 +96,16 @@ public class ForkJoinTutorial {
     public static Job buildWorkerJob(String jobName, BlockingQueue<Record> workQueue, BlockingQueue<Record> joinQueue) {
         return aNewJob()
                 .named(jobName)
-                .reader(new BlockingQueueRecordReader<>(workQueue))
+                .reader(new BlockingQueueRecordReader(workQueue))
                 .processor(new TweetProcessor(jobName))
-                .writer(new BlockingQueueRecordWriter<>(joinQueue))
+                .writer(new BlockingQueueRecordWriter(joinQueue))
                 .build();
     }
 
     public static Job buildJoinJob(String jobName, BlockingQueue<Record> joinQueue) {
         return aNewJob()
                 .named(jobName)
-                .reader(new BlockingQueueRecordReader<>(joinQueue, NB_WORKERS))
+                .reader(new BlockingQueueRecordReader(joinQueue, NB_WORKERS))
                 .filter(new PoisonRecordFilter())
                 .writer(new StandardOutputRecordWriter())
                 .build();

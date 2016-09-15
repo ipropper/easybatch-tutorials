@@ -25,18 +25,19 @@
 package org.easybatch.tutorials.advanced.cbrd.fruits;
 
 import org.easybatch.core.dispatcher.Predicate;
-import org.easybatch.core.record.StringRecord;
+import org.easybatch.core.record.Record;
 
 /**
  * A predicate that matches string records containing "apple".
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class AppleRecordPredicate implements Predicate<StringRecord> {
+public class AppleRecordPredicate implements Predicate<Record> {
 
     @Override
-    public boolean matches(StringRecord record) {
-        return record.getPayload().contains("apple");
+    public boolean matches(Record record) {
+        String payload = (String) record.getPayload();
+        return payload.contains("apple");
     }
 
 }
