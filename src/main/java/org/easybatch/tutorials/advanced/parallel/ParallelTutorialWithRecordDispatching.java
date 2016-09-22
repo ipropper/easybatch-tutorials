@@ -24,13 +24,14 @@
 
 package org.easybatch.tutorials.advanced.parallel;
 
-import org.easybatch.core.dispatcher.PoisonRecordBroadcaster;
-import org.easybatch.core.dispatcher.RoundRobinRecordDispatcher;
 import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.filter.PoisonRecordFilter;
 import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.listener.PoisonRecordBroadcaster;
 import org.easybatch.core.reader.BlockingQueueRecordReader;
 import org.easybatch.core.record.Record;
+import org.easybatch.core.writer.RoundRobinBlockingQueueRecordWriter;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tutorials.common.Tweet;
@@ -38,8 +39,6 @@ import org.easybatch.tutorials.common.TweetProcessor;
 
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static java.util.Arrays.asList;
@@ -64,8 +63,8 @@ public class ParallelTutorialWithRecordDispatching {
         BlockingQueue<Record> queue2 = new LinkedBlockingQueue<>();
 
         // Create a round robin record dispatcher to distribute records to worker jobs
-        RoundRobinRecordDispatcher<Record> roundRobinRecordDispatcher =
-                                        new RoundRobinRecordDispatcher<>(asList(queue1, queue2));
+        RoundRobinBlockingQueueRecordWriter roundRobinBlockingQueueRecordWriter =
+                                        new RoundRobinBlockingQueueRecordWriter(asList(queue1, queue2));
 
         // Build a master job to read records from the data source and dispatch them to worker jobs
         Job masterJob = aNewJob()
@@ -73,8 +72,8 @@ public class ParallelTutorialWithRecordDispatching {
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
-                .dispatcher(roundRobinRecordDispatcher)
-                .jobListener(new PoisonRecordBroadcaster<>(asList(queue1, queue2)))
+                .writer(roundRobinBlockingQueueRecordWriter)
+                .jobListener(new PoisonRecordBroadcaster(asList(queue1, queue2)))
                 .build();
 
         // Build worker jobs
@@ -82,20 +81,20 @@ public class ParallelTutorialWithRecordDispatching {
         Job workerJob2 = buildWorkerJob(queue2, "worker-job2");
 
         // Create a thread pool to call master and worker jobs in parallel
-        ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        JobExecutor jobExecutor = new JobExecutor(THREAD_POOL_SIZE);
 
         // Submit workers to executor service
-        executorService.invokeAll(asList(masterJob, workerJob1, workerJob2));
+        jobExecutor.submitAll(masterJob, workerJob1, workerJob2);
 
         // Shutdown executor service
-        executorService.shutdown();
+        jobExecutor.shutdown();
 
     }
 
     public static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
         return aNewJob()
                 .named(jobName)
-                .reader(new BlockingQueueRecordReader<>(queue))
+                .reader(new BlockingQueueRecordReader(queue))
                 .filter(new PoisonRecordFilter())
                 .processor(new TweetProcessor())
                 .build();

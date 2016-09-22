@@ -46,19 +46,22 @@ public class Launcher {
         File tweets = new File("src/main/resources/data/tweets.csv");
 
         // Build a batch job
+        WordCountProcessor wordCountProcessor = new WordCountProcessor();
         Job job = new JobBuilder()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new GrepFilter("#EasyBatch"))
                 .processor(new CutProcessor(",", 2))
-                .processor(new WordCountProcessor())
+                .processor(wordCountProcessor)
                 .build();
 
         // Execute the job
-        JobReport report = JobExecutor.execute(job);
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.execute(job);
 
         // Print the batch execution result
-        System.out.println("The number of words in tweets containing #EasyBatch = " + report.getResult());
+        System.out.println("The number of words in tweets containing #EasyBatch = " + wordCountProcessor.getCount());
 
+        jobExecutor.shutdown();
     }
 
 }

@@ -52,10 +52,12 @@ public class Launcher {
                 .build();
 
         // Execute the job and get report
-        JobReport report = JobExecutor.execute(job);
+        JobExecutor jobExecutor = new JobExecutor();
+        JobReport report = jobExecutor.execute(job);
 
         System.out.println(report);
 
+        jobExecutor.shutdown();
         JMSUtil.stopEmbeddedBroker();
         System.exit(0);
 

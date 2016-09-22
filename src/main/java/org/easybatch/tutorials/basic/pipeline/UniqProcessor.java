@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.basic.pipeline;
 
-import org.easybatch.core.processor.ComputationalRecordProcessor;
+import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.record.StringRecord;
 
 import java.util.HashSet;
@@ -35,7 +35,7 @@ import java.util.Set;
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class UniqProcessor implements ComputationalRecordProcessor<StringRecord, StringRecord, Set<String>> {
+public class UniqProcessor implements RecordProcessor<StringRecord, StringRecord> {
 
     private Set<String> uniqueStrings = new HashSet<>();
 
@@ -49,8 +49,7 @@ public class UniqProcessor implements ComputationalRecordProcessor<StringRecord,
         return record;
     }
 
-    @Override
-    public Set<String> getComputationResult() {
+    public Set<String> getUniqueStrings() {
         return uniqueStrings;
     }
 

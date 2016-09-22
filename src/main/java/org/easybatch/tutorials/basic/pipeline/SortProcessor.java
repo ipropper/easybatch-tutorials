@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.basic.pipeline;
 
-import org.easybatch.core.processor.ComputationalRecordProcessor;
+import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.record.StringRecord;
 
 import java.util.Set;
@@ -35,7 +35,7 @@ import java.util.TreeSet;
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class SortProcessor implements ComputationalRecordProcessor<StringRecord, StringRecord, Set<String>> {
+public class SortProcessor implements RecordProcessor<StringRecord, StringRecord> {
 
     private Set<String> sortedStrings = new TreeSet<>();
 
@@ -46,8 +46,7 @@ public class SortProcessor implements ComputationalRecordProcessor<StringRecord,
         return record;
     }
 
-    @Override
-    public Set<String> getComputationResult() {
+    public Set<String> getSortedStrings() {
         return sortedStrings;
     }
 

@@ -28,7 +28,6 @@ import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobBuilder;
 import org.easybatch.core.job.JobExecutor;
-import org.easybatch.core.job.JobReport;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tutorials.common.Tweet;
@@ -49,20 +48,23 @@ public class Launcher {
         File tweets = new File("src/main/resources/data/tweets.csv");
 
         // Build a batch job
+        TweetCountProcessor processor = new TweetCountProcessor();
         Job job = new JobBuilder()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
-                .validator(new BeanValidationRecordValidator<Tweet>())
-                .processor(new TweetCountProcessor())
+                .validator(new BeanValidationRecordValidator())
+                .processor(processor)
                 .build();
 
         // Execute the job
-        JobReport report = JobExecutor.execute(job);
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.execute(job);
 
         // Print the job execution report
-        System.out.println("Total tweets containing #EasyBatch = " + report.getResult());
+        System.out.println("Total tweets containing #EasyBatch = " + processor.getCount());
 
+        jobExecutor.shutdown();
     }
 
 }

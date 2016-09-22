@@ -27,6 +27,8 @@ package org.easybatch.tutorials.intermediate.mongodb.load;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import org.easybatch.core.filter.HeaderRecordFilter;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
 import org.easybatch.extensions.mongodb.MongoDBRecordWriter;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
@@ -55,15 +57,19 @@ public class Launcher {
         //load tweets from tweets.csv
         File tweets = new File("src/main/resources/data/tweets.csv");
 
-        aNewJob()
+        Job job = aNewJob()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
-                .validator(new BeanValidationRecordValidator<Tweet>())
+                .validator(new BeanValidationRecordValidator())
                 .processor(new TweetToDBObjectTransformer())
                 .writer(new MongoDBRecordWriter(tweetsCollection))
-                .call();
+                .build();
 
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.execute(job);
+
+        jobExecutor.shutdown();
         mongoClient.close();
 
     }

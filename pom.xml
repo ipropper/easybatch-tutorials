@@ -4,7 +4,7 @@
 
     <groupId>org.easybatch</groupId>
     <artifactId>easybatch-tutorials</artifactId>
-    <version>4.1.0</version>
+    <version>5.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>easybatch-tutorials</name>
@@ -640,7 +640,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.cbrd.files.Launcher</mainClass>
+                            <mainClass>org.easybatch.tutorials.advanced.cbrd.Launcher</mainClass>
                             <systemProperties>
                                 <systemProperty>
                                     <key>java.util.logging.SimpleFormatter.format</key>

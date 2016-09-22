@@ -1,6 +1,8 @@
 package org.easybatch.tutorials.basic.csv2xml;
 
 import org.easybatch.core.filter.HeaderRecordFilter;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.writer.FileRecordWriter;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
@@ -25,17 +27,20 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
 
         File csvTweets = new File("src/main/resources/data/tweets.csv");
-        FileWriter xmlTweetsWriter = new FileWriter(new File("tweets.xml"));
+        File xmlTweets = new File("tweets.xml");
 
-        aNewJob()
+        Job job = aNewJob()
                 .reader(new FlatFileRecordReader(csvTweets))
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .marshaller(new XmlRecordMarshaller(Tweet.class))
-                .writer(new FileRecordWriter(xmlTweetsWriter))
-                .jobListener(new XmlWrapperTagWriter(xmlTweetsWriter, "tweets"))
-                .call();
+                .writer(new FileRecordWriter(new FileWriter(xmlTweets)))
+                //.jobListener(new XmlWrapperTagWriter(xmlTweetsWriter, "tweets"))
+                .build();
 
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.execute(job);
+        jobExecutor.shutdown();
     }
 
 }

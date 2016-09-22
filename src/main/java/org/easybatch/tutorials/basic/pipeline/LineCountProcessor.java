@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.basic.pipeline;
 
-import org.easybatch.core.processor.ComputationalRecordProcessor;
+import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.record.Record;
 
 /**
@@ -32,7 +32,7 @@ import org.easybatch.core.record.Record;
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class LineCountProcessor implements ComputationalRecordProcessor<Record, Record, Integer> {
+public class LineCountProcessor implements RecordProcessor<Record, Record> {
 
     private Integer count = 0;
 
@@ -42,8 +42,7 @@ public class LineCountProcessor implements ComputationalRecordProcessor<Record, 
         return record;
     }
 
-    @Override
-    public Integer getComputationResult() {
+    public Integer getCount() {
         return count;
     }
 

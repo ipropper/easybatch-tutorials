@@ -26,7 +26,6 @@ package org.easybatch.tutorials.basic.wordcount;
 
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobExecutor;
-import org.easybatch.core.job.JobReport;
 import org.easybatch.core.reader.StringRecordReader;
 
 import java.util.Map;
@@ -38,7 +37,6 @@ import static org.easybatch.core.job.JobBuilder.aNewJob;
  *
 * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
 */
-@SuppressWarnings("unchecked")
 public class Launcher {
 
     public static void main(String[] args) {
@@ -49,17 +47,20 @@ public class Launcher {
                 "not so big";
 
         // Build a batch job
+        WordCounter wordCounter = new WordCounter();
         Job job = aNewJob()
                 .reader(new StringRecordReader(dataSource))
                 .mapper(new LineTokenizer())
-                .processor(new WordCounter())
+                .processor(wordCounter)
                 .build();
 
         // Execute the job
-        JobReport report = JobExecutor.execute(job);
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.execute(job);
+        jobExecutor.shutdown();
         
         // Get result
-        Map<String, Integer> words = (Map<String, Integer>) report.getResult();
+        Map<String, Integer> words = wordCounter.getCount();
 
         System.out.println(words);
 

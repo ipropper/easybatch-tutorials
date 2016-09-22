@@ -28,7 +28,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.hsqldb.jdbc.JDBCDataSource;
 
+import javax.sql.DataSource;
 import java.io.File;
 import java.sql.*;
 
@@ -78,6 +80,14 @@ public class DatabaseUtil {
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
+    }
+
+    public static DataSource getDataSource() throws SQLException {
+        JDBCDataSource dataSource = new JDBCDataSource();
+        dataSource.setUser("sa");
+        dataSource.setPassword("pwd");
+        dataSource.setUrl(DATABASE_URL);
+        return dataSource;
     }
 
     public static void startEmbeddedDatabase() throws Exception {

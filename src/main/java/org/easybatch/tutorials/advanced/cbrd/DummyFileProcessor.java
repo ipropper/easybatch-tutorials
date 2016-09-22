@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.advanced.cbrd.files;
+package org.easybatch.tutorials.advanced.cbrd;
 
 import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.record.FileRecord;

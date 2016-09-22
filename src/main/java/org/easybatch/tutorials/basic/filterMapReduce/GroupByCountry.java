@@ -1,6 +1,6 @@
 package org.easybatch.tutorials.basic.filterMapReduce;
 
-import org.easybatch.core.processor.ComputationalRecordProcessor;
+import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.record.Record;
 
 import java.util.HashMap;
@@ -13,13 +13,13 @@ import java.util.Set;
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class GroupByCountry implements ComputationalRecordProcessor<Record, Record, Map<String, Set<Person>>> {
+public class GroupByCountry implements RecordProcessor<Record<Person>, Record<Person>> {
 
     private  Map<String, Set<Person>> personsByCountry = new HashMap<>();
 
     @Override
-    public Record processRecord(Record record) {
-        Person person = (Person) record.getPayload();
+    public Record<Person> processRecord(Record<Person> record) {
+        Person person = record.getPayload();
         String country = person.getCountry();
         if (!personsByCountry.containsKey(country)) {
             personsByCountry.put(country, new HashSet<Person>());
@@ -28,8 +28,7 @@ public class GroupByCountry implements ComputationalRecordProcessor<Record, Reco
         return record;
     }
 
-    @Override
-    public Map<String, Set<Person>> getComputationResult() {
+    public Map<String, Set<Person>> getPersonsByCountry() {
         return personsByCountry;
     }
 

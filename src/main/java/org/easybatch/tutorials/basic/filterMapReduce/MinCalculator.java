@@ -24,20 +24,20 @@
 
 package org.easybatch.tutorials.basic.filterMapReduce;
 
-import org.easybatch.core.processor.ComputationalRecordProcessor;
-import org.easybatch.core.record.GenericRecord;
+import org.easybatch.core.processor.RecordProcessor;
+import org.easybatch.core.record.Record;
 
 /**
  * Record processor that calculates min value.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class MinCalculator implements ComputationalRecordProcessor<GenericRecord<Integer>, GenericRecord<Integer>, Integer> {
+public class MinCalculator implements RecordProcessor<Record<Integer>, Record<Integer>> {
 
     private Integer min = Integer.MAX_VALUE;
 
     @Override
-    public GenericRecord<Integer> processRecord(GenericRecord<Integer> record) {
+    public Record<Integer> processRecord(Record<Integer> record) {
         Integer payload = record.getPayload();
         if (payload < min) {
             min = payload;
@@ -45,8 +45,7 @@ public class MinCalculator implements ComputationalRecordProcessor<GenericRecord
         return record;
     }
 
-    @Override
-    public Integer getComputationResult() {
+    public Integer getMin() {
         return min;
     }
 

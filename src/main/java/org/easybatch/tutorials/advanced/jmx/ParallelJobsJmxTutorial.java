@@ -73,7 +73,7 @@ public class ParallelJobsJmxTutorial {
                 .reader(new FlatFileRecordReader(dataSource))
                 .filter(recordFilter)
                 .processor(new TweetSlowProcessor())
-                .jmxMode(true)
+                .enableJmx(true)
                 .build();
     }
 

@@ -24,7 +24,7 @@
 
 package org.easybatch.tutorials.basic.pipeline;
 
-import org.easybatch.core.processor.ComputationalRecordProcessor;
+import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.record.StringRecord;
 
 /**
@@ -32,12 +32,11 @@ import org.easybatch.core.record.StringRecord;
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class WordCountProcessor implements ComputationalRecordProcessor<StringRecord, StringRecord, Integer> {
+public class WordCountProcessor implements RecordProcessor<StringRecord, StringRecord> {
 
     private Integer count = 0;
 
-    @Override
-    public Integer getComputationResult() {
+    public Integer getCount() {
         return count;
     }
 

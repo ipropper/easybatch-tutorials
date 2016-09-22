@@ -24,7 +24,6 @@
 
 package org.easybatch.tutorials.intermediate.elasticsearch;
 
-import org.easybatch.core.processor.RecordProcessingException;
 import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.record.GenericRecord;
 import org.easybatch.core.record.StringRecord;
@@ -44,7 +43,7 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 public class TweetTransformer implements RecordProcessor<GenericRecord<Tweet>, StringRecord> {
 
     @Override
-    public StringRecord processRecord(GenericRecord<Tweet> record) throws RecordProcessingException {
+    public StringRecord processRecord(GenericRecord<Tweet> record) throws Exception {
         Tweet tweet = record.getPayload();
         XContentBuilder builder;
         try {
@@ -57,7 +56,7 @@ public class TweetTransformer implements RecordProcessor<GenericRecord<Tweet>, S
             return new StringRecord(record.getHeader(), builder.string());
         } catch (IOException e) {
             String message = format("Unable to process tweet %s", tweet);
-            throw new RecordProcessingException(message, e);
+            throw new Exception(message, e);
         }
     }
 

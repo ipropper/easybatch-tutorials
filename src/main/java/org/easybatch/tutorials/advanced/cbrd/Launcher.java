@@ -22,26 +22,24 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.advanced.cbrd.files;
+package org.easybatch.tutorials.advanced.cbrd;
 
-import org.easybatch.core.dispatcher.ContentBasedRecordDispatcher;
-import org.easybatch.core.dispatcher.ContentBasedRecordDispatcherBuilder;
-import org.easybatch.core.dispatcher.PoisonRecordBroadcaster;
 import org.easybatch.core.filter.FileExtensionFilter;
 import org.easybatch.core.filter.PoisonRecordFilter;
 import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.listener.PoisonRecordBroadcaster;
 import org.easybatch.core.reader.BlockingQueueRecordReader;
 import org.easybatch.core.reader.FileRecordReader;
-import org.easybatch.core.record.FileRecord;
+import org.easybatch.core.record.Record;
+import org.easybatch.core.writer.ContentBasedBlockingQueueRecordWriter;
+import org.easybatch.core.writer.ContentBasedBlockingQueueRecordWriterBuilder;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static java.util.Arrays.asList;
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
@@ -59,13 +57,13 @@ public class Launcher {
         File directory = new File(path);
 
         // Create queues
-        BlockingQueue<FileRecord> csvQueue = new LinkedBlockingQueue<>();
-        BlockingQueue<FileRecord> xmlQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<Record> csvQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<Record> xmlQueue = new LinkedBlockingQueue<>();
 
         // Create a content based record dispatcher to dispatch records based on their content
-        ContentBasedRecordDispatcher<FileRecord> recordDispatcher = new ContentBasedRecordDispatcherBuilder<FileRecord>()
-                .when(new CsvFilePredicate()).dispatchTo(csvQueue)
-                .when(new XmlFilePredicate()).dispatchTo(xmlQueue)
+        ContentBasedBlockingQueueRecordWriter recordDispatcher = new ContentBasedBlockingQueueRecordWriterBuilder()
+                .when(new CsvFilePredicate()).writeTo(csvQueue)
+                .when(new XmlFilePredicate()).writeTo(xmlQueue)
                 .build();
 
         // Build a master job that will read files from the directory and dispatch them to worker jobs
@@ -73,29 +71,29 @@ public class Launcher {
                 .named("master-job")
                 .reader(new FileRecordReader(directory))
                 .filter(new FileExtensionFilter(".log", ".tmp"))
-                .dispatcher(recordDispatcher)
-                .jobListener(new PoisonRecordBroadcaster(Arrays.<BlockingQueue>asList(csvQueue, xmlQueue)))
+                .writer(recordDispatcher)
+                .jobListener(new PoisonRecordBroadcaster(Arrays.asList(csvQueue, xmlQueue)))
                 .build();
 
         // Build jobs
         Job workerJob1 = buildWorkerJob(csvQueue, "csv-worker-job");
         Job workerJob2 = buildWorkerJob(xmlQueue, "xml-worker-job");
 
-        // Create a threads pool to call jobs in parallel
-        ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        // Create a Job executor with 3 worker threads
+        JobExecutor jobExecutor = new JobExecutor(THREAD_POOL_SIZE);
 
-        // Submit master and worker jobs to executor service
-        executorService.invokeAll(asList(masterJob, workerJob1, workerJob2));
+        // Submit master and worker jobs to job executor
+        jobExecutor.submitAll(masterJob, workerJob1, workerJob2);
 
-        // Shutdown executor service
-        executorService.shutdown();
+        // Shutdown job executor
+        jobExecutor.shutdown();
 
     }
 
-    public static Job buildWorkerJob(BlockingQueue<FileRecord> queue, String jobName) {
+    public static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
         return aNewJob()
                 .named(jobName)
-                .reader(new BlockingQueueRecordReader<>(queue))
+                .reader(new BlockingQueueRecordReader(queue))
                 .filter(new PoisonRecordFilter())
                 .processor(new DummyFileProcessor())
                 .build();

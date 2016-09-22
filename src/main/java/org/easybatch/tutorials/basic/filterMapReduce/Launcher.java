@@ -26,7 +26,6 @@ package org.easybatch.tutorials.basic.filterMapReduce;
 
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobExecutor;
-import org.easybatch.core.job.JobReport;
 import org.easybatch.core.reader.IterableRecordReader;
 
 import java.util.ArrayList;
@@ -43,6 +42,8 @@ public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
+        JobExecutor jobExecutor = new JobExecutor();
+
         List<Person> dataSource = new ArrayList<>();
         dataSource.add(new Person("jean", "france", 10));
         dataSource.add(new Person("foo", "usa", 30));
@@ -54,30 +55,35 @@ public class Launcher {
          */
 
         // Build a batch job
+        MinCalculator minCalculator = new MinCalculator();
         Job job = aNewJob()
                 .reader(new IterableRecordReader(dataSource))
                 .filter(new CountryFilter("france"))
                 .mapper(new AgeMapper())
-                .processor(new MinCalculator())
+                .processor(minCalculator)
                 .build();
 
         // Run the job
-        JobReport report = JobExecutor.execute(job);
+        jobExecutor.execute(job);
 
         // Print the job execution report
-        System.out.println("The youngest french person's age is: " + report.getResult());
+        System.out.println("The youngest french person's age is: " + minCalculator.getMin());
 
         /*
          * Example 2: group persons by country
          */
 
-        report = aNewJob()
+        GroupByCountry groupByCountryProcessor = new GroupByCountry();
+        job = aNewJob()
                 .reader(new IterableRecordReader(dataSource))
-                .processor(new GroupByCountry())
-                .call();
+                .processor(groupByCountryProcessor)
+                .build();
 
-        System.out.println("Persons grouped by country: " + report.getResult());
+        jobExecutor.execute(job);
 
+        System.out.println("Persons grouped by country: " + groupByCountryProcessor.getPersonsByCountry());
+
+        jobExecutor.shutdown();
     }
 
 }

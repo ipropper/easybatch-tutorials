@@ -24,15 +24,16 @@
 
 package org.easybatch.tutorials.advanced.parallel;
 
-import org.easybatch.core.dispatcher.PoisonRecordBroadcaster;
-import org.easybatch.core.dispatcher.RoundRobinRecordDispatcher;
 import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.filter.PoisonRecordFilter;
 import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.listener.PoisonRecordBroadcaster;
 import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.reader.BlockingQueueRecordReader;
 import org.easybatch.core.record.Record;
 import org.easybatch.core.writer.BlockingQueueRecordWriter;
+import org.easybatch.core.writer.RoundRobinBlockingQueueRecordWriter;
 import org.easybatch.core.writer.StandardOutputRecordWriter;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
@@ -41,7 +42,8 @@ import org.easybatch.tutorials.common.Tweet;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import static java.util.Arrays.asList;
 import static org.easybatch.core.job.JobBuilder.aNewJob;
@@ -73,45 +75,45 @@ public class ForkJoinTutorial {
         Job joinJob = buildJoinJob("join-job", joinQueue);
 
         // Create a thread pool to call jobs in parallel
-        ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        JobExecutor jobExecutor = new JobExecutor(THREAD_POOL_SIZE);
 
         // Submit jobs to executor service
-        executorService.invokeAll(asList(forkJob, workerJob1, workerJob2, joinJob));
+        jobExecutor.submitAll(forkJob, workerJob1, workerJob2, joinJob);
 
         // Shutdown executor service
-        executorService.shutdown();
+        jobExecutor.shutdown();
     }
 
-    public static Job buildForkJob(String jobName, File dataSource, List<BlockingQueue<Record>> workQueues) throws FileNotFoundException {
+    private static Job buildForkJob(String jobName, File dataSource, List<BlockingQueue<Record>> workQueues) throws FileNotFoundException {
         return aNewJob()
                 .named(jobName)
                 .reader(new FlatFileRecordReader(dataSource))
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
-                .dispatcher(new RoundRobinRecordDispatcher<>(workQueues))
-                .jobListener(new PoisonRecordBroadcaster<>(workQueues))
+                .writer(new RoundRobinBlockingQueueRecordWriter(workQueues))
+                .jobListener(new PoisonRecordBroadcaster(workQueues))
                 .build();
     }
 
-    public static Job buildWorkerJob(String jobName, BlockingQueue<Record> workQueue, BlockingQueue<Record> joinQueue) {
+    private static Job buildWorkerJob(String jobName, BlockingQueue<Record> workQueue, BlockingQueue<Record> joinQueue) {
         return aNewJob()
                 .named(jobName)
-                .reader(new BlockingQueueRecordReader<>(workQueue))
+                .reader(new BlockingQueueRecordReader(workQueue))
                 .processor(new TweetProcessor(jobName))
-                .writer(new BlockingQueueRecordWriter<>(joinQueue))
+                .writer(new BlockingQueueRecordWriter(joinQueue))
                 .build();
     }
 
-    public static Job buildJoinJob(String jobName, BlockingQueue<Record> joinQueue) {
+    private static Job buildJoinJob(String jobName, BlockingQueue<Record> joinQueue) {
         return aNewJob()
                 .named(jobName)
-                .reader(new BlockingQueueRecordReader<>(joinQueue, NB_WORKERS))
+                .reader(new BlockingQueueRecordReader(joinQueue, NB_WORKERS))
                 .filter(new PoisonRecordFilter())
                 .writer(new StandardOutputRecordWriter())
                 .build();
     }
 
-    static class TweetProcessor implements RecordProcessor<Record, Record> {
+    private static class TweetProcessor implements RecordProcessor<Record, Record> {
 
         private String workerName;
 

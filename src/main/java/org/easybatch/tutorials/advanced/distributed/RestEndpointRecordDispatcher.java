@@ -27,19 +27,16 @@ package org.easybatch.tutorials.advanced.distributed;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.io.IOUtils;
-import org.easybatch.core.dispatcher.AbstractRecordDispatcher;
-import org.easybatch.core.dispatcher.RecordDispatchingException;
+import org.easybatch.core.record.Batch;
 import org.easybatch.core.record.Header;
 import org.easybatch.core.record.Record;
 import org.easybatch.core.record.StringRecord;
+import org.easybatch.core.writer.RecordWriter;
 import org.easybatch.tutorials.advanced.jms.JMSUtil;
 
-import javax.jms.JMSException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-
-import static java.lang.String.format;
 
 /**
  * Record dispatcher listening to incoming rest requests.
@@ -47,25 +44,15 @@ import static java.lang.String.format;
  *
  * <strong>
  * This class is kept simple for demonstration purpose.
- * You should inject a list of JMS queues to dispatch records to instead of calling
- * the static {@link JMSUtil} class using a single queue.
+ * You should inject a list of JMS queues to which dispatch records instead of calling
+ * the static {@link JMSUtil} class with a single queue.
  * </strong>
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class RestEndpointRecordDispatcher extends AbstractRecordDispatcher<Record> implements HttpHandler {
+public class RestEndpointRecordDispatcher implements RecordWriter, HttpHandler {
 
     private long recordNumber;
-
-    @Override
-    public void dispatchRecord(Record record) throws RecordDispatchingException {
-        try {
-            JMSUtil.sendStringRecord((StringRecord)record);
-        } catch (JMSException e) {
-            String message = format("Unable to dispatch record %s", record);
-            throw new RecordDispatchingException(message, e);
-        }
-    }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
@@ -74,12 +61,29 @@ public class RestEndpointRecordDispatcher extends AbstractRecordDispatcher<Recor
         String payload = IOUtils.toString(requestBody);
         try {
             Header header = new Header(++recordNumber, "REST API: /api/orders", new Date());
-            dispatchRecord(new StringRecord(header, payload));
+            writeRecords(new Batch(new StringRecord(header, payload)));
             httpExchange.sendResponseHeaders(200, 0);
         } catch (Exception e) {
             httpExchange.sendResponseHeaders(500, 0);
         } finally {
             httpExchange.close();
         }
+    }
+
+    @Override
+    public void open() throws Exception {
+
+    }
+
+    @Override
+    public void writeRecords(Batch batch) throws Exception {
+        for (Record record : batch) {
+            JMSUtil.sendStringRecord((StringRecord)record);
+        }
+    }
+
+    @Override
+    public void close() throws Exception {
+
     }
 }
