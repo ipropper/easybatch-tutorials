@@ -65,7 +65,7 @@ public class Launcher {
                 .reader(new JdbcRecordReader(dataSource, "select * from tweet"))
                 .mapper(new JdbcRecordMapper(Tweet.class, "id", "user", "message"))
                 .processor(new TweetTransformer())
-                .processor(new TweetIndexer(client))
+                .writer(new TweetIndexer(client))
                 .build();
 
         JobExecutor jobExecutor = new JobExecutor();

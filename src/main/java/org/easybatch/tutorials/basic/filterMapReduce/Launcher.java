@@ -57,6 +57,7 @@ public class Launcher {
         // Build a batch job
         MinCalculator minCalculator = new MinCalculator();
         Job job = aNewJob()
+                .named("find-youngest-french-person")
                 .reader(new IterableRecordReader(dataSource))
                 .filter(new CountryFilter("france"))
                 .mapper(new AgeMapper())
@@ -75,6 +76,7 @@ public class Launcher {
 
         GroupByCountry groupByCountryProcessor = new GroupByCountry();
         job = aNewJob()
+                .named("group-persons-by-country")
                 .reader(new IterableRecordReader(dataSource))
                 .processor(groupByCountryProcessor)
                 .build();

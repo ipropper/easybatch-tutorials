@@ -35,7 +35,7 @@ import org.easybatch.extensions.mongodb.MongoDBRecordReader;
 import org.easybatch.extensions.xstream.XstreamRecordMarshaller;
 import org.easybatch.xml.XmlWrapperTagWriter;
 
-import java.io.FileWriter;
+import java.io.File;
 
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
@@ -55,7 +55,7 @@ public class Launcher {
         DBCollection tweetsCollection = mongoClient.getDB("test").getCollection("tweets");
 
         // Create output file tweets.xml
-        FileWriter tweets = new FileWriter("tweets.xml");
+        File tweets = new File("tweets.xml");
 
         // Build and run the batch job
         Job job = aNewJob()
@@ -68,10 +68,10 @@ public class Launcher {
 
         JobExecutor jobExecutor = new JobExecutor();
         jobExecutor.execute(job);
+        jobExecutor.shutdown();
 
         System.out.println("Successfully exported tweets.");
 
-        jobExecutor.shutdown();
         mongoClient.close();
     }
 }

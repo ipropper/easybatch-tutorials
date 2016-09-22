@@ -69,11 +69,10 @@ public class Launcher {
 
         JobExecutor jobExecutor = new JobExecutor();
         jobExecutor.execute(job);
+        jobExecutor.shutdown();
 
         // Dump tweet table to check inserted data
         DatabaseUtil.dumpTweetTable();
-
-        jobExecutor.shutdown();
 
         // Shutdown embedded database server and delete temporary files
         DatabaseUtil.closeSessionFactory();

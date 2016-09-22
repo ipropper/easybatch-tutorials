@@ -58,31 +58,31 @@ public class Launcher {
         // Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
 
-        // Setup the JDBC writer
         DataSource dataSource = DatabaseUtil.getDataSource();
         String query = "INSERT INTO tweet VALUES (?,?,?);";
-        JdbcRecordWriter jdbcRecordWriter = new JdbcRecordWriter(dataSource, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, "id", "user", "message"));
+        String[] fields = {"id", "user", "message"};
 
         // Build a batch job
         Job job = aNewJob()
                 .batchSize(2)
                 .filter(new HeaderRecordFilter())
                 .reader(new FlatFileRecordReader(tweets))
-                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
+                .mapper(new DelimitedRecordMapper(Tweet.class, fields))
                 .validator(new BeanValidationRecordValidator())
-                .writer(jdbcRecordWriter)
+                .writer(new JdbcRecordWriter(dataSource, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, fields)))
                 .build();
         
         // Execute the job
         JobExecutor jobExecutor = new JobExecutor();
         JobReport jobReport = jobExecutor.execute(job);
+        jobExecutor.shutdown();
+
         System.out.println(jobReport);
 
         // Dump tweet table to check inserted data
         DatabaseUtil.dumpTweetTable();
 
         // Shutdown embedded database server and delete temporary files
-        jobExecutor.shutdown();
         DatabaseUtil.cleanUpWorkingDirectory();
 
     }

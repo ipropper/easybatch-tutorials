@@ -36,7 +36,6 @@ import org.easybatch.tutorials.common.Tweet;
 
 import javax.sql.DataSource;
 import java.io.File;
-import java.io.FileWriter;
 
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
@@ -52,7 +51,7 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
 
         // Output file
-        FileWriter tweets = new FileWriter(new File("tweets.csv"));
+        File tweets = new File("target/tweets.csv");
         
         //Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();

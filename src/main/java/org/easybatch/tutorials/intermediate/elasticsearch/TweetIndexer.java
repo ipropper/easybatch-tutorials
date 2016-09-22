@@ -24,18 +24,19 @@
 
 package org.easybatch.tutorials.intermediate.elasticsearch;
 
-import org.easybatch.core.processor.RecordProcessor;
-import org.easybatch.core.record.StringRecord;
+import org.easybatch.core.record.Batch;
+import org.easybatch.core.record.Record;
+import org.easybatch.core.writer.RecordWriter;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.client.Client;
 
 /**
- * Processor that indexes tweets in elastic search.
- *
- * For production use, prefer elastic search <a href="http://www.elasticsearch.org/guide/en/elasticsearch/client/java-api/current/bulk.html">bulk API</a> for better performance.
+ * Writer to index tweets in elastic search in bulk mode.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class TweetIndexer implements RecordProcessor<StringRecord, StringRecord>{
+public class TweetIndexer implements RecordWriter {
 
     private Client client;
 
@@ -44,15 +45,25 @@ public class TweetIndexer implements RecordProcessor<StringRecord, StringRecord>
     }
 
     @Override
-    public StringRecord processRecord(StringRecord record) {
-        String tweet = record.getPayload();
-        //index the tweet in the twitter index
-        client.prepareIndex("twitter", "tweet")
-                .setSource(tweet)
-                .execute()
-                .actionGet();
+    public void open() throws Exception {
 
-        return record;
     }
 
+    @Override
+    public void writeRecords(Batch batch) throws Exception {
+        BulkRequestBuilder bulkRequest = client.prepareBulk();
+        for (Record record : batch) {
+            String tweet = (String) record.getPayload();
+            bulkRequest.add(client.prepareIndex("twitter", "tweet").setSource(tweet));
+        }
+        BulkResponse bulkResponse = bulkRequest.get();
+        if (bulkResponse.hasFailures()) {
+            throw new Exception("Unable to index records");
+        }
+    }
+
+    @Override
+    public void close() throws Exception {
+        client.close();
+    }
 }
