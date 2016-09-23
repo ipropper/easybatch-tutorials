@@ -29,17 +29,14 @@ import org.easybatch.core.filter.RecordNumberGreaterThanFilter;
 import org.easybatch.core.filter.RecordNumberLowerThanFilter;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobBuilder;
+import org.easybatch.core.job.JobExecutor;
 import org.easybatch.flatfile.FlatFileRecordReader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import static java.util.Arrays.asList;
 
 /**
- * Main class to run the parallel JMX tutorial.
+ * Main class to run the parallel jobs JMX tutorial.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
@@ -58,12 +55,12 @@ public class ParallelJobsJmxTutorial {
         // worker job 2: process 4+ and filters records 1-3
         Job job2 = buildJob(dataSource, new RecordNumberLowerThanFilter(4), "worker-job2");
 
-        //create a 2 threads pool to call worker jobs in parallel
-        ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        //create a job executor with 2 worker threads
+        JobExecutor jobExecutor = new JobExecutor(THREAD_POOL_SIZE);
 
-        executorService.invokeAll(asList(job1, job2));
+        jobExecutor.submitAll(job1, job2);
 
-        executorService.shutdown();
+        jobExecutor.shutdown();
 
     }
 

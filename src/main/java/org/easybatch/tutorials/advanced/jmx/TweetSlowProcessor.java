@@ -28,7 +28,7 @@ import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.record.StringRecord;
 
 /**
- * A processor that prints out tweets to the console slowwwwly :-).
+ * A processor that prints tweets to the console.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
@@ -42,7 +42,7 @@ public class TweetSlowProcessor implements RecordProcessor<StringRecord, StringR
             System.out.println(record.getPayload());
             return record;
         } catch (InterruptedException e) {
-            throw new Exception("Unable to process record " + record, e);
+            throw new Exception("Unable to process " + record, e);
         }
     }
 

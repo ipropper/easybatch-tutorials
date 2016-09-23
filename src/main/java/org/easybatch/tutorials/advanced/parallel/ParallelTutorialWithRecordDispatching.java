@@ -59,12 +59,12 @@ public class ParallelTutorialWithRecordDispatching {
         File tweets = new File("src/main/resources/data/tweets.csv");
 
         // Create queues
-        BlockingQueue<Record> queue1 = new LinkedBlockingQueue<>();
-        BlockingQueue<Record> queue2 = new LinkedBlockingQueue<>();
+        BlockingQueue<Record> workQueue1 = new LinkedBlockingQueue<>();
+        BlockingQueue<Record> workQueue2 = new LinkedBlockingQueue<>();
 
-        // Create a round robin record record writer to distribute records to worker jobs
+        // Create a round robin record writer to distribute records to worker jobs
         RoundRobinBlockingQueueRecordWriter roundRobinBlockingQueueRecordWriter =
-                                        new RoundRobinBlockingQueueRecordWriter(asList(queue1, queue2));
+                                        new RoundRobinBlockingQueueRecordWriter(asList(workQueue1, workQueue2));
 
         // Build a master job to read records from the data source and dispatch them to worker jobs
         Job masterJob = aNewJob()
@@ -73,12 +73,12 @@ public class ParallelTutorialWithRecordDispatching {
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .writer(roundRobinBlockingQueueRecordWriter)
-                .jobListener(new PoisonRecordBroadcaster(asList(queue1, queue2)))
+                .jobListener(new PoisonRecordBroadcaster(asList(workQueue1, workQueue2)))
                 .build();
 
         // Build worker jobs
-        Job workerJob1 = buildWorkerJob(queue1, "worker-job1");
-        Job workerJob2 = buildWorkerJob(queue2, "worker-job2");
+        Job workerJob1 = buildWorkerJob(workQueue1, "worker-job1");
+        Job workerJob2 = buildWorkerJob(workQueue2, "worker-job2");
 
         // Create a job executor with 3 worker threads
         JobExecutor jobExecutor = new JobExecutor(THREAD_POOL_SIZE);
@@ -91,10 +91,10 @@ public class ParallelTutorialWithRecordDispatching {
 
     }
 
-    private static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
+    private static Job buildWorkerJob(BlockingQueue<Record> workQueue, String jobName) {
         return aNewJob()
                 .named(jobName)
-                .reader(new BlockingQueueRecordReader(queue))
+                .reader(new BlockingQueueRecordReader(workQueue))
                 .filter(new PoisonRecordFilter())
                 .processor(new TweetProcessor())
                 .build();

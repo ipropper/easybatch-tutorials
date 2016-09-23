@@ -55,7 +55,7 @@ public class SingleJobJmxTutorial {
         JobExecutor jobExecutor = new JobExecutor();
         JobReport report = jobExecutor.execute(job);
 
-        System.out.println("report = " + report);
+        System.out.println(report);
 
         jobExecutor.shutdown();
     }

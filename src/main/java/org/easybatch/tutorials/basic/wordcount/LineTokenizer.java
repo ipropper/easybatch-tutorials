@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class LineTokenizer implements RecordMapper<StringRecord, Record<List<String>>> {
+class LineTokenizer implements RecordMapper<StringRecord, Record<List<String>>> {
 
     public Record<List<String>> processRecord(StringRecord record) {
         String payload = record.getPayload();

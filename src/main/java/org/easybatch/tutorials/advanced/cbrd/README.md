@@ -1,9 +1,9 @@
-# Content-Based record dispatcher Tutorial 1
+# Content-Based record writer tutorial
 
 ## Description
 
-This tutorial is a show case of the `ContentBasedRecordDispatcher`.
-The goal is to process a directory containing multiple files and to dispatch these files based on their content type.
+This tutorial is a show case of the `ContentBasedBlockingQueueRecordWriter`.
+The goal is to process a directory containing multiple files and to dispatch these files to worker jobs based on their content type.
 Input files are processed in parallel using multiple queues.
 
 ## Pre-requisite

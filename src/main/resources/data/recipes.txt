@@ -1,4 +1,4 @@
-R,Easy chocolate cake
+R,chocolate cake
 I,chocolate,500g
 I,sugar,100g
 I,cocoa powder,50g

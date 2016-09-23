@@ -97,4 +97,11 @@ public class JMSUtil {
         FileUtils.deleteDirectory(brokerDataDirectoryFile);
     }
 
+    public static QueueConnectionFactory getQueueConnectionFactory() {
+        return queueConnectionFactory;
+    }
+
+    public static Queue getQueue() {
+        return queue;
+    }
 }

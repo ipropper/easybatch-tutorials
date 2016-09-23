@@ -24,7 +24,6 @@
 
 package org.easybatch.tutorials.advanced.parallel;
 
-import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.filter.RecordFilter;
 import org.easybatch.core.filter.RecordNumberGreaterThanFilter;
 import org.easybatch.core.filter.RecordNumberLowerThanFilter;

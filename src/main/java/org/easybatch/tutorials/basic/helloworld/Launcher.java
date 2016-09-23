@@ -24,7 +24,6 @@
 
 package org.easybatch.tutorials.basic.helloworld;
 
-import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobBuilder;
 import org.easybatch.core.job.JobExecutor;
@@ -49,9 +48,7 @@ public class Launcher {
         // Build a batch job
         Job job = new JobBuilder()
                 .named("hello world job")
-                .batchSize(2)
                 .reader(new FlatFileRecordReader(dataSource))
-                .filter(new HeaderRecordFilter())
                 .writer(new StandardOutputRecordWriter())
                 .build();
 

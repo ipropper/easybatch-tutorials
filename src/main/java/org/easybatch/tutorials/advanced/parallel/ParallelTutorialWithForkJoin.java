@@ -53,7 +53,7 @@ import static org.easybatch.core.job.JobBuilder.aNewJob;
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class ForkJoinTutorial {
+public class ParallelTutorialWithForkJoin {
 
     private static final int THREAD_POOL_SIZE = 4;
     private static final int NB_WORKERS = 2;

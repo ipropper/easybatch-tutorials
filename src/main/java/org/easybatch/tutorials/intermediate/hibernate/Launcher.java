@@ -57,7 +57,7 @@ public class Launcher {
 
         SessionFactory sessionFactory = DatabaseUtil.getSessionFactory();
 
-        // Build and run a batch job
+        // Build job
         Job job = aNewJob()
                 .batchSize(2)
                 .reader(new FlatFileRecordReader(tweets))
@@ -67,6 +67,7 @@ public class Launcher {
                 .writer(new HibernateRecordWriter(sessionFactory))
                 .build();
 
+        // Execute the job
         JobExecutor jobExecutor = new JobExecutor();
         jobExecutor.execute(job);
         jobExecutor.shutdown();

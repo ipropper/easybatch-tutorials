@@ -36,7 +36,6 @@ import org.easybatch.core.writer.ContentBasedBlockingQueueRecordWriter;
 import org.easybatch.core.writer.ContentBasedBlockingQueueRecordWriterBuilder;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -57,11 +56,11 @@ public class Launcher {
         String path = args.length == 0 ? "." : args[0];
         File directory = new File(path);
 
-        // Create queues
+        // Create work queues
         BlockingQueue<Record> csvQueue = new LinkedBlockingQueue<>();
         BlockingQueue<Record> xmlQueue = new LinkedBlockingQueue<>();
 
-        // Create a content based record writer to write records based on their content
+        // Create a content based record writer to write records to work queues based on their content
         ContentBasedBlockingQueueRecordWriter contentBasedBlockingQueueRecordWriter = new ContentBasedBlockingQueueRecordWriterBuilder()
                 .when(new CsvFilePredicate()).writeTo(csvQueue)
                 .when(new XmlFilePredicate()).writeTo(xmlQueue)
@@ -91,10 +90,10 @@ public class Launcher {
 
     }
 
-    private static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
+    private static Job buildWorkerJob(BlockingQueue<Record> workQueue, String jobName) {
         return aNewJob()
                 .named(jobName)
-                .reader(new BlockingQueueRecordReader(queue))
+                .reader(new BlockingQueueRecordReader(workQueue))
                 .filter(new PoisonRecordFilter())
                 .processor(new DummyFileProcessor())
                 .build();

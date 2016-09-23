@@ -72,10 +72,11 @@ public class Launcher {
         // Execute the job
         JobExecutor jobExecutor = new JobExecutor();
         JobReport jobReport = jobExecutor.execute(job);
+        jobExecutor.shutdown();
+
         System.out.println(jobReport);
 
         // Shutdown embedded database server and delete temporary files
-        jobExecutor.shutdown();
         DatabaseUtil.cleanUpWorkingDirectory();
 
     }

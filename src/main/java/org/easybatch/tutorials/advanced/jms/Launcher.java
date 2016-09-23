@@ -46,7 +46,7 @@ public class Launcher {
 
         // Build a batch job
         Job job = new JobBuilder()
-                .reader(new JmsQueueRecordReader(JMSUtil.queueConnectionFactory, JMSUtil.queue))
+                .reader(new JmsQueueRecordReader(JMSUtil.getQueueConnectionFactory(), JMSUtil.getQueue()))
                 .filter(new JmsPoisonRecordFilter())
                 .processor(new JmsRecordProcessor())
                 .build();
