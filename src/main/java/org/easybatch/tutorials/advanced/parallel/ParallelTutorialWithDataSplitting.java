@@ -56,7 +56,7 @@ public class ParallelTutorialWithDataSplitting {
         Job job1 = buildJob(tweetsPart1, "worker-job1");
         Job job2 = buildJob(tweetsPart2, "worker-job2");
 
-        //create a 2 threads pool to call worker jobs in parallel
+        //create a job executor with 2 worker threads
         JobExecutor jobExecutor = new JobExecutor(THREAD_POOL_SIZE);
 
         List<Future<JobReport>> partialReports = jobExecutor.submitAll(job1, job2);

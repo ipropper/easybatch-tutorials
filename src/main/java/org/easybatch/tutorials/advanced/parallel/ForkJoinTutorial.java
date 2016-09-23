@@ -74,13 +74,13 @@ public class ForkJoinTutorial {
         Job workerJob2 = buildWorkerJob("worker-job2", workQueue2, joinQueue);
         Job joinJob = buildJoinJob("join-job", joinQueue);
 
-        // Create a thread pool to call jobs in parallel
+        // Create a job executor to call jobs in parallel
         JobExecutor jobExecutor = new JobExecutor(THREAD_POOL_SIZE);
 
-        // Submit jobs to executor service
+        // Submit jobs to run in parallel
         jobExecutor.submitAll(forkJob, workerJob1, workerJob2, joinJob);
 
-        // Shutdown executor service
+        // Shutdown job executor
         jobExecutor.shutdown();
     }
 
@@ -117,7 +117,7 @@ public class ForkJoinTutorial {
 
         private String workerName;
 
-        public TweetProcessor(String workerName) {
+        TweetProcessor(String workerName) {
             this.workerName = workerName;
         }
 

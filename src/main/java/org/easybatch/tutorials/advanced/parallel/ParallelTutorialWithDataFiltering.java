@@ -24,6 +24,7 @@
 
 package org.easybatch.tutorials.advanced.parallel;
 
+import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.filter.RecordFilter;
 import org.easybatch.core.filter.RecordNumberGreaterThanFilter;
 import org.easybatch.core.filter.RecordNumberLowerThanFilter;
@@ -58,7 +59,7 @@ public class ParallelTutorialWithDataFiltering {
         // worker job 2: process 4+ and filters records 1-3
         Job job2 = buildJob(tweets, new RecordNumberLowerThanFilter(4), "worker-job2");
 
-        //create a 2 threads pool to call worker jobs in parallel
+        //create a job executor with 2 worker threads call jobs in parallel
         JobExecutor jobExecutor = new JobExecutor(THREAD_POOL_SIZE);
 
         List<Future<JobReport>> partialReports = jobExecutor.submitAll(job1, job2);

@@ -62,7 +62,7 @@ public class ParallelTutorialWithRecordDispatching {
         BlockingQueue<Record> queue1 = new LinkedBlockingQueue<>();
         BlockingQueue<Record> queue2 = new LinkedBlockingQueue<>();
 
-        // Create a round robin record dispatcher to distribute records to worker jobs
+        // Create a round robin record record writer to distribute records to worker jobs
         RoundRobinBlockingQueueRecordWriter roundRobinBlockingQueueRecordWriter =
                                         new RoundRobinBlockingQueueRecordWriter(asList(queue1, queue2));
 
@@ -80,18 +80,18 @@ public class ParallelTutorialWithRecordDispatching {
         Job workerJob1 = buildWorkerJob(queue1, "worker-job1");
         Job workerJob2 = buildWorkerJob(queue2, "worker-job2");
 
-        // Create a thread pool to call master and worker jobs in parallel
+        // Create a job executor with 3 worker threads
         JobExecutor jobExecutor = new JobExecutor(THREAD_POOL_SIZE);
 
-        // Submit workers to executor service
+        // Submit jobs to executor
         jobExecutor.submitAll(masterJob, workerJob1, workerJob2);
 
-        // Shutdown executor service
+        // Shutdown job executor
         jobExecutor.shutdown();
 
     }
 
-    public static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
+    private static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
         return aNewJob()
                 .named(jobName)
                 .reader(new BlockingQueueRecordReader(queue))

@@ -40,6 +40,7 @@ import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static java.util.Arrays.asList;
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
@@ -60,8 +61,8 @@ public class Launcher {
         BlockingQueue<Record> csvQueue = new LinkedBlockingQueue<>();
         BlockingQueue<Record> xmlQueue = new LinkedBlockingQueue<>();
 
-        // Create a content based record dispatcher to dispatch records based on their content
-        ContentBasedBlockingQueueRecordWriter recordDispatcher = new ContentBasedBlockingQueueRecordWriterBuilder()
+        // Create a content based record writer to write records based on their content
+        ContentBasedBlockingQueueRecordWriter contentBasedBlockingQueueRecordWriter = new ContentBasedBlockingQueueRecordWriterBuilder()
                 .when(new CsvFilePredicate()).writeTo(csvQueue)
                 .when(new XmlFilePredicate()).writeTo(xmlQueue)
                 .build();
@@ -71,8 +72,8 @@ public class Launcher {
                 .named("master-job")
                 .reader(new FileRecordReader(directory))
                 .filter(new FileExtensionFilter(".log", ".tmp"))
-                .writer(recordDispatcher)
-                .jobListener(new PoisonRecordBroadcaster(Arrays.asList(csvQueue, xmlQueue)))
+                .writer(contentBasedBlockingQueueRecordWriter)
+                .jobListener(new PoisonRecordBroadcaster(asList(csvQueue, xmlQueue)))
                 .build();
 
         // Build jobs
@@ -90,7 +91,7 @@ public class Launcher {
 
     }
 
-    public static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
+    private static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
         return aNewJob()
                 .named(jobName)
                 .reader(new BlockingQueueRecordReader(queue))
