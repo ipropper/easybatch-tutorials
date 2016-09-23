@@ -24,7 +24,6 @@
 
 package org.easybatch.tutorials.advanced.parallel;
 
-import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.filter.PoisonRecordFilter;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobExecutor;
@@ -35,11 +34,12 @@ import org.easybatch.core.record.Record;
 import org.easybatch.core.writer.BlockingQueueRecordWriter;
 import org.easybatch.core.writer.RoundRobinBlockingQueueRecordWriter;
 import org.easybatch.core.writer.StandardOutputRecordWriter;
-import org.easybatch.flatfile.DelimitedRecordMapper;
-import org.easybatch.flatfile.FlatFileRecordReader;
+import org.easybatch.jdbc.JdbcRecordMapper;
+import org.easybatch.jdbc.JdbcRecordReader;
+import org.easybatch.tutorials.common.DatabaseUtil;
 import org.easybatch.tutorials.common.Tweet;
 
-import java.io.File;
+import javax.sql.DataSource;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -60,8 +60,12 @@ public class ParallelTutorialWithForkJoin {
 
     public static void main(String[] args) throws Exception {
 
-        // Create data source
-        File tweets = new File("src/main/resources/data/tweets.csv");
+        // Start embedded database server
+        DatabaseUtil.startEmbeddedDatabase();
+        DatabaseUtil.populateTweetTable();
+
+        // Get a data source
+        DataSource dataSource = DatabaseUtil.getDataSource();
 
         // Create queues
         BlockingQueue<Record> workQueue1 = new LinkedBlockingQueue<>();
@@ -69,7 +73,7 @@ public class ParallelTutorialWithForkJoin {
         BlockingQueue<Record> joinQueue = new LinkedBlockingQueue<>();
 
         // Build jobs
-        Job forkJob = buildForkJob("fork-job", tweets, asList(workQueue1, workQueue2));
+        Job forkJob = buildForkJob("fork-job", dataSource, asList(workQueue1, workQueue2));
         Job workerJob1 = buildWorkerJob("worker-job1", workQueue1, joinQueue);
         Job workerJob2 = buildWorkerJob("worker-job2", workQueue2, joinQueue);
         Job joinJob = buildJoinJob("join-job", joinQueue);
@@ -82,14 +86,16 @@ public class ParallelTutorialWithForkJoin {
 
         // Shutdown job executor
         jobExecutor.shutdown();
+
+        // Shutdown embedded database server and delete temporary files
+        DatabaseUtil.cleanUpWorkingDirectory();
     }
 
-    private static Job buildForkJob(String jobName, File dataSource, List<BlockingQueue<Record>> workQueues) throws FileNotFoundException {
+    private static Job buildForkJob(String jobName, DataSource dataSource, List<BlockingQueue<Record>> workQueues) throws FileNotFoundException {
         return aNewJob()
                 .named(jobName)
-                .reader(new FlatFileRecordReader(dataSource))
-                .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
+                .reader(new JdbcRecordReader(dataSource, "select * from tweet"))
+                .mapper(new JdbcRecordMapper(Tweet.class, "id", "user", "message"))
                 .writer(new RoundRobinBlockingQueueRecordWriter(workQueues))
                 .jobListener(new PoisonRecordBroadcaster(workQueues))
                 .build();
