@@ -27,6 +27,8 @@ package org.easybatch.tutorials.intermediate.mongodb.extract;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.writer.FileRecordWriter;
 import org.easybatch.extensions.mongodb.MongoDBRecordMapper;
 import org.easybatch.extensions.mongodb.MongoDBRecordReader;
@@ -56,13 +58,15 @@ public class Launcher {
         FileWriter tweets = new FileWriter("tweets.xml");
 
         // Build and run the batch job
-        aNewJob()
+        Job job = aNewJob()
                 .reader(new MongoDBRecordReader(tweetsCollection, new BasicDBObject()))
                 .mapper(new MongoDBRecordMapper<>(Tweet.class))
                 .processor(new XstreamRecordMarshaller("tweet", Tweet.class))
                 .writer(new FileRecordWriter(tweets))
                 .jobListener(new XmlWrapperTagWriter(tweets, "tweets"))
-                .call();
+                .build();
+
+        JobExecutor.execute(job);
 
         System.out.println("Successfully exported tweets.");
 

@@ -24,6 +24,8 @@
 
 package org.easybatch.tutorials.intermediate.elasticsearch;
 
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
 import org.easybatch.jdbc.JdbcRecordMapper;
 import org.easybatch.jdbc.JdbcRecordReader;
 import org.easybatch.tutorials.common.DatabaseUtil;
@@ -59,12 +61,14 @@ public class Launcher {
         Connection connection = DatabaseUtil.getConnection();
 
         // Build and run the batch job
-        aNewJob()
+        Job job = aNewJob()
                 .reader(new JdbcRecordReader(connection, "select * from tweet"))
                 .mapper(new JdbcRecordMapper(Tweet.class, "id", "user", "message"))
                 .processor(new TweetTransformer())
                 .processor(new TweetIndexer(client))
-                .call();
+                .build();
+
+        JobExecutor.execute(job);
 
         // Check if tweets have been successfully indexed in elastic search
         node.client().admin().indices().prepareRefresh().execute().actionGet();

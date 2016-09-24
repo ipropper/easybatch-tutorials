@@ -48,7 +48,7 @@ public class SingleJobJmxTutorial {
         Job job = new JobBuilder()
                 .reader(new FlatFileRecordReader(dataSource))
                 .processor(new TweetSlowProcessor())
-                .jmxMode(true)
+                .enableJmx(true)
                 .build();
 
         // Run the job and get execution report

@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.filter.BatchFilter;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.mapper.BatchMapper;
 import org.easybatch.core.marshaller.BatchMarshaller;
 import org.easybatch.core.processor.RecordProcessingException;
@@ -40,11 +42,13 @@ public class Launcher {
         List<String> dataSource = Arrays.asList("foo", "bar", "baz", "toto", "titi");
         List<String> dataSink = new ArrayList<>();
 
-        aNewJob()
+        Job job = aNewJob()
                 .reader(new IterableBatchReader(dataSource, BATCH_SIZE))
                 .processor(new BatchProcessor())
                 .writer(new CollectionBatchWriter(dataSink))
-                .call();
+                .build();
+
+        JobExecutor.execute(job);
 
         System.out.println("dataSink = " + dataSink);
         System.out.println("***********************");
@@ -54,14 +58,16 @@ public class Launcher {
          */
         File tweets = new File("src/main/resources/data/tweets.csv");
         String[] fields = {"id", "user", "message"};
-        aNewJob()
+        job = aNewJob()
                 .reader(new FlatFileBatchReader(tweets, BATCH_SIZE))
                 .filter(new BatchFilter(new HeaderRecordFilter()))
                 .processor(new BatchProcessor())
                 .mapper(new BatchMapper(new DelimitedRecordMapper(Tweet.class, fields)))
                 .marshaller(new BatchMarshaller(new DelimitedRecordMarshaller(Tweet.class, fields)))
                 .writer(new StandardOutputBatchWriter())
-                .call();
+                .build();
+
+        JobExecutor.execute(job);
     }
 
     private static class BatchProcessor implements RecordProcessor<Batch, Batch> {

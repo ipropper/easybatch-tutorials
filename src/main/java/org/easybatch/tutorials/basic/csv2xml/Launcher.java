@@ -1,6 +1,8 @@
 package org.easybatch.tutorials.basic.csv2xml;
 
 import org.easybatch.core.filter.HeaderRecordFilter;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.writer.FileRecordWriter;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
@@ -27,14 +29,16 @@ public class Launcher {
         File csvTweets = new File("src/main/resources/data/tweets.csv");
         FileWriter xmlTweetsWriter = new FileWriter(new File("tweets.xml"));
 
-        aNewJob()
+        Job job = aNewJob()
                 .reader(new FlatFileRecordReader(csvTweets))
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .marshaller(new XmlRecordMarshaller(Tweet.class))
                 .writer(new FileRecordWriter(xmlTweetsWriter))
                 .jobListener(new XmlWrapperTagWriter(xmlTweetsWriter, "tweets"))
-                .call();
+                .build();
+
+        JobExecutor.execute(job);
 
     }
 

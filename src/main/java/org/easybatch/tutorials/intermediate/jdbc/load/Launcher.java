@@ -24,22 +24,21 @@
 
 package org.easybatch.tutorials.intermediate.jdbc.load;
 
+import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.job.JobReport;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
+import org.easybatch.jdbc.BeanPropertiesPreparedStatementProvider;
 import org.easybatch.jdbc.JdbcConnectionListener;
 import org.easybatch.jdbc.JdbcRecordWriter;
-import org.easybatch.jdbc.PreparedStatementProvider;
 import org.easybatch.tutorials.common.DatabaseUtil;
 import org.easybatch.tutorials.common.Tweet;
 import org.easybatch.validation.BeanValidationRecordValidator;
 
 import java.io.File;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
@@ -63,20 +62,13 @@ public class Launcher {
         // Setup the JDBC writer
         Connection connection = DatabaseUtil.getConnection();
         String query = "INSERT INTO tweet VALUES (?,?,?);";
-        JdbcRecordWriter jdbcRecordWriter = new JdbcRecordWriter(connection, query, new PreparedStatementProvider() {
-            @Override
-            public void prepareStatement(PreparedStatement preparedStatement, Object record) throws SQLException {
-                Tweet tweet = (Tweet) record;
-                preparedStatement.setInt(1, tweet.getId());
-                preparedStatement.setString(2, tweet.getUser());
-                preparedStatement.setString(3, tweet.getMessage());
-            }
-        });
+        JdbcRecordWriter jdbcRecordWriter = new JdbcRecordWriter(
+                connection, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, "id", "user", "message"));
 
         // Build a batch job
         Job job = aNewJob()
-                .skip(1)
                 .reader(new FlatFileRecordReader(tweets))
+                .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
                 .validator(new BeanValidationRecordValidator<Tweet>())
                 .writer(jdbcRecordWriter)
@@ -102,15 +94,8 @@ public class Launcher {
 
         // Setup the JDBC batch writer
         String query = "INSERT INTO tweet VALUES (?,?,?);";
-        JdbcBatchWriter jdbcBatchWriter = new JdbcBatchWriter(connection, query, new PreparedStatementProvider() {
-            @Override
-            public void prepareStatement(PreparedStatement preparedStatement, Object record) throws SQLException {
-                Tweet tweet = (Tweet) record;
-                preparedStatement.setInt(1, tweet.getId());
-                preparedStatement.setString(2, tweet.getUser());
-                preparedStatement.setString(3, tweet.getMessage());
-            }
-        });
+        JdbcRecordWriter jdbcRecordWriter = new JdbcRecordWriter(
+                connection, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, "id", "user", "message"));
 
         // Build the job in batch mode
         int batchSize = 2;
