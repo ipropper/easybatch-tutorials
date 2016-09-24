@@ -24,22 +24,22 @@
 
 package org.easybatch.tutorials.intermediate.jdbc.load;
 
-import org.easybatch.core.filter.BatchFilter;
-import org.easybatch.core.mapper.BatchMapper;
-import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.job.JobReport;
 import org.easybatch.flatfile.DelimitedRecordMapper;
-import org.easybatch.flatfile.FlatFileBatchReader;
 import org.easybatch.flatfile.FlatFileRecordReader;
-import org.easybatch.jdbc.*;
+import org.easybatch.jdbc.JdbcConnectionListener;
+import org.easybatch.jdbc.JdbcRecordWriter;
+import org.easybatch.jdbc.PreparedStatementProvider;
 import org.easybatch.tutorials.common.DatabaseUtil;
 import org.easybatch.tutorials.common.Tweet;
 import org.easybatch.validation.BeanValidationRecordValidator;
 
 import java.io.File;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
@@ -53,11 +53,7 @@ import static org.easybatch.core.job.JobBuilder.aNewJob;
 public class Launcher {
 
     public static void main(String[] args) throws Exception {
-        runTutorialInRecordMode();
-        //runTutorialInBatchMode();
-    }
 
-    private static void runTutorialInRecordMode() throws Exception {
         // Load tweets from tweets.csv
         File tweets = new File("src/main/resources/data/tweets.csv");
 
@@ -65,20 +61,28 @@ public class Launcher {
         DatabaseUtil.startEmbeddedDatabase();
 
         // Setup the JDBC writer
-        String[] fields = {"id", "user", "message"};
-        String query = "INSERT INTO tweet VALUES (?,?,?);";
         Connection connection = DatabaseUtil.getConnection();
+        String query = "INSERT INTO tweet VALUES (?,?,?);";
+        JdbcRecordWriter jdbcRecordWriter = new JdbcRecordWriter(connection, query, new PreparedStatementProvider() {
+            @Override
+            public void prepareStatement(PreparedStatement preparedStatement, Object record) throws SQLException {
+                Tweet tweet = (Tweet) record;
+                preparedStatement.setInt(1, tweet.getId());
+                preparedStatement.setString(2, tweet.getUser());
+                preparedStatement.setString(3, tweet.getMessage());
+            }
+        });
 
         // Build a batch job
         Job job = aNewJob()
                 .skip(1)
                 .reader(new FlatFileRecordReader(tweets))
-                .mapper(new DelimitedRecordMapper(Tweet.class, fields))
-                .validator(new BeanValidationRecordValidator())
-                .writer(new JdbcRecordWriter(connection, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, fields)))
+                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
+                .validator(new BeanValidationRecordValidator<Tweet>())
+                .writer(jdbcRecordWriter)
                 .jobListener(new JdbcConnectionListener(connection))
                 .build();
-
+        
         // Execute the job
         JobReport jobReport = JobExecutor.execute(job);
         System.out.println(jobReport);
@@ -88,43 +92,42 @@ public class Launcher {
 
         // Shutdown embedded database server and delete temporary files
         DatabaseUtil.cleanUpWorkingDirectory();
-    }
 
-    private static void runTutorialInBatchMode() throws Exception {
-
-        // Load tweets from tweets.csv
-        File tweets = new File("src/main/resources/data/tweets.csv");
-
-        // Start embedded database server
-        DatabaseUtil.startEmbeddedDatabase();
-
-        String[] fields = {"id", "user", "message"};
-        String query = "INSERT INTO tweet VALUES (?,?,?);";
-        Connection connection = DatabaseUtil.getConnection();
+        /*
+         * Load data in batch mode sample:
 
         // Disable autocommit
+        Connection connection = DatabaseUtil.getConnection();
         connection.setAutoCommit(false);
+
+        // Setup the JDBC batch writer
+        String query = "INSERT INTO tweet VALUES (?,?,?);";
+        JdbcBatchWriter jdbcBatchWriter = new JdbcBatchWriter(connection, query, new PreparedStatementProvider() {
+            @Override
+            public void prepareStatement(PreparedStatement preparedStatement, Object record) throws SQLException {
+                Tweet tweet = (Tweet) record;
+                preparedStatement.setInt(1, tweet.getId());
+                preparedStatement.setString(2, tweet.getUser());
+                preparedStatement.setString(3, tweet.getMessage());
+            }
+        });
 
         // Build the job in batch mode
         int batchSize = 2;
         Job job = aNewJob()
                 .reader(new FlatFileBatchReader(tweets, batchSize))
                 .filter(new BatchFilter(new HeaderRecordFilter()))
-                .mapper(new BatchMapper(new DelimitedRecordMapper(Tweet.class, fields)))
-                .writer(new JdbcBatchWriter(connection, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, fields)))
+                .mapper(new BatchMapper<Tweet>(new DelimitedRecordMapper(Tweet.class, "id", "user", "message")))
+                .writer(jdbcBatchWriter)
                 .pipelineListener(new JdbcTransactionListener(connection)) // commit/rollback transaction after each batch
                 .jobListener(new JdbcConnectionListener(connection)) // close JDBC connection after job end
                 .build();
 
         // Execute the job
         JobReport jobReport = JobExecutor.execute(job);
-        System.out.println(jobReport);
 
-        // Dump tweet table to check inserted data
-        DatabaseUtil.dumpTweetTable();
+        */
 
-        // Shutdown embedded database server and delete temporary files
-        DatabaseUtil.cleanUpWorkingDirectory();
     }
 
 }

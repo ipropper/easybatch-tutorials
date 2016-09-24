@@ -95,7 +95,7 @@ public class ParallelTutorialWithRecordDispatching {
     public static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
         return aNewJob()
                 .named(jobName)
-                .reader(new BlockingQueueRecordReader(queue))
+                .reader(new BlockingQueueRecordReader<>(queue))
                 .filter(new PoisonRecordFilter())
                 .processor(new TweetProcessor())
                 .build();

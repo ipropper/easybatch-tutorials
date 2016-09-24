@@ -26,18 +26,18 @@ package org.easybatch.tutorials.advanced.cbrd.fruits;
 
 import org.easybatch.core.dispatcher.Predicate;
 import org.easybatch.core.record.Record;
+import org.easybatch.core.record.StringRecord;
 
 /**
  * A predicate that matches string records containing "orange".
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class OrangeRecordPredicate implements Predicate<Record> {
+public class OrangeRecordPredicate implements Predicate<StringRecord> {
 
     @Override
-    public boolean matches(Record record) {
-        String payload = (String) record.getPayload();
-        return payload.contains("orange");
+    public boolean matches(StringRecord record) {
+        return record.getPayload().contains("orange");
     }
 
 }
