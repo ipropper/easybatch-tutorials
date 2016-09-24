@@ -25,6 +25,8 @@
 package org.easybatch.tutorials.intermediate.hibernate;
 
 import org.easybatch.core.filter.HeaderRecordFilter;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
 import org.easybatch.extensions.hibernate.HibernateRecordWriter;
 import org.easybatch.extensions.hibernate.HibernateSessionListener;
 import org.easybatch.extensions.hibernate.HibernateTransactionListener;
@@ -58,7 +60,7 @@ public class Launcher {
         Session session = DatabaseUtil.getSessionFactory().openSession();
 
         // Build and run a batch job
-        aNewJob()
+        Job job = aNewJob()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
                 .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
@@ -66,7 +68,9 @@ public class Launcher {
                 .writer(new HibernateRecordWriter(session))
                 .pipelineListener(new HibernateTransactionListener(session))
                 .jobListener(new HibernateSessionListener(session))
-                .call();
+                .build();
+
+        JobExecutor.execute(job);
 
         // Dump tweet table to check inserted data
         DatabaseUtil.dumpTweetTable();
@@ -79,16 +83,18 @@ public class Launcher {
          * Load data in batch mode sample:
 
          int batchSize = 2;
-         aNewJob()
+         Job job  = aNewJob()
                 .reader(new FlatFileBatchReader(tweets, batchSize))
                 .filter(new BatchFilter(new HeaderRecordFilter()))
                 .mapper(new BatchMapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message")))
                 .writer(new HibernateBatchWriter(session))
                 .pipelineListener(new HibernateTransactionListener(session)) // commit/rollback transaction after each batch
                 .jobListener(new HibernateSessionListener(session)) // close session after job end
-                .call();
+                .build();
 
+        JobExecutor.execute(job);
          */
+
 
     }
 

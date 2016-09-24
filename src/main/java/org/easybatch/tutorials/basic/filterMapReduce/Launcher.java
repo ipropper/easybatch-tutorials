@@ -71,10 +71,12 @@ public class Launcher {
          * Example 2: group persons by country
          */
 
-        report = aNewJob()
+        job = aNewJob()
                 .reader(new IterableRecordReader(dataSource))
                 .processor(new GroupByCountry())
-                .call();
+                .build();
+
+        report = JobExecutor.execute(job);
 
         System.out.println("Persons grouped by country: " + report.getResult());
 
