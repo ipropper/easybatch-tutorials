@@ -63,7 +63,7 @@ public class Launcher {
         Connection connection = DatabaseUtil.getConnection();
         String query = "INSERT INTO tweet VALUES (?,?,?);";
         JdbcRecordWriter jdbcRecordWriter = new JdbcRecordWriter(
-                connection, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, "id", "name", "message"));
+                connection, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, "id", "user", "message"));
 
         // Build a batch job
         Job job = aNewJob()
@@ -95,7 +95,7 @@ public class Launcher {
         // Setup the JDBC batch writer
         String query = "INSERT INTO tweet VALUES (?,?,?);";
         JdbcRecordWriter jdbcRecordWriter = new JdbcRecordWriter(
-                connection, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, "id", "name", "message"));
+                connection, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, "id", "user", "message"));
 
         // Build the job in batch mode
         int batchSize = 2;
