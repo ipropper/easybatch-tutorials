@@ -63,7 +63,7 @@ public class Launcher {
         // Build and run the batch job
         Job job = aNewJob()
                 .reader(new JdbcRecordReader(dataSource, "select * from tweet"))
-                .mapper(new JdbcRecordMapper(Tweet.class, "id", "user", "message"))
+                .mapper(new JdbcRecordMapper<>(Tweet.class, "id", "user", "message"))
                 .processor(new TweetTransformer())
                 .writer(new TweetIndexer(client))
                 .build();

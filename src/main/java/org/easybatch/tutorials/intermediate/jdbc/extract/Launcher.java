@@ -64,8 +64,8 @@ public class Launcher {
         String[] fields = {"id", "user", "message"};
         Job job = aNewJob()
                 .reader(new JdbcRecordReader(dataSource, "select * from tweet"))
-                .mapper(new JdbcRecordMapper(Tweet.class, fields))
-                .marshaller(new DelimitedRecordMarshaller(Tweet.class, fields))
+                .mapper(new JdbcRecordMapper<>(Tweet.class, fields))
+                .marshaller(new DelimitedRecordMarshaller<>(Tweet.class, fields))
                 .writer(new FileRecordWriter(tweets))
                 .build();
         

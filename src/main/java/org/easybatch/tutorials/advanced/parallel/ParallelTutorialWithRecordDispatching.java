@@ -71,7 +71,7 @@ public class ParallelTutorialWithRecordDispatching {
                 .named("master-job")
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
+                .mapper(new DelimitedRecordMapper<>(Tweet.class, "id", "user", "message"))
                 .writer(roundRobinBlockingQueueRecordWriter)
                 .jobListener(new PoisonRecordBroadcaster(asList(workQueue1, workQueue2)))
                 .build();

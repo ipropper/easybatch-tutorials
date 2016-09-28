@@ -67,7 +67,7 @@ public class Launcher {
                 .batchSize(2)
                 .filter(new HeaderRecordFilter())
                 .reader(new FlatFileRecordReader(tweets))
-                .mapper(new DelimitedRecordMapper(Tweet.class, fields))
+                .mapper(new DelimitedRecordMapper<>(Tweet.class, fields))
                 .validator(new BeanValidationRecordValidator())
                 .writer(new JdbcRecordWriter(dataSource, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, fields)))
                 .build();

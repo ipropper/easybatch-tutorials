@@ -80,7 +80,7 @@ public class ParallelTutorialWithDataFiltering {
                 .named(jobName)
                 .reader(new FlatFileRecordReader(file))
                 .filter(recordFilter)
-                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
+                .mapper(new DelimitedRecordMapper<>(Tweet.class, "id", "user", "message"))
                 .processor(new TweetProcessor())
                 .build();
     }

@@ -95,7 +95,7 @@ public class ParallelTutorialWithForkJoin {
         return aNewJob()
                 .named(jobName)
                 .reader(new JdbcRecordReader(dataSource, "select * from tweet"))
-                .mapper(new JdbcRecordMapper(Tweet.class, "id", "user", "message"))
+                .mapper(new JdbcRecordMapper<>(Tweet.class, "id", "user", "message"))
                 .writer(new RoundRobinBlockingQueueRecordWriter(workQueues))
                 .jobListener(new PoisonRecordBroadcaster(workQueues))
                 .build();

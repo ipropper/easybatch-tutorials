@@ -77,7 +77,7 @@ public class ParallelTutorialWithDataSplitting {
         return JobBuilder.aNewJob()
                 .named(jobName)
                 .reader(new FlatFileRecordReader(file))
-                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
+                .mapper(new DelimitedRecordMapper<>(Tweet.class, "id", "user", "message"))
                 .processor(new TweetProcessor())
                 .build();
     }

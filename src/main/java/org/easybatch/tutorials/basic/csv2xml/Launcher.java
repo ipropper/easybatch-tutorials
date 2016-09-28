@@ -32,8 +32,8 @@ public class Launcher {
         Job job = aNewJob()
                 .reader(new FlatFileRecordReader(csvTweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
-                .marshaller(new XmlRecordMarshaller(Tweet.class))
+                .mapper(new DelimitedRecordMapper<>(Tweet.class, "id", "user", "message"))
+                .marshaller(new XmlRecordMarshaller<>(Tweet.class))
                 .writer(new FileRecordWriter(new FileWriter(xmlTweets, true)))
                 .jobListener(new XmlWrapperTagWriter(xmlTweets, "tweets"))
                 .build();
