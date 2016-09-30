@@ -51,7 +51,6 @@ public class Launcher {
 
         // Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
-        DatabaseUtil.populateTweetTable();
 
         // Start embedded elastic search node
         Node node = ElasticSearchUtils.startEmbeddedNode();

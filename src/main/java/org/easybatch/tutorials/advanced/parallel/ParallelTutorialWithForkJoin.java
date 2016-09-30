@@ -62,7 +62,6 @@ public class ParallelTutorialWithForkJoin {
 
         // Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
-        DatabaseUtil.populateTweetTable();
 
         // Get a data source
         DataSource dataSource = DatabaseUtil.getDataSource();

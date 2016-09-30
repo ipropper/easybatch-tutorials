@@ -53,6 +53,7 @@ public class Launcher {
 
         // Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
+        DatabaseUtil.deleteAllTweets();
         DatabaseUtil.initializeSessionFactory();
 
         SessionFactory sessionFactory = DatabaseUtil.getSessionFactory();

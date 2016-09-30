@@ -57,6 +57,7 @@ public class Launcher {
 
         // Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
+        DatabaseUtil.deleteAllTweets();
 
         DataSource dataSource = DatabaseUtil.getDataSource();
         String query = "INSERT INTO tweet VALUES (?,?,?);";

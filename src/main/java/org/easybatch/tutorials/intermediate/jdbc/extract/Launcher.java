@@ -52,10 +52,9 @@ public class Launcher {
 
         // Output file
         File tweets = new File("target/tweets.csv");
-        
+
         //Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
-        DatabaseUtil.populateTweetTable();
 
         // get a connection to the database
         DataSource dataSource = DatabaseUtil.getDataSource();
