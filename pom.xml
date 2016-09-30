@@ -4,7 +4,7 @@
 
     <groupId>org.easybatch</groupId>
     <artifactId>easybatch-tutorials</artifactId>
-    <version>4.2.0</version>
+    <version>5.0.0-RC1</version>
     <packaging>jar</packaging>
 
     <name>easybatch-tutorials</name>
@@ -13,7 +13,8 @@
 
     <properties>
         <exec-maven-plugin-version>1.4.0</exec-maven-plugin-version>
-        <hsqldb.version>2.3.3</hsqldb.version>
+        <hsqldb.version>2.3.4</hsqldb.version>
+        <spring.version>4.3.3.RELEASE</spring.version>
         <hibernate-core.version>4.3.11.Final</hibernate-core.version>
         <javax.json.version>1.0.4</javax.json.version>
         <gson.version>2.4</gson.version>
@@ -171,6 +172,12 @@
             <version>${mongodb-driver.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -217,12 +224,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.basic.helloworld.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -239,78 +240,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.basic.wordcount.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>runKeyAPIsTutorial</id>
-            <build>
-                <defaultGoal>exec:java</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${exec-maven-plugin-version}</version>
-                        <configuration>
-                            <mainClass>org.easybatch.tutorials.basic.keyapis.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>runPipelineTutorial</id>
-            <build>
-                <defaultGoal>exec:java</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${exec-maven-plugin-version}</version>
-                        <configuration>
-                            <mainClass>org.easybatch.tutorials.basic.pipeline.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>runFilterMapReduceTutorial</id>
-            <build>
-                <defaultGoal>exec:java</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${exec-maven-plugin-version}</version>
-                        <configuration>
-                            <mainClass>org.easybatch.tutorials.basic.filterMapReduce.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -327,12 +256,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.basic.csv2xml.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -340,29 +263,6 @@
         </profile>
 
         <!-- profiles to run intermediate tutorials -->
-        <profile>
-            <id>runBatchProcessingTutorial</id>
-            <build>
-                <defaultGoal>exec:java</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${exec-maven-plugin-version}</version>
-                        <configuration>
-                            <mainClass>org.easybatch.tutorials.intermediate.batches.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
         <profile>
             <id>runHibernateTutorial</id>
             <build>
@@ -374,12 +274,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.intermediate.hibernate.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -396,12 +290,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.intermediate.jdbc.load.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -418,12 +306,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.intermediate.jdbc.extract.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -440,12 +322,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.intermediate.mongodb.load.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -463,12 +339,6 @@
                         <configuration>
                             <mainClass>org.easybatch.tutorials.intermediate.mongodb.extract.Launcher</mainClass>
                             <stopUnresponsiveDaemonThreads>true</stopUnresponsiveDaemonThreads>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -485,12 +355,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.intermediate.elasticsearch.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -507,12 +371,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.intermediate.recipes.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -531,12 +389,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.advanced.parallel.ParallelTutorialWithRecordDispatching</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -553,12 +405,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.advanced.parallel.ParallelTutorialWithDataFiltering</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -575,19 +421,13 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.advanced.parallel.ParallelTutorialWithDataSplitting</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
         <profile>
-            <id>runForkJoinTutorial</id>
+            <id>runParallelTutorialWithForkJoin</id>
             <build>
                 <defaultGoal>exec:java</defaultGoal>
                 <plugins>
@@ -596,35 +436,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.parallel.ForkJoinTutorial</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>runFruitsParallelProcessingTutorial</id>
-            <build>
-                <defaultGoal>exec:java</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${exec-maven-plugin-version}</version>
-                        <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.cbrd.fruits.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
+                            <mainClass>org.easybatch.tutorials.advanced.parallel.ParallelTutorialWithForkJoin</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -640,13 +452,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.cbrd.files.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
+                            <mainClass>org.easybatch.tutorials.advanced.cbrd.Launcher</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -663,12 +469,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.advanced.quartz.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -685,12 +485,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.advanced.spring.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -707,12 +501,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.advanced.jmx.SingleJobJmxTutorial</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -729,12 +517,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.advanced.jmx.ParallelJobsJmxTutorial</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -751,12 +533,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.advanced.jms.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -773,34 +549,6 @@
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
                             <mainClass>org.easybatch.tutorials.advanced.jms.JMSSenderLauncher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>runDistributedTutorial</id>
-            <build>
-                <defaultGoal>exec:java</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${exec-maven-plugin-version}</version>
-                        <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.distributed.Launcher</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>java.util.logging.SimpleFormatter.format</key>
-                                    <value>[%1$tc] %4$s: %5$s%n</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>

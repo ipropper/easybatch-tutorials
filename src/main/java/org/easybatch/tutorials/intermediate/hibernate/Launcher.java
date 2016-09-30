@@ -28,14 +28,12 @@ import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobExecutor;
 import org.easybatch.extensions.hibernate.HibernateRecordWriter;
-import org.easybatch.extensions.hibernate.HibernateSessionListener;
-import org.easybatch.extensions.hibernate.HibernateTransactionListener;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tutorials.common.DatabaseUtil;
 import org.easybatch.tutorials.common.Tweet;
 import org.easybatch.validation.BeanValidationRecordValidator;
-import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.io.File;
 
@@ -55,22 +53,25 @@ public class Launcher {
 
         // Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
+        DatabaseUtil.deleteAllTweets();
         DatabaseUtil.initializeSessionFactory();
 
-        Session session = DatabaseUtil.getSessionFactory().openSession();
+        SessionFactory sessionFactory = DatabaseUtil.getSessionFactory();
 
-        // Build and run a batch job
+        // Build job
         Job job = aNewJob()
+                .batchSize(2)
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
-                .validator(new BeanValidationRecordValidator<Tweet>())
-                .writer(new HibernateRecordWriter(session))
-                .pipelineListener(new HibernateTransactionListener(session))
-                .jobListener(new HibernateSessionListener(session))
+                .mapper(new DelimitedRecordMapper<>(Tweet.class, "id", "user", "message"))
+                .validator(new BeanValidationRecordValidator())
+                .writer(new HibernateRecordWriter(sessionFactory))
                 .build();
 
-        JobExecutor.execute(job);
+        // Execute the job
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.execute(job);
+        jobExecutor.shutdown();
 
         // Dump tweet table to check inserted data
         DatabaseUtil.dumpTweetTable();
@@ -78,23 +79,6 @@ public class Launcher {
         // Shutdown embedded database server and delete temporary files
         DatabaseUtil.closeSessionFactory();
         DatabaseUtil.cleanUpWorkingDirectory();
-
-        /*
-         * Load data in batch mode sample:
-
-         int batchSize = 2;
-         Job job  = aNewJob()
-                .reader(new FlatFileBatchReader(tweets, batchSize))
-                .filter(new BatchFilter(new HeaderRecordFilter()))
-                .mapper(new BatchMapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message")))
-                .writer(new HibernateBatchWriter(session))
-                .pipelineListener(new HibernateTransactionListener(session)) // commit/rollback transaction after each batch
-                .jobListener(new HibernateSessionListener(session)) // close session after job end
-                .build();
-
-        JobExecutor.execute(job);
-         */
-
 
     }
 

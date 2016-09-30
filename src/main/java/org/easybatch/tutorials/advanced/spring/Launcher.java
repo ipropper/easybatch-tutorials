@@ -40,8 +40,10 @@ public class Launcher {
 
         ApplicationContext context = new ClassPathXmlApplicationContext("org/easybatch/tutorials/advanced/spring/application-context.xml");
         Job job = (Job) context.getBean("job");
-        JobExecutor.execute(job);
 
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.execute(job);
+        jobExecutor.shutdown();
     }
 
 }

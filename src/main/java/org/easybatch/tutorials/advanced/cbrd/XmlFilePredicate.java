@@ -22,22 +22,24 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.advanced.cbrd.files;
+package org.easybatch.tutorials.advanced.cbrd;
 
-import org.easybatch.core.processor.RecordProcessor;
-import org.easybatch.core.record.FileRecord;
+import org.easybatch.core.record.Record;
+import org.easybatch.core.writer.Predicate;
+
+import java.io.File;
 
 /**
- * Dummy file processor.
+ * A predicate that matches csv files.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class DummyFileProcessor implements RecordProcessor<FileRecord, FileRecord> {
+public class XmlFilePredicate implements Predicate {
 
     @Override
-    public FileRecord processRecord(FileRecord record) {
-        System.out.println("processed file = " + record.getPayload().getAbsolutePath());
-        return record;
+    public boolean matches(Record record) {
+        File payload = (File) record.getPayload();
+        return payload.getAbsolutePath().endsWith("xml");
     }
 
 }

@@ -46,16 +46,18 @@ public class Launcher {
 
         // Build a batch job
         Job job = new JobBuilder()
-                .reader(new JmsQueueRecordReader(JMSUtil.queueConnectionFactory, JMSUtil.queue))
+                .reader(new JmsQueueRecordReader(JMSUtil.getQueueConnectionFactory(), JMSUtil.getQueue()))
                 .filter(new JmsPoisonRecordFilter())
                 .processor(new JmsRecordProcessor())
                 .build();
 
         // Execute the job and get report
-        JobReport report = JobExecutor.execute(job);
+        JobExecutor jobExecutor = new JobExecutor();
+        JobReport report = jobExecutor.execute(job);
 
         System.out.println(report);
 
+        jobExecutor.shutdown();
         JMSUtil.stopEmbeddedBroker();
         System.exit(0);
 

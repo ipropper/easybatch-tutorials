@@ -24,13 +24,14 @@
 
 package org.easybatch.tutorials.advanced.parallel;
 
-import org.easybatch.core.dispatcher.PoisonRecordBroadcaster;
-import org.easybatch.core.dispatcher.RoundRobinRecordDispatcher;
 import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.filter.PoisonRecordFilter;
 import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.listener.PoisonRecordBroadcaster;
 import org.easybatch.core.reader.BlockingQueueRecordReader;
 import org.easybatch.core.record.Record;
+import org.easybatch.core.writer.RoundRobinBlockingQueueRecordWriter;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tutorials.common.Tweet;
@@ -38,8 +39,6 @@ import org.easybatch.tutorials.common.TweetProcessor;
 
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static java.util.Arrays.asList;
@@ -60,42 +59,42 @@ public class ParallelTutorialWithRecordDispatching {
         File tweets = new File("src/main/resources/data/tweets.csv");
 
         // Create queues
-        BlockingQueue<Record> queue1 = new LinkedBlockingQueue<>();
-        BlockingQueue<Record> queue2 = new LinkedBlockingQueue<>();
+        BlockingQueue<Record> workQueue1 = new LinkedBlockingQueue<>();
+        BlockingQueue<Record> workQueue2 = new LinkedBlockingQueue<>();
 
-        // Create a round robin record dispatcher to distribute records to worker jobs
-        RoundRobinRecordDispatcher<Record> roundRobinRecordDispatcher =
-                                        new RoundRobinRecordDispatcher<>(asList(queue1, queue2));
+        // Create a round robin record writer to distribute records to worker jobs
+        RoundRobinBlockingQueueRecordWriter roundRobinBlockingQueueRecordWriter =
+                                        new RoundRobinBlockingQueueRecordWriter(asList(workQueue1, workQueue2));
 
         // Build a master job to read records from the data source and dispatch them to worker jobs
         Job masterJob = aNewJob()
                 .named("master-job")
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
-                .dispatcher(roundRobinRecordDispatcher)
-                .jobListener(new PoisonRecordBroadcaster<>(asList(queue1, queue2)))
+                .mapper(new DelimitedRecordMapper<>(Tweet.class, "id", "user", "message"))
+                .writer(roundRobinBlockingQueueRecordWriter)
+                .jobListener(new PoisonRecordBroadcaster(asList(workQueue1, workQueue2)))
                 .build();
 
         // Build worker jobs
-        Job workerJob1 = buildWorkerJob(queue1, "worker-job1");
-        Job workerJob2 = buildWorkerJob(queue2, "worker-job2");
+        Job workerJob1 = buildWorkerJob(workQueue1, "worker-job1");
+        Job workerJob2 = buildWorkerJob(workQueue2, "worker-job2");
 
-        // Create a thread pool to call master and worker jobs in parallel
-        ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        // Create a job executor with 3 worker threads
+        JobExecutor jobExecutor = new JobExecutor(THREAD_POOL_SIZE);
 
-        // Submit workers to executor service
-        executorService.invokeAll(asList(masterJob, workerJob1, workerJob2));
+        // Submit jobs to executor
+        jobExecutor.submitAll(masterJob, workerJob1, workerJob2);
 
-        // Shutdown executor service
-        executorService.shutdown();
+        // Shutdown job executor
+        jobExecutor.shutdown();
 
     }
 
-    public static Job buildWorkerJob(BlockingQueue<Record> queue, String jobName) {
+    private static Job buildWorkerJob(BlockingQueue<Record> workQueue, String jobName) {
         return aNewJob()
                 .named(jobName)
-                .reader(new BlockingQueueRecordReader<>(queue))
+                .reader(new BlockingQueueRecordReader(workQueue))
                 .filter(new PoisonRecordFilter())
                 .processor(new TweetProcessor())
                 .build();

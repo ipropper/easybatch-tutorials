@@ -27,19 +27,20 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
 
         File csvTweets = new File("src/main/resources/data/tweets.csv");
-        FileWriter xmlTweetsWriter = new FileWriter(new File("tweets.xml"));
+        File xmlTweets = new File("target/tweets.xml");
 
         Job job = aNewJob()
                 .reader(new FlatFileRecordReader(csvTweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
-                .marshaller(new XmlRecordMarshaller(Tweet.class))
-                .writer(new FileRecordWriter(xmlTweetsWriter))
-                .jobListener(new XmlWrapperTagWriter(xmlTweetsWriter, "tweets"))
+                .mapper(new DelimitedRecordMapper<>(Tweet.class, "id", "user", "message"))
+                .marshaller(new XmlRecordMarshaller<>(Tweet.class))
+                .writer(new FileRecordWriter(new FileWriter(xmlTweets, true)))
+                .jobListener(new XmlWrapperTagWriter(xmlTweets, "tweets"))
                 .build();
 
-        JobExecutor.execute(job);
-
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.execute(job);
+        jobExecutor.shutdown();
     }
 
 }

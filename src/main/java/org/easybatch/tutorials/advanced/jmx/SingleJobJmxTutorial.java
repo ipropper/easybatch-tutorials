@@ -52,10 +52,12 @@ public class SingleJobJmxTutorial {
                 .build();
 
         // Run the job and get execution report
-        JobReport report = JobExecutor.execute(job);
+        JobExecutor jobExecutor = new JobExecutor();
+        JobReport report = jobExecutor.execute(job);
 
-        System.out.println("report = " + report);
+        System.out.println(report);
 
+        jobExecutor.shutdown();
     }
 
 }

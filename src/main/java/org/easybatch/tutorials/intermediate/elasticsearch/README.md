@@ -2,7 +2,7 @@
 
 ## Description
 
-This tutorial is an application that reads tweets from a relational database and index them in a ElasticSearch server.
+This tutorial is an application that reads tweets from a relational database and index them in a ElasticSearch server in bulk mode.
 
 ## Pre-requisite
 

@@ -24,26 +24,25 @@
 
 package org.easybatch.tutorials.advanced.jmx;
 
-import org.easybatch.core.processor.RecordProcessingException;
 import org.easybatch.core.processor.RecordProcessor;
 import org.easybatch.core.record.StringRecord;
 
 /**
- * A processor that prints out tweets to the console slowwwwly :-).
+ * A processor that prints tweets to the console.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
 public class TweetSlowProcessor implements RecordProcessor<StringRecord, StringRecord> {
 
     @Override
-    public StringRecord processRecord(StringRecord record) throws RecordProcessingException {
+    public StringRecord processRecord(StringRecord record) throws Exception {
         //slow down the processor for demonstration purpose
         try {
             Thread.sleep(5000);
             System.out.println(record.getPayload());
             return record;
         } catch (InterruptedException e) {
-            throw new RecordProcessingException("Unable to process record " + record, e);
+            throw new Exception("Unable to process " + record, e);
         }
     }
 

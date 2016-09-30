@@ -31,14 +31,13 @@ import org.easybatch.core.job.JobReport;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.jdbc.BeanPropertiesPreparedStatementProvider;
-import org.easybatch.jdbc.JdbcConnectionListener;
 import org.easybatch.jdbc.JdbcRecordWriter;
 import org.easybatch.tutorials.common.DatabaseUtil;
 import org.easybatch.tutorials.common.Tweet;
 import org.easybatch.validation.BeanValidationRecordValidator;
 
+import javax.sql.DataSource;
 import java.io.File;
-import java.sql.Connection;
 
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
@@ -58,25 +57,27 @@ public class Launcher {
 
         // Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
+        DatabaseUtil.deleteAllTweets();
 
-        // Setup the JDBC writer
-        Connection connection = DatabaseUtil.getConnection();
+        DataSource dataSource = DatabaseUtil.getDataSource();
         String query = "INSERT INTO tweet VALUES (?,?,?);";
-        JdbcRecordWriter jdbcRecordWriter = new JdbcRecordWriter(
-                connection, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, "id", "user", "message"));
+        String[] fields = {"id", "user", "message"};
 
         // Build a batch job
         Job job = aNewJob()
-                .reader(new FlatFileRecordReader(tweets))
+                .batchSize(2)
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
-                .validator(new BeanValidationRecordValidator<Tweet>())
-                .writer(jdbcRecordWriter)
-                .jobListener(new JdbcConnectionListener(connection))
+                .reader(new FlatFileRecordReader(tweets))
+                .mapper(new DelimitedRecordMapper<>(Tweet.class, fields))
+                .validator(new BeanValidationRecordValidator())
+                .writer(new JdbcRecordWriter(dataSource, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, fields)))
                 .build();
         
         // Execute the job
-        JobReport jobReport = JobExecutor.execute(job);
+        JobExecutor jobExecutor = new JobExecutor();
+        JobReport jobReport = jobExecutor.execute(job);
+        jobExecutor.shutdown();
+
         System.out.println(jobReport);
 
         // Dump tweet table to check inserted data
@@ -84,34 +85,6 @@ public class Launcher {
 
         // Shutdown embedded database server and delete temporary files
         DatabaseUtil.cleanUpWorkingDirectory();
-
-        /*
-         * Load data in batch mode sample:
-
-        // Disable autocommit
-        Connection connection = DatabaseUtil.getConnection();
-        connection.setAutoCommit(false);
-
-        // Setup the JDBC batch writer
-        String query = "INSERT INTO tweet VALUES (?,?,?);";
-        JdbcRecordWriter jdbcRecordWriter = new JdbcRecordWriter(
-                connection, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, "id", "user", "message"));
-
-        // Build the job in batch mode
-        int batchSize = 2;
-        Job job = aNewJob()
-                .reader(new FlatFileBatchReader(tweets, batchSize))
-                .filter(new BatchFilter(new HeaderRecordFilter()))
-                .mapper(new BatchMapper<Tweet>(new DelimitedRecordMapper(Tweet.class, "id", "user", "message")))
-                .writer(jdbcBatchWriter)
-                .pipelineListener(new JdbcTransactionListener(connection)) // commit/rollback transaction after each batch
-                .jobListener(new JdbcConnectionListener(connection)) // close JDBC connection after job end
-                .build();
-
-        // Execute the job
-        JobReport jobReport = JobExecutor.execute(job);
-
-        */
 
     }
 

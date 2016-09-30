@@ -29,15 +29,13 @@ import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.job.JobReport;
 import org.easybatch.core.writer.FileRecordWriter;
 import org.easybatch.flatfile.DelimitedRecordMarshaller;
-import org.easybatch.jdbc.JdbcConnectionListener;
 import org.easybatch.jdbc.JdbcRecordMapper;
 import org.easybatch.jdbc.JdbcRecordReader;
 import org.easybatch.tutorials.common.DatabaseUtil;
 import org.easybatch.tutorials.common.Tweet;
 
+import javax.sql.DataSource;
 import java.io.File;
-import java.io.FileWriter;
-import java.sql.Connection;
 
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
@@ -53,27 +51,28 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
 
         // Output file
-        FileWriter tweets = new FileWriter(new File("tweets.csv"));
-        
+        File tweets = new File("target/tweets.csv");
+
         //Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
-        DatabaseUtil.populateTweetTable();
 
         // get a connection to the database
-        Connection connection = DatabaseUtil.getConnection();
+        DataSource dataSource = DatabaseUtil.getDataSource();
 
         // Build a batch job
         String[] fields = {"id", "user", "message"};
         Job job = aNewJob()
-                .reader(new JdbcRecordReader(connection, "select * from tweet"))
-                .mapper(new JdbcRecordMapper(Tweet.class, fields))
-                .marshaller(new DelimitedRecordMarshaller(Tweet.class, fields))
+                .reader(new JdbcRecordReader(dataSource, "select * from tweet"))
+                .mapper(new JdbcRecordMapper<>(Tweet.class, fields))
+                .marshaller(new DelimitedRecordMarshaller<>(Tweet.class, fields))
                 .writer(new FileRecordWriter(tweets))
-                .jobListener(new JdbcConnectionListener(connection))
                 .build();
         
         // Execute the job
-        JobReport jobReport = JobExecutor.execute(job);
+        JobExecutor jobExecutor = new JobExecutor();
+        JobReport jobReport = jobExecutor.execute(job);
+        jobExecutor.shutdown();
+
         System.out.println(jobReport);
 
         // Shutdown embedded database server and delete temporary files

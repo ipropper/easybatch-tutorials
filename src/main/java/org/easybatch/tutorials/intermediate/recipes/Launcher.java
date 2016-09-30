@@ -50,8 +50,9 @@ public class Launcher {
                 .build();
 
         // Execute the batch job
-        JobExecutor.execute(job);
-
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.execute(job);
+        jobExecutor.shutdown();
     }
 
 }

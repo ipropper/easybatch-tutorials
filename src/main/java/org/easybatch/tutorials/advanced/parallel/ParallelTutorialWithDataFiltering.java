@@ -36,11 +36,7 @@ import org.easybatch.tutorials.common.TweetProcessor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import static java.util.Arrays.asList;
 
 /**
  * Main class to run the parallel jobs tutorial with data source filtering.
@@ -62,10 +58,10 @@ public class ParallelTutorialWithDataFiltering {
         // worker job 2: process 4+ and filters records 1-3
         Job job2 = buildJob(tweets, new RecordNumberLowerThanFilter(4), "worker-job2");
 
-        //create a 2 threads pool to call worker jobs in parallel
-        ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        //create a job executor with 2 worker threads call jobs in parallel
+        JobExecutor jobExecutor = new JobExecutor(THREAD_POOL_SIZE);
 
-        List<Future<JobReport>> partialReports = executorService.invokeAll(asList(job1, job2));
+        List<Future<JobReport>> partialReports = jobExecutor.submitAll(job1, job2);
 
         //merge partial reports into a global one
         JobReport report1 = partialReports.get(0).get();
@@ -75,7 +71,7 @@ public class ParallelTutorialWithDataFiltering {
         JobReport finalReport = reportMerger.mergerReports(report1, report2);
         System.out.println(finalReport);
 
-        executorService.shutdown();
+        jobExecutor.shutdown();
 
     }
 
@@ -84,7 +80,7 @@ public class ParallelTutorialWithDataFiltering {
                 .named(jobName)
                 .reader(new FlatFileRecordReader(file))
                 .filter(recordFilter)
-                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
+                .mapper(new DelimitedRecordMapper<>(Tweet.class, "id", "user", "message"))
                 .processor(new TweetProcessor())
                 .build();
     }

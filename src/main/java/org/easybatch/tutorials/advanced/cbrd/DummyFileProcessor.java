@@ -22,36 +22,22 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.basic.pipeline;
+package org.easybatch.tutorials.advanced.cbrd;
 
-import org.easybatch.core.processor.ComputationalRecordProcessor;
-import org.easybatch.core.record.StringRecord;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.easybatch.core.processor.RecordProcessor;
+import org.easybatch.core.record.FileRecord;
 
 /**
- * A processor that mimics "uniq" unix command.
+ * Dummy file processor.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class UniqProcessor implements ComputationalRecordProcessor<StringRecord, StringRecord, Set<String>> {
-
-    private Set<String> uniqueStrings = new HashSet<>();
-
+public class DummyFileProcessor implements RecordProcessor<FileRecord, FileRecord> {
 
     @Override
-    public StringRecord processRecord(StringRecord record) {
-        String payload = record.getPayload();
-        if (!uniqueStrings.contains(payload)) {
-            uniqueStrings.add(payload);
-        }
+    public FileRecord processRecord(FileRecord record) {
+        System.out.println("processing file = " + record.getPayload().getAbsolutePath());
         return record;
-    }
-
-    @Override
-    public Set<String> getComputationResult() {
-        return uniqueStrings;
     }
 
 }

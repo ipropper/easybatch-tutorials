@@ -1,8 +1,10 @@
-# Key APIs Tutorial
+# Content-Based record writer tutorial
 
 ## Description
 
-This tutorial is a simple batch application that reads tweets from a flat file and calculates some statistics on these tweets.
+This tutorial is a show case of the `ContentBasedBlockingQueueRecordWriter`.
+The goal is to process a directory containing multiple files and to dispatch these files to worker jobs based on their content type.
+Input files are processed in parallel using multiple queues.
 
 ## Pre-requisite
 
@@ -30,12 +32,12 @@ Open a terminal in the directory where you have extracted the source code of the
 ```
 $>cd easybatch-tutorials
 $>mvn install
-$>mvn exec:java -PrunKeyAPIsTutorial
+$>mvn exec:java -PrunFilesParallelProcessingTutorial
 ```
 
 ### From Your IDE
 
 * Import the `easybatch-tutorials` project in your IDE
 * Resolve maven dependencies
-* Navigate to the `org.easybatch.tutorials.basic.keyapis` package
-* Run the `org.easybatch.tutorials.basic.keyapis.Launcher` class without any argument
+* Navigate to the `org.easybatch.tutorials.advanced.cbrd.files` package
+* Run the `org.easybatch.tutorials.advanced.cbrd.files.Launcher` class without any argument

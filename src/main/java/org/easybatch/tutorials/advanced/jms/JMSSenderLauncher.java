@@ -37,6 +37,7 @@ public class JMSSenderLauncher {
 
         //init JMS factory
         JMSUtil.initJMSFactory();
+        System.out.println("Type 'quit' to stop the application");
 
         // Send some messages to JMS queue
         Scanner scanner = new Scanner(System.in);

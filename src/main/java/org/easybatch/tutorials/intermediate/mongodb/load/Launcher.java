@@ -60,14 +60,16 @@ public class Launcher {
         Job job = aNewJob()
                 .reader(new FlatFileRecordReader(tweets))
                 .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper(Tweet.class, "id", "user", "message"))
-                .validator(new BeanValidationRecordValidator<Tweet>())
+                .mapper(new DelimitedRecordMapper<>(Tweet.class, "id", "user", "message"))
+                .validator(new BeanValidationRecordValidator())
                 .processor(new TweetToDBObjectTransformer())
                 .writer(new MongoDBRecordWriter(tweetsCollection))
                 .build();
 
-        JobExecutor.execute(job);
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.execute(job);
 
+        jobExecutor.shutdown();
         mongoClient.close();
 
     }

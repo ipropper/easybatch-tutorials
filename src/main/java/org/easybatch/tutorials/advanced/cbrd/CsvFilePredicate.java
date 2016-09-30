@@ -22,21 +22,24 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.advanced.cbrd.fruits;
+package org.easybatch.tutorials.advanced.cbrd;
 
-import org.easybatch.core.dispatcher.Predicate;
-import org.easybatch.core.record.StringRecord;
+import org.easybatch.core.record.Record;
+import org.easybatch.core.writer.Predicate;
+
+import java.io.File;
 
 /**
- * A predicate that matches string records containing "apple".
+ * A predicate that matches csv files.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class AppleRecordPredicate implements Predicate<StringRecord> {
+public class CsvFilePredicate implements Predicate {
 
     @Override
-    public boolean matches(StringRecord record) {
-        return record.getPayload().contains("apple");
+    public boolean matches(Record record) {
+        File payload = (File) record.getPayload();
+        return payload.getAbsolutePath().endsWith("csv");
     }
 
 }

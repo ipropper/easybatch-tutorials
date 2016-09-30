@@ -31,6 +31,7 @@ import org.elasticsearch.node.Node;
 import java.io.File;
 import java.io.IOException;
 
+import static org.easybatch.core.util.Utils.FILE_SEPARATOR;
 import static org.easybatch.core.util.Utils.JAVA_IO_TMPDIR;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
@@ -39,7 +40,7 @@ import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
  */
 public class ElasticSearchUtils {
 
-    private static final String ES_DATA_DIRECTORY = JAVA_IO_TMPDIR + "es-data";
+    private static final String ES_DATA_DIRECTORY = JAVA_IO_TMPDIR + FILE_SEPARATOR + "es-data";
 
     public static Node startEmbeddedNode(){
 

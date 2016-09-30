@@ -53,7 +53,9 @@ public class Launcher {
                 .build();
 
         // Execute the job
-        JobReport report = JobExecutor.execute(job);
+        JobExecutor jobExecutor = new JobExecutor();
+        JobReport report = jobExecutor.execute(job);
+        jobExecutor.shutdown();
 
         // Print the job execution report
         System.out.println(report);
