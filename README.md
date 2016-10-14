@@ -39,6 +39,7 @@ The `org.easybatch.tutorials.common` package contains main classes that are comm
 * [JMS][]: Learn how to create asynchronous batch applications using Easy Batch and JMS
 * [Parallel processing][]: An example of how to use Easy Batch to process data in parallel
 * [Content-Based Record Writer][]: An example of how to process multiple files in parallel based on their content
+* [Restart a failed job Tutorial][]: An example of how to create a custom checkpoint listener to restart a failed job from where it left off
 
 [Hello world]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/basic/helloworld
 [Word Count]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/basic/wordcount
@@ -58,3 +59,4 @@ The `org.easybatch.tutorials.common` package contains main classes that are comm
 [JMS]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/advanced/jms
 [Parallel processing]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/advanced/parallel
 [Content-Based Record Writer]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/advanced/cbrd
+[Restart a failed job Tutorial]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/advanced/restart
