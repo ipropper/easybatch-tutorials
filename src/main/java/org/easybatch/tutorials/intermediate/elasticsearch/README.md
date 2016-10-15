@@ -4,28 +4,13 @@
 
 This tutorial is an application that reads tweets from a relational database and index them in a ElasticSearch server in bulk mode.
 
-## Pre-requisite
-
-* JDK 1.7+
-* Maven
-* Git (optional)
-* Your favorite IDE (optional)
-
-## Get source code
-
-### Using git
-
-`git clone https://github.com/EasyBatch/easybatch-tutorials.git`
-
-### Downloading a zip file
-
-Download the [zip file](https://github.com/EasyBatch/easybatch-tutorials/archive/master.zip) containing the source code and extract it.
+A similar use case is synchronizing data from the main database to a [reporting database](http://martinfowler.com/bliki/ReportingDatabase.html).
 
 ## Run the tutorial
 
 ### From the command line
 
-Open a terminal in the directory where you have extracted the source code of the project, then proceed as follows:
+Open a terminal an run the following command:
 
 ```
 $>cd easybatch-tutorials

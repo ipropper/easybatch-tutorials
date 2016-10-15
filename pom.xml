@@ -245,6 +245,9 @@
                 </plugins>
             </build>
         </profile>
+
+
+        <!-- profiles to run intermediate tutorials -->
         <profile>
             <id>runCsv2xmlTutorial</id>
             <build>
@@ -255,25 +258,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.basic.csv2xml.Launcher</mainClass>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <!-- profiles to run intermediate tutorials -->
-        <profile>
-            <id>runHibernateTutorial</id>
-            <build>
-                <defaultGoal>exec:java</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${exec-maven-plugin-version}</version>
-                        <configuration>
-                            <mainClass>org.easybatch.tutorials.intermediate.hibernate.Launcher</mainClass>
+                            <mainClass>org.easybatch.tutorials.intermediate.csv2xml.Launcher</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -289,7 +274,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.intermediate.jdbc.load.Launcher</mainClass>
+                            <mainClass>org.easybatch.tutorials.intermediate.load.Launcher</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -305,40 +290,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.intermediate.jdbc.extract.Launcher</mainClass>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>runMongoDBImportDataTutorial</id>
-            <build>
-                <defaultGoal>exec:java</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${exec-maven-plugin-version}</version>
-                        <configuration>
-                            <mainClass>org.easybatch.tutorials.intermediate.mongodb.load.Launcher</mainClass>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>runMongoDBExportDataTutorial</id>
-            <build>
-                <defaultGoal>exec:java</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${exec-maven-plugin-version}</version>
-                        <configuration>
-                            <mainClass>org.easybatch.tutorials.intermediate.mongodb.extract.Launcher</mainClass>
-                            <stopUnresponsiveDaemonThreads>true</stopUnresponsiveDaemonThreads>
+                            <mainClass>org.easybatch.tutorials.intermediate.extract.Launcher</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -360,6 +312,8 @@
                 </plugins>
             </build>
         </profile>
+
+        <!-- profiles to run advanced tutorials -->
         <profile>
             <id>runRecipesTutorial</id>
             <build>
@@ -370,14 +324,12 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.intermediate.recipes.Launcher</mainClass>
+                            <mainClass>org.easybatch.tutorials.advanced.recipes.Launcher</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
-
-        <!-- profiles to run advanced tutorials -->
         <profile>
             <id>runCheckPointListenerTutorial</id>
             <build>

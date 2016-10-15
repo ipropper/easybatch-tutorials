@@ -22,28 +22,39 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.intermediate.mongodb.load;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import org.easybatch.core.processor.RecordProcessor;
-import org.easybatch.core.record.GenericRecord;
-import org.easybatch.tutorials.common.Tweet;
+package org.easybatch.tutorials.advanced.recipes;
 
 /**
- * A record processor that transforms a tweet into a MongoDB Object.
- *
- * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ * Ingredient bean.
  */
-public class TweetToDBObjectTransformer implements RecordProcessor<GenericRecord<Tweet>, GenericRecord<DBObject>> {
+public class Ingredient {
+
+    private String name;
+
+    private int quantity;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     @Override
-    public GenericRecord<DBObject> processRecord(GenericRecord<Tweet> record) {
-        Tweet tweet = record.getPayload();
-        DBObject payload = new BasicDBObject()
-                .append("_id", tweet.getId())
-                .append("user", tweet.getUser())
-                .append("message", tweet.getMessage());
-        return new GenericRecord<>(record.getHeader(), payload);
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Ingredient{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", quantity=").append(quantity);
+        sb.append('}');
+        return sb.toString();
     }
 }

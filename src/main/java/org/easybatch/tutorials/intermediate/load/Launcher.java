@@ -22,17 +22,19 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.intermediate.jdbc.extract;
+package org.easybatch.tutorials.intermediate.load;
 
+import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobExecutor;
 import org.easybatch.core.job.JobReport;
-import org.easybatch.core.writer.FileRecordWriter;
-import org.easybatch.flatfile.DelimitedRecordMarshaller;
-import org.easybatch.jdbc.JdbcRecordMapper;
-import org.easybatch.jdbc.JdbcRecordReader;
+import org.easybatch.flatfile.DelimitedRecordMapper;
+import org.easybatch.flatfile.FlatFileRecordReader;
+import org.easybatch.jdbc.BeanPropertiesPreparedStatementProvider;
+import org.easybatch.jdbc.JdbcRecordWriter;
 import org.easybatch.tutorials.common.DatabaseUtil;
 import org.easybatch.tutorials.common.Tweet;
+import org.easybatch.validation.BeanValidationRecordValidator;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -40,9 +42,9 @@ import java.io.File;
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
- * Main class to run the JDBC export data tutorial.
+ * Main class to run the JDBC import data tutorial.
  *
- * The goal is to read tweets from a relational database and export them to a flat file.
+ * The goal is to read tweets from a CSV file and load them in a relational database.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
@@ -50,22 +52,25 @@ public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
-        // Output file
-        File tweets = new File("target/tweets.csv");
+        // Load tweets from tweets.csv
+        File tweets = new File("src/main/resources/data/tweets.csv");
 
-        //Start embedded database server
+        // Start embedded database server
         DatabaseUtil.startEmbeddedDatabase();
+        DatabaseUtil.deleteAllTweets();
 
-        // get a connection to the database
         DataSource dataSource = DatabaseUtil.getDataSource();
+        String query = "INSERT INTO tweet VALUES (?,?,?);";
+        String[] fields = {"id", "user", "message"};
 
         // Build a batch job
-        String[] fields = {"id", "user", "message"};
         Job job = aNewJob()
-                .reader(new JdbcRecordReader(dataSource, "select * from tweet"))
-                .mapper(new JdbcRecordMapper<>(Tweet.class, fields))
-                .marshaller(new DelimitedRecordMarshaller<>(Tweet.class, fields))
-                .writer(new FileRecordWriter(tweets))
+                .batchSize(2)
+                .filter(new HeaderRecordFilter())
+                .reader(new FlatFileRecordReader(tweets))
+                .mapper(new DelimitedRecordMapper<>(Tweet.class, fields))
+                .validator(new BeanValidationRecordValidator())
+                .writer(new JdbcRecordWriter(dataSource, query, new BeanPropertiesPreparedStatementProvider(Tweet.class, fields)))
                 .build();
         
         // Execute the job
@@ -74,6 +79,9 @@ public class Launcher {
         jobExecutor.shutdown();
 
         System.out.println(jobReport);
+
+        // Dump tweet table to check inserted data
+        DatabaseUtil.dumpTweetTable();
 
         // Shutdown embedded database server and delete temporary files
         DatabaseUtil.cleanUpWorkingDirectory();

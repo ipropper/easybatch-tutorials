@@ -22,27 +22,27 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.intermediate.mongodb.extract;
+package org.easybatch.tutorials.intermediate.extract;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.job.JobReport;
 import org.easybatch.core.writer.FileRecordWriter;
-import org.easybatch.extensions.mongodb.MongoDBRecordMapper;
-import org.easybatch.extensions.mongodb.MongoDBRecordReader;
-import org.easybatch.extensions.xstream.XstreamRecordMarshaller;
-import org.easybatch.xml.XmlWrapperTagWriter;
+import org.easybatch.flatfile.DelimitedRecordMarshaller;
+import org.easybatch.jdbc.JdbcRecordMapper;
+import org.easybatch.jdbc.JdbcRecordReader;
+import org.easybatch.tutorials.common.DatabaseUtil;
+import org.easybatch.tutorials.common.Tweet;
 
+import javax.sql.DataSource;
 import java.io.File;
 
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
- * Main class to export tweets from MongoDB to an XML file.
+ * Main class to run the JDBC export data tutorial.
  *
- * <strong>Pre requisite: mongod should be up and running on default port (27017)</strong>
+ * The goal is to read tweets from a relational database and export them to a flat file.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
@@ -50,28 +50,34 @@ public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
-        // Create a mongo client
-        MongoClient mongoClient = new MongoClient();
-        DBCollection tweetsCollection = mongoClient.getDB("test").getCollection("tweets");
+        // Output file
+        File tweets = new File("target/tweets.csv");
 
-        // Create output file tweets.xml
-        File tweets = new File("tweets.xml");
+        //Start embedded database server
+        DatabaseUtil.startEmbeddedDatabase();
 
-        // Build and run the batch job
+        // get a connection to the database
+        DataSource dataSource = DatabaseUtil.getDataSource();
+
+        // Build a batch job
+        String[] fields = {"id", "user", "message"};
         Job job = aNewJob()
-                .reader(new MongoDBRecordReader(tweetsCollection, new BasicDBObject()))
-                .mapper(new MongoDBRecordMapper<>(Tweet.class))
-                .processor(new XstreamRecordMarshaller("tweet", Tweet.class))
+                .reader(new JdbcRecordReader(dataSource, "select * from tweet"))
+                .mapper(new JdbcRecordMapper<>(Tweet.class, fields))
+                .marshaller(new DelimitedRecordMarshaller<>(Tweet.class, fields))
                 .writer(new FileRecordWriter(tweets))
-                .jobListener(new XmlWrapperTagWriter(tweets, "tweets"))
                 .build();
-
+        
+        // Execute the job
         JobExecutor jobExecutor = new JobExecutor();
-        jobExecutor.execute(job);
+        JobReport jobReport = jobExecutor.execute(job);
         jobExecutor.shutdown();
 
-        System.out.println("Successfully exported tweets.");
+        System.out.println(jobReport);
 
-        mongoClient.close();
+        // Shutdown embedded database server and delete temporary files
+        DatabaseUtil.cleanUpWorkingDirectory();
+
     }
+
 }

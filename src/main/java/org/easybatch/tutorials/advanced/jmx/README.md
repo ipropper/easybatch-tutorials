@@ -10,29 +10,11 @@ This tutorial contains 2 examples:
 - `SingleJobJmxTutorial`: shows how to monitor a single job
 - `ParallelJobsJmxTutorial`: shows how to monitor two jobs running in parallel 
 
-## Pre-requisite
-
-* JDK 1.7+
-* Maven
-* Any JMX compliant client (such as VisualVM)
-* Git (optional)
-* Your favorite IDE (optional)
-
-## Get source code
-
-### Using git
-
-`git clone https://github.com/EasyBatch/easybatch-tutorials.git`
-
-### Downloading a zip file
-
-Download the [zip file](https://github.com/EasyBatch/easybatch-tutorials/archive/master.zip) containing the source code and extract it.
-
 ## Run the tutorial
 
 ### From the command line
 
-Open a terminal in the directory where you have extracted the source code of the project, then proceed as follows:
+Open a terminal and run the following commands:
 
 ```
 $>cd easybatch-tutorials

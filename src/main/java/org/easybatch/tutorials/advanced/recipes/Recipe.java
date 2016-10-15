@@ -22,72 +22,34 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.intermediate.mongodb.extract;
+package org.easybatch.tutorials.advanced.recipes;
 
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Java bean representing a tweet.
- *
- * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ * Recipe bean.
  */
-@Entity
-public class Tweet {
+public class Recipe {
 
-    @Id
-    private int id;
+    private String name;
 
-    @NotNull
-    private String user;
+    private List<Ingredient> ingredients = new ArrayList<>();
 
-    @Size(min = 0, max = 140)
-    private String message;
-
-    public Tweet() {
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Tweet(int id, String user, String message) {
-        this.id = id;
-        this.user = user;
-        this.message = message;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public List<Ingredient> getIngredients() {
+        return ingredients;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Tweet{");
-        sb.append("id=").append(id);
-        sb.append(", user='").append(user).append('\'');
-        sb.append(", message='").append(message).append('\'');
+        final StringBuilder sb = new StringBuilder("Recipe{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", ingredients=").append(ingredients);
         sb.append('}');
         return sb.toString();
     }
-
 }

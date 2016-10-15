@@ -1,4 +1,4 @@
-package org.easybatch.tutorials.basic.csv2xml;
+package org.easybatch.tutorials.intermediate.csv2xml;
 
 import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.job.Job;
@@ -17,8 +17,6 @@ import static org.easybatch.core.job.JobBuilder.aNewJob;
 
 /**
  * Main class to launch the CSV to XML tutorial.
- * 
- * The goal is to read tweets from a CSV file and transform them to XML format.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */

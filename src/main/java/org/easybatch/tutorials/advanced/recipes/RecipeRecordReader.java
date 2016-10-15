@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.intermediate.recipes;
+package org.easybatch.tutorials.advanced.recipes;
 
 import org.easybatch.core.reader.RecordReader;
 import org.easybatch.core.record.Header;

@@ -22,55 +22,37 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.intermediate.mongodb.load;
+package org.easybatch.tutorials.advanced.recipes;
 
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
-import org.easybatch.core.filter.HeaderRecordFilter;
 import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
 import org.easybatch.core.job.JobExecutor;
-import org.easybatch.extensions.mongodb.MongoDBRecordWriter;
-import org.easybatch.flatfile.DelimitedRecordMapper;
-import org.easybatch.flatfile.FlatFileRecordReader;
-import org.easybatch.tutorials.common.Tweet;
-import org.easybatch.validation.BeanValidationRecordValidator;
+import org.easybatch.core.writer.StandardOutputRecordWriter;
 
 import java.io.File;
 
-import static org.easybatch.core.job.JobBuilder.aNewJob;
-
 /**
- * Main class to run MongoDB tutorial.
+* Main class to run the recipes tutorial.
  *
- * <strong>Pre requisite: mongod should be up and running on default port (27017)</strong>
- * 
- * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
- */
+* @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+*/
 public class Launcher {
 
     public static void main(String[] args) throws Exception {
 
-        // create a mongo client
-        MongoClient mongoClient = new MongoClient();
-        DBCollection tweetsCollection = mongoClient.getDB("test").getCollection("tweets");
+        // Initialize input file recipes.txt
+        File recipes = new File("src/main/resources/data/recipes.txt");
 
-        //load tweets from tweets.csv
-        File tweets = new File("src/main/resources/data/tweets.csv");
-
-        Job job = aNewJob()
-                .reader(new FlatFileRecordReader(tweets))
-                .filter(new HeaderRecordFilter())
-                .mapper(new DelimitedRecordMapper<>(Tweet.class, "id", "user", "message"))
-                .validator(new BeanValidationRecordValidator())
-                .processor(new TweetToDBObjectTransformer())
-                .writer(new MongoDBRecordWriter(tweetsCollection))
+        // Build a batch job
+        Job job = new JobBuilder()
+                .reader(new RecipeRecordReader(recipes))
+                .writer(new StandardOutputRecordWriter())
                 .build();
 
+        // Execute the batch job
         JobExecutor jobExecutor = new JobExecutor();
         jobExecutor.execute(job);
-
         jobExecutor.shutdown();
-        mongoClient.close();
-
     }
+
 }
