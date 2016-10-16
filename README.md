@@ -38,7 +38,7 @@ If you are looking for previous versions, please refer to the [releases page](ht
 * [Writing a custom reader to support multi-line records][]
 * [Processing data in parallel with multiple worker jobs][]
 * [Processing data asynchronously using a JMS queue][]
-* [Distribute records to worker jobs based on their content][]:
+* [Distribute records to worker jobs based on their content][]
 
 [Hello world]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/basic/helloworld
 [Word Count]: https://github.com/EasyBatch/easybatch-tutorials/tree/master/src/main/java/org/easybatch/tutorials/basic/wordcount
