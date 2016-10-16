@@ -44,12 +44,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import static java.util.Arrays.asList;
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
-/**
-* Main class to run the parallel jobs tutorial with record dispatching.
- *
-* @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
-*/
-public class ParallelTutorialWithRecordDispatching {
+public class RecordDispatching {
 
     private static final int THREAD_POOL_SIZE = 3;
 

@@ -38,12 +38,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.concurrent.Future;
 
-/**
- * Main class to run the parallel jobs tutorial with data source filtering.
- *
- * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
- */
-public class ParallelTutorialWithDataFiltering {
+public class LogicalPartitions {
 
     private static final int THREAD_POOL_SIZE = 2;
 

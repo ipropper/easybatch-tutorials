@@ -347,7 +347,7 @@
             </build>
         </profile>
         <profile>
-            <id>runParallelTutorialWithRecordDispatching</id>
+            <id>runParallelProcessingWithForkJoin</id>
             <build>
                 <defaultGoal>exec:java</defaultGoal>
                 <plugins>
@@ -356,14 +356,14 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.parallel.ParallelTutorialWithRecordDispatching</mainClass>
+                            <mainClass>org.easybatch.tutorials.advanced.parallel.ForkJoin</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
         <profile>
-            <id>runParallelTutorialWithDataFiltering</id>
+            <id>runParallelProcessingWithLogicalPartitions</id>
             <build>
                 <defaultGoal>exec:java</defaultGoal>
                 <plugins>
@@ -372,14 +372,14 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.parallel.ParallelTutorialWithDataFiltering</mainClass>
+                            <mainClass>org.easybatch.tutorials.advanced.parallel.LogicalPartitions</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
         <profile>
-            <id>runParallelTutorialWithDataSplitting</id>
+            <id>runParallelProcessingWithPhysicalPartitions</id>
             <build>
                 <defaultGoal>exec:java</defaultGoal>
                 <plugins>
@@ -388,23 +388,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.parallel.ParallelTutorialWithDataSplitting</mainClass>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>runParallelTutorialWithForkJoin</id>
-            <build>
-                <defaultGoal>exec:java</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${exec-maven-plugin-version}</version>
-                        <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.parallel.ParallelTutorialWithForkJoin</mainClass>
+                            <mainClass>org.easybatch.tutorials.advanced.parallel.PhysicalPartitions</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>

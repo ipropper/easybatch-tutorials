@@ -35,12 +35,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.concurrent.Future;
 
-/**
- * Main class to run the parallel jobs tutorial with data source splitting.
- *
- * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
- */
-public class ParallelTutorialWithDataSplitting {
+public class PhysicalPartitions {
 
     private static final int THREAD_POOL_SIZE = 2;
 

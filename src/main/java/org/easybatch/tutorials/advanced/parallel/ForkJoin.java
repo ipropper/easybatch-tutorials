@@ -48,12 +48,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import static java.util.Arrays.asList;
 import static org.easybatch.core.job.JobBuilder.aNewJob;
 
-/**
- * Main class to run the fork/join tutorial.
- *
- * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
- */
-public class ParallelTutorialWithForkJoin {
+public class ForkJoin {
 
     private static final int THREAD_POOL_SIZE = 4;
     private static final int NB_WORKERS = 2;
