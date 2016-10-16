@@ -13,25 +13,9 @@ Tutorials described in this page use the current stable version of Easy Batch: [
 
 If you are looking for previous versions, please refer to the [releases page](https://github.com/EasyBatch/easybatch-tutorials/releases).
 
-## Pre-requisite
-
-* JDK 1.7+
-* Maven
-
-## Download and build tutorials
-
-* [:arrow_down: Download](https://github.com/EasyBatch/easybatch-tutorials/releases/tag/v5.0.0-RC2) the source code of tutorials and unzip it
-* Build tutorials:
-
-```shell
-$>cd easybatch-tutorials
-$>mvn install
-```
-
-## Run tutorials
-
-Each tutorial comes with a launcher class and a maven profile to run it.
-Please refer to the `README.md` file of each tutorial for more details about how to run it.
+| :information_source: Pre-requisite | :arrow_down: Download   | :hash: Build | :arrow_forward: Run |
+|------------------------------------|-------------------------|--------------|---------------------|
+|Java 7+ && maven 3+ |[Get source code](https://github.com/EasyBatch/easybatch-tutorials/releases/tag/v5.0.0-RC2)|`$>mvn install`|`$>mvn exec:java -P run[tutorial name]`|
 
 # Basic tutorials
 
