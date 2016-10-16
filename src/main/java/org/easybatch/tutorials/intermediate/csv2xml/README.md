@@ -2,7 +2,10 @@
 
 ## Description
 
-This tutorial is a typical ETL application that reads data from a CSV file, transform it to XML format and write it to an output file.
+This tutorial is a typical ETL application that reads data from a CSV file, transform it to XML format and write it to an output file:
+
+![csv-to-xml](csv-to-xml.png)
+
 Here is the input file called `tweets.csv` :
 
 ```

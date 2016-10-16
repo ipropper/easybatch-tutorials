@@ -22,7 +22,7 @@ id,user,message
 10000000,baz,@foo @bar what are you talking about? Am I in trouble?
 ```
 
-# Processing data in parallel by creating physical partitions
+## Processing data in parallel by creating physical partitions
 
 Sometimes, it is possible to split the data source into multiple partitions:
 
@@ -39,7 +39,7 @@ You can run multiple jobs within the same JVM (one thread per job) or using mult
 
 This example is implemented in the `PhysicalPartitions` class.
 
-# Processing data in parallel by creating logical partitions
+## Processing data in parallel by creating logical partitions
 
 Sometimes it is just impossible to split the data source into multiple physical parts.
 A common technique is to use a single data source but to instruct worker jobs to process separate parts and
@@ -58,7 +58,7 @@ Let's see an example:
 
 This example is implemented in the `LogicalPartitions` class.
 
-# Processing data in parallel with fork/join model
+## Processing data in parallel with fork/join model
 
 In most cases, it is the processing step that is most expensive and should be done in parallel.
 Reading and writing data could be done in serial.

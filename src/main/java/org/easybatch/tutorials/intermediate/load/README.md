@@ -2,7 +2,8 @@
 
 ## Description
 
-After reading the Hello world tutorial, you should be familiar with basic blocs to create an application with Easy Batch. We will continue our journey with processing the same tweets:
+After reading the Hello world tutorial, you should be familiar with basic blocs to create an application with Easy Batch.
+We will continue our journey with processing the same tweets:
 
 ```
 id,user,message
@@ -12,7 +13,11 @@ id,user,message
 4,toto,@foo @bar @baz yeah! kinda KISS framework
 ```
 
-In this tutorial, you will learn how to store these tweets in a relational database. So let's get started!
+In this tutorial, you will learn how to store these tweets in a relational database:
+
+![file-to-db](file-to-db.png)
+
+So let's get started!
 
 ## Reading tweets from a flat file
 

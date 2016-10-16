@@ -1,10 +1,12 @@
-# ElasticSearch Tutorial
+# Tutorial:
 
 ## Description
 
-This tutorial is an application that reads tweets from a relational database and index them in a ElasticSearch server in bulk mode.
+This tutorial is a batch application that reads tweets from a relational database (master) and index them in a ElasticSearch server:
 
-A similar use case is synchronizing data from the main database to a [reporting database](http://martinfowler.com/bliki/ReportingDatabase.html).
+![db-to-db](db-to-db.png)
+
+A similar use case is synchronizing data from the master database to a [reporting database](http://martinfowler.com/bliki/ReportingDatabase.html).
 
 ## Run the tutorial
 

@@ -3,7 +3,11 @@
 ## Description
 
 You have seen in the previous tutorial how to load tweets from a flat file to a relational database.
-In this tutorial, you will see how to do the opposite task: exporting tweets from the database to a flat file.
+In this tutorial, you will see how to do the opposite task, exporting tweets from the database to a flat file:
+
+![db-to-file](db-to-file.png)
+
+Let's get started!
 
 ## Reading tweets from the database
 
