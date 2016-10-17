@@ -1,4 +1,4 @@
-# Tutorial:
+# Tutorial: Populating a search database
 
 ## Description
 
@@ -6,7 +6,7 @@ This tutorial is a batch application that reads tweets from a relational databas
 
 ![db-to-db](db-to-db.png)
 
-A similar use case is synchronizing data from the master database to a [reporting database](http://martinfowler.com/bliki/ReportingDatabase.html).
+A similar use case is synchronizing data between an operational database and a [reporting database](http://martinfowler.com/bliki/ReportingDatabase.html).
 
 ## Run the tutorial
 
