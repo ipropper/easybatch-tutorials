@@ -1,8 +1,11 @@
-# Word Count Tutorial
+# Tutorial: Word Count
 
 ## Description
 
-This tutorial is a simple batch application that counts the number of occurrences of each word in a flat file.
+This tutorial is a simple batch application that counts the number of occurrences of each word in a flat file. We will create:
+
+* A record mapper called `LineTokenizer` that maps each line to a list of its words
+* A record processor called `WordCounter` that counts the occurrences of each word
 
 ## Run the tutorial
 

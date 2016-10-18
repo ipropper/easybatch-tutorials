@@ -1,9 +1,9 @@
-# Hello World Tutorial
+# Tutorial: Hello World
 
 ## Description
 
 In this tutorial, you will learn how to build a very simple batch application to process a flat file.
-We will process text records containing tweets and print them out to the console. Here are the `tweets.csv` file:
+We will read text records containing tweets and print them out to the console. Here are the `tweets.csv` file:
 
 ```
 id,user,message
@@ -24,10 +24,11 @@ Let's get started!
 
 ## Reading tweets from the data source
 
-You need to read records from a flat file, you can use the `FlatFileRecordReader`.
+To read records from a flat file, you can use the `FlatFileRecordReader`.
 This reader will read the file line by line and produce `StringRecord` instances which, as you may have guessed,
  contain strings as payload, or tweets in our case.
-Let's configure a job named "Hello world job" to use this reader:
+
+Let's configure a job named `Hello world job` to use this reader:
 
 ```java
 File dataSource = new File("tweets.csv");

@@ -25,10 +25,10 @@
 package org.easybatch.tutorials.advanced.parallel;
 
 import org.easybatch.core.job.*;
+import org.easybatch.core.writer.StandardOutputRecordWriter;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tutorials.common.Tweet;
-import org.easybatch.tutorials.common.TweetProcessor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -73,7 +73,7 @@ public class PhysicalPartitions {
                 .named(jobName)
                 .reader(new FlatFileRecordReader(file))
                 .mapper(new DelimitedRecordMapper<>(Tweet.class, "id", "user", "message"))
-                .processor(new TweetProcessor())
+                .writer(new StandardOutputRecordWriter())
                 .build();
     }
 

@@ -30,7 +30,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * Main class to run the Hello World tutorial using easy batch - spring extension module.
+ * Main class to run configure the Hello World job using Spring.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
@@ -40,8 +40,8 @@ public class Launcher {
 
         ApplicationContext context = new ClassPathXmlApplicationContext("org/easybatch/tutorials/advanced/spring/application-context.xml");
         Job job = (Job) context.getBean("job");
+        JobExecutor jobExecutor = (JobExecutor) context.getBean("jobExecutor");
 
-        JobExecutor jobExecutor = new JobExecutor();
         jobExecutor.execute(job);
         jobExecutor.shutdown();
     }

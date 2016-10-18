@@ -32,10 +32,10 @@ import org.easybatch.core.listener.PoisonRecordBroadcaster;
 import org.easybatch.core.reader.BlockingQueueRecordReader;
 import org.easybatch.core.record.Record;
 import org.easybatch.core.writer.RoundRobinBlockingQueueRecordWriter;
+import org.easybatch.core.writer.StandardOutputRecordWriter;
 import org.easybatch.flatfile.DelimitedRecordMapper;
 import org.easybatch.flatfile.FlatFileRecordReader;
 import org.easybatch.tutorials.common.Tweet;
-import org.easybatch.tutorials.common.TweetProcessor;
 
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
@@ -91,7 +91,7 @@ public class RecordDispatching {
                 .named(jobName)
                 .reader(new BlockingQueueRecordReader(workQueue))
                 .filter(new PoisonRecordFilter())
-                .processor(new TweetProcessor())
+                .writer(new StandardOutputRecordWriter())
                 .build();
     }
 

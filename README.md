@@ -1,5 +1,7 @@
 # Welcome to Easy Batch tutorials
 
+## Introduction
+
 Tutorials are organised in 3 levels:
 
 * Basic
@@ -8,28 +10,30 @@ Tutorials are organised in 3 levels:
 
 Each tutorial is contained in a separate package containing a `README.md` file that describes the tutorial and how to run it.
 The `org.easybatch.tutorials.common` package contains classes that are common to all tutorials.
+All examples use tweets data. Tweets are represented by the `org.easybatch.tutorials.common.Tweet` bean.
 
-Tutorials described in this page use the current stable version of Easy Batch: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.easybatch/easybatch-core/badge.svg?style=flat)](http://search.maven.org/#artifactdetails|org.easybatch|easybatch-core|5.0.0-RC2|)
-
+:warning: Tutorials described in this page use the current stable version of Easy Batch: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.easybatch/easybatch-core/badge.svg?style=flat)](http://search.maven.org/#artifactdetails|org.easybatch|easybatch-core|5.0.0-RC2|)
 If you are looking for previous versions, please refer to the [releases page](https://github.com/EasyBatch/easybatch-tutorials/releases).
+
+## Quick start
 
 | :information_source: Prerequisites | :arrow_down: Download   | :hash: Build | :arrow_forward: Run |
 |------------------------------------|-------------------------|--------------|---------------------|
 |Java 7+ && maven 3+ |[Get source code](https://github.com/EasyBatch/easybatch-tutorials/releases/tag/v5.0.0-RC2)|`$>mvn install`|`$>mvn exec:java -P run[tutorial name]`|
 
-# Basic tutorials
+## Basic tutorials
 
 * [Hello world][]
 * [Word Count][]
 
-# Intermediate tutorials
+## Intermediate tutorials
 
 * [Transforming data from one format to another][]
 * [Importing data from a flat file into a database][]
 * [Exporting data from a database to a flat file][]
 * [Populating a search database][]
 
-# Advanced tutorials
+## Advanced tutorials
 
 * [Monitoring jobs with JMX][]
 * [Scheduling jobs with Quartz][]

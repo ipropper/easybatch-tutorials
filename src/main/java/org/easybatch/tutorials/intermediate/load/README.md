@@ -2,8 +2,11 @@
 
 ## Description
 
-After reading the Hello world tutorial, you should be familiar with basic blocs to create an application with Easy Batch.
-We will continue our journey with processing the same tweets:
+In this tutorial, you will learn how to read tweets from a flat file and store them in a relational database:
+
+![file-to-db](file-to-db.png)
+
+Here is the `tweets.csv` file:
 
 ```
 id,user,message
@@ -12,10 +15,6 @@ id,user,message
 3,baz,@foo @bar Is it really easy?
 4,toto,@foo @bar @baz yeah! kinda KISS framework
 ```
-
-In this tutorial, you will learn how to store these tweets in a relational database:
-
-![file-to-db](file-to-db.png)
 
 So let's get started!
 
@@ -70,9 +69,6 @@ You can also configure a custom delimiter if you want.
 
 Note that the mapper also converts raw textual data to typed data in the `Tweet` instance.
 
-**NOTE:** If the mapper is not able to map a record to an instance of the `Tweet` class,
- it will throw an exception that will cause the job to reject this record and move to the next one.
-
 ## Validating tweets
 
 We all know that tweets can have at most 140 characters, and we would like to save only valid tweets in the database.
@@ -124,7 +120,7 @@ To keep the tutorial simple, a in-memory database will be used.
 
 Tweets will be inserted in the tweet table:
 
-| field   | type        |
+| field   | type         |
 |---------|--------------|
 | id      | integer      |
 | user    | varchar(32)  |
@@ -134,7 +130,7 @@ To use the `JdbcRecordWriter`, we need to supply 3 artifacts:
 
 * a JDBC DataSource
 * the SQL query to insert data
-* and a PreparedStatementProvider
+* and a `PreparedStatementProvider`
 
 First things first, let's create a JDBC connection:
 
@@ -142,8 +138,8 @@ First things first, let's create a JDBC connection:
 DataSource ds = DatabaseUtil.getDataSource()
 ```
 
-The `DatabaseUtil` class provides static helper methods to work with the embedded database (not shown here for simplicity's sake).
-Next, we need to provide the SQL query to insert tweets in the Tweet table:
+The `DatabaseUtil` class provides static helper methods to work with the embedded database (not shown here for the sake of simplicity).
+Next, we need to provide the SQL query to insert tweets in the `Tweet` table:
 
 ```java
 String query = "INSERT INTO TWEET values (?, ?, ?)"

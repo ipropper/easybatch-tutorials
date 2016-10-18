@@ -24,10 +24,6 @@
 
 package org.easybatch.tutorials.common;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -35,30 +31,18 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 
 import javax.sql.DataSource;
 import java.io.File;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
 
 /**
- * Utility class for embedded database and hibernate services.
+ * Utility class for embedded database.
  */
 public class DatabaseUtil {
 
     private static EmbeddedDatabase embeddedDatabase;
     private static JdbcTemplate jdbcTemplate;
-    private static SessionFactory sessionFactory;
-
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-
-    public static void initializeSessionFactory() {
-        Configuration configuration = new Configuration();
-        configuration.configure("/org/easybatch/tutorials/intermediate/hibernate/hibernate.cfg.xml");
-        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                .applySettings(configuration.getProperties()).build();
-        sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-    }
 
     public static DataSource getDataSource() throws SQLException {
         return embeddedDatabase;
@@ -100,9 +84,4 @@ public class DatabaseUtil {
         new File("mem.tmp").delete();
     }
 
-    public static void closeSessionFactory() {
-        if (sessionFactory != null) {
-            sessionFactory.close();
-        }
-    }
 }

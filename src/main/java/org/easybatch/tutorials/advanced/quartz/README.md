@@ -1,8 +1,8 @@
-# Job scheduling Tutorial
+# Tutorial: Job scheduling
 
 ## Description
 
-This tutorial is an application that schedule a batch job to run repeatedly 10 seconds.
+This tutorial is an application that schedules a batch job to run repeatedly every 10 seconds.
 The goal is to show how to use `easybatch-quartz` module APIs.
 
 ## Run the tutorial

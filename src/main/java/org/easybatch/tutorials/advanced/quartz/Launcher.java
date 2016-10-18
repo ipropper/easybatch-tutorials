@@ -26,12 +26,13 @@ package org.easybatch.tutorials.advanced.quartz;
 
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobBuilder;
+import org.easybatch.core.writer.StandardOutputRecordWriter;
 import org.easybatch.extensions.quartz.JobScheduler;
 import org.easybatch.flatfile.FlatFileRecordReader;
-import org.easybatch.tutorials.common.TweetProcessor;
 
 import java.io.File;
 import java.util.Date;
+import java.util.Scanner;
 
 /**
  * Main class to run the Hello World tutorial repeatedly every 10 seconds using quartz extension module.
@@ -55,7 +56,7 @@ public class Launcher {
         // Build a batch job
         Job job = new JobBuilder()
                 .reader(new FlatFileRecordReader(dataSource))
-                .processor(new TweetProcessor())
+                .writer(new StandardOutputRecordWriter())
                 .build();
 
         // Schedule the job to start now and run every 10 seconds
@@ -64,7 +65,7 @@ public class Launcher {
         scheduler.start();
 
         System.out.println("Hit enter to stop the application");
-        System.in.read();
+        new Scanner(System.in).nextLine();
         scheduler.stop();
     }
 

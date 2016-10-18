@@ -2,8 +2,7 @@
 
 ## Description
 
-You have seen in the previous tutorial how to load tweets from a flat file to a relational database.
-In this tutorial, you will see how to do the opposite task, exporting tweets from the database to a flat file:
+In this tutorial, you will see how to export tweets data from a relational database to a flat file:
 
 ![db-to-file](db-to-file.png)
 
@@ -28,7 +27,7 @@ Job job = JobBuilder.aNewJob()
 
 To use the `JdbcRecordReader`, we need to provide a JDBC data source and the query to fetch data.
 
-The `DatabaseUtil` class provides static helper methods to work with the embedded database (not shown here for simplicity's sake).
+The `DatabaseUtil` class provides static helper methods to work with the embedded database (not shown here for the sake of simplicity).
 
 ## Mapping records to instances of the Tweet bean
 
@@ -45,7 +44,7 @@ public class Tweet {
 }
 ```
 
-The `JdbcRecordMapper` can map JdbcRecords to instances of the domain object `Tweet`:
+The `JdbcRecordMapper` can map Jdbc records to instances of the domain object `Tweet`:
 
 ```java
 DataSource dataSource = DatabaseUtil.getDataSource();

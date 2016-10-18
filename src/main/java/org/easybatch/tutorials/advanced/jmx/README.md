@@ -1,4 +1,4 @@
-# Job monitoring Tutorial
+# Tutorial: Job monitoring
 
 ## Description
 

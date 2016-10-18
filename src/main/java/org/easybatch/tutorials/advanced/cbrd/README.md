@@ -1,4 +1,4 @@
-# Content-Based record writer tutorial
+# tutorial: Distribute records to worker jobs based on their content
 
 ## Description
 
