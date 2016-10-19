@@ -24,54 +24,50 @@
 
 package org.easybatch.tutorials.advanced.jmx;
 
-import org.easybatch.core.filter.RecordFilter;
-import org.easybatch.core.filter.RecordNumberGreaterThanFilter;
-import org.easybatch.core.filter.RecordNumberLowerThanFilter;
+import org.easybatch.core.jmx.JobMonitorProxy;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobBuilder;
 import org.easybatch.core.job.JobExecutor;
 import org.easybatch.flatfile.FlatFileRecordReader;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 /**
- * Main class to run the parallel jobs JMX tutorial.
+ * Main class to run the job progress tutorial.
+ *
+ * To run with:
+ *  -Dcom.sun.management.jmxremote.port=9999
+ *  -Dcom.sun.management.jmxremote.local.only=false
+ *  -Dcom.sun.management.jmxremote.authenticate=false
+ *  -Dcom.sun.management.jmxremote.ssl=false
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-public class ParallelJobsJmxTutorial {
-
-    private static final int THREAD_POOL_SIZE = 2;
+public class JobProgressTutorial {
 
     public static void main(String[] args) throws Exception {
 
-        // Create the  data source
         File dataSource = new File("src/main/resources/data/tweets.csv");
+        ProgressListener progressListener = new ProgressListener(dataSource);
 
-        // Build worker jobs
-        // worker job 1: process records 1-3 and filters records 4+
-        Job job1 = buildJob(dataSource, new RecordNumberGreaterThanFilter(3), "worker-job1");
-        // worker job 2: process 4+ and filters records 1-3
-        Job job2 = buildJob(dataSource, new RecordNumberLowerThanFilter(4), "worker-job2");
-
-        //create a job executor with 2 worker threads
-        JobExecutor jobExecutor = new JobExecutor(THREAD_POOL_SIZE);
-
-        jobExecutor.submitAll(job1, job2);
-
-        jobExecutor.shutdown();
-
-    }
-
-    private static Job buildJob(File dataSource, RecordFilter recordFilter, String jobName) throws FileNotFoundException {
-        return JobBuilder.aNewJob()
-                .named(jobName)
+        // Build the batch job
+        Job job = new JobBuilder()
                 .reader(new FlatFileRecordReader(dataSource))
-                .filter(recordFilter)
                 .processor(new TweetSlowProcessor())
                 .enableJmx(true)
                 .build();
+
+        // Submit the job the job
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.submit(job);
+        jobExecutor.shutdown();
+
+        // Create a job monitor proxy to get notified each time a progress information is sent by the running job
+        JobMonitorProxy jobMonitor = new JobMonitorProxy("localhost", 9999, "job");
+        jobMonitor.addMonitoringListener(progressListener);
+        Thread thread = new Thread(jobMonitor);
+        thread.setDaemon(true);
+        thread.start();
     }
 
 }

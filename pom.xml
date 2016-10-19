@@ -443,7 +443,7 @@
             </build>
         </profile>
         <profile>
-            <id>runSingleJobJmxTutorial</id>
+            <id>runJobMonitoringTutorial</id>
             <build>
                 <defaultGoal>exec:java</defaultGoal>
                 <plugins>
@@ -452,23 +452,34 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.jmx.SingleJobJmxTutorial</mainClass>
+                            <mainClass>org.easybatch.tutorials.advanced.jmx.JobMonitoringTutorial</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
         <profile>
-            <id>runParallelJobsJmxTutorial</id>
+            <id>runJobProgressTutorial</id>
             <build>
-                <defaultGoal>exec:java</defaultGoal>
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin-version}</version>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
                         <configuration>
-                            <mainClass>org.easybatch.tutorials.advanced.jmx.ParallelJobsJmxTutorial</mainClass>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-Dcom.sun.management.jmxremote.port=9999</argument>
+                                <argument>-Dcom.sun.management.jmxremote.local.only=false</argument>
+                                <argument>-Dcom.sun.management.jmxremote.authenticate=false</argument>
+                                <argument>-Dcom.sun.management.jmxremote.ssl=false</argument>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>org.easybatch.tutorials.advanced.jmx.JobProgressTutorial</argument>
+                            </arguments>
                         </configuration>
                     </plugin>
                 </plugins>

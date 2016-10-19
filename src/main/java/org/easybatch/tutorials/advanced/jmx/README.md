@@ -3,55 +3,32 @@
 ## Description
 
 This tutorial is an application that reads tweets from a flat file and prints them out to the standard output.
-The `TweetSlowProcessor` simulates a long running processor to allow you to monitor the application using a JMX client.
+The `TweetSlowProcessor` simulates a long running processor.
 
-This tutorial contains 2 examples:
+### Part 1:
 
-- `SingleJobJmxTutorial`: shows how to monitor a single job
-- `ParallelJobsJmxTutorial`: shows how to monitor two jobs running in parallel 
+In this section, the goal is to run the application and monitor the job using a standard JMX client.
 
-## Run the tutorial
+* Run the tutorial with `mvn exec:java -PrunJobMonitoringTutorial` from the command line or by running the
+`org.easybatch.tutorials.advanced.jmx.JobMonitoringTutorial` class from your IDE
 
-### From the command line
-
-Open a terminal and run the following commands:
-
-```
-$>cd easybatch-tutorials
-$>mvn install
-$> # Launch the single job jmx tutorial
-$>mvn exec:java -PrunSingleJobJmxTutorial
-```
-
-Using your JMX client, navigate to the `org.easybatch.core.monitor:name=job` MBean
+* Using a JMX client, navigate to the `org.easybatch.core.monitor:name=job` MBean
  and you will be able to monitor the execution progress of the application in real time.
- 
-```
-$> # Launch the parallel job jmx tutorial
-$>mvn exec:java -PrunParallelJobsJmxTutorial
-```
-When you want to monitor multiple jobs in parallel, you can give each job a name. This name will be the name
-of the JMX MBean that monitors the job.
-In this tutorial, we are running two jobs in parallel named `worker-job1` and `worker-job2`.
-Using your JMX client, navigate to the `org.easybatch.core.monitor` type.
- You can see two MBeans named `worker-job1` and `worker-job2` registered there. You can monitor the execution progress of each job
- in real time.
 
-### From Your IDE
+### Part 2:
 
-* Import the `easybatch-tutorials` project in your IDE
-* Resolve maven dependencies
-* Navigate to the `org.easybatch.tutorials.advanced.jmx` package
-* Run the `org.easybatch.tutorials.advanced.jmx.SingleJobJmxTutorial` class without any argument
+In this section, we will implement a custom listener to monitor execution progress. The `ProgressListener` will:
 
-Using your JMX client, navigate to the `org.easybatch.core.monitor:name=job` MBean
- and you will be able to monitor the execution progress of the application in real time.
- 
-* Run the `org.easybatch.tutorials.advanced.jmx.ParallelJobsJmxTutorial` class without any argument
+* calculate the total number of records in the data source in order to calculate the progress.
+* listen to notifications from the running job and print out progress to the console.
 
-When you want to monitor multiple jobs in parallel, you can give each job a name. This name will be the name
-of the JMX MBean that monitors the job.
-In this tutorial, we are running two jobs in parallel named `worker-job1` and `worker-job2`.
-Using your JMX client, navigate to the `org.easybatch.core.monitor` type.
- You can see two MBeans named `worker-job1` and `worker-job2` registered there. You can monitor the execution progress of each job
- in real time.
+Run the tutorial:
+
+* from the command line with `mvn exec:exec -PrunJobProgressTutorial`
+* from your IDE by running the `org.easybatch.tutorials.advanced.jmx.JobProgressTutorial` class with the following JMV parameters:
+    - `-Dcom.sun.management.jmxremote.port=9999`
+    - `-Dcom.sun.management.jmxremote.local.only=false`
+    - `-Dcom.sun.management.jmxremote.authenticate=false`
+    - `-Dcom.sun.management.jmxremote.ssl=false`
+
+You should see the execution progress updated in real time in the standard output.

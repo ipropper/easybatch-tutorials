@@ -27,36 +27,35 @@ package org.easybatch.tutorials.advanced.jmx;
 import org.easybatch.core.job.Job;
 import org.easybatch.core.job.JobBuilder;
 import org.easybatch.core.job.JobExecutor;
-import org.easybatch.core.job.JobReport;
+import org.easybatch.core.writer.StandardOutputRecordWriter;
 import org.easybatch.flatfile.FlatFileRecordReader;
 
 import java.io.File;
 
 /**
-* Main class to run the JMX tutorial.
+* Main class to run the job monitoring tutorial.
  *
 * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
 */
-public class SingleJobJmxTutorial {
+public class JobMonitoringTutorial {
 
     public static void main(String[] args) throws Exception {
 
-        // Create the  data source
+        // Create the data source
         File dataSource = new File("src/main/resources/data/tweets.csv");
         
         // Build the batch job
         Job job = new JobBuilder()
                 .reader(new FlatFileRecordReader(dataSource))
                 .processor(new TweetSlowProcessor())
+                .writer(new StandardOutputRecordWriter())
                 .enableJmx(true)
+                .batchSize(1)
                 .build();
 
-        // Run the job and get execution report
+        // Run the job
         JobExecutor jobExecutor = new JobExecutor();
-        JobReport report = jobExecutor.execute(job);
-
-        System.out.println(report);
-
+        jobExecutor.execute(job);
         jobExecutor.shutdown();
     }
 
