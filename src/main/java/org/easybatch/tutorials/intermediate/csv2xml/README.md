@@ -82,9 +82,9 @@ What do all these components do? Here are the details:
 * Step 3: To map each delimited record to an instance of the `Tweet` bean, we use the `DelimitedRecordMapper`. This mapper needs to be configured with the target object type and the list of field names.
 * Step 4: At this point of the pipeline, we should have an instance of the `Tweet` bean for each record, we can marshal it to XML format using the `XmlRecordMarshaller`
 * Step 5: Once tweets are marshaled to XML, we can write them to the output file with a `FileRecordWriter`
-* Step 6: Finally, we need to add a wrapper tag (<tweets>...</tweets>) around the file content. This is the job of the `XmlWrapperTagWriter`. This is a job listener that:
-    ** Writes the XML declaration and the opening tag <tweets> at the beginning of the job
-    ** Writes the closing tag </tweets> and closes the file writer at the end of the job
+* Step 6: Finally, we need to add a wrapper tag (<tweets>...</tweets>) around the file content.
+This is the job of the `XmlWrapperTagWriter`.
+This is a job listener that writes the XML declaration and the opening tag <tweets> in the beginning of the job and the closing tag </tweets> in the end of the job
 
 That's it. Let's run the tutorial and see the result.
 
