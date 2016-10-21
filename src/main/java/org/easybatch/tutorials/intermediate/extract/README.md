@@ -4,7 +4,9 @@
 
 In this tutorial, you will see how to export tweets data from a relational database to a flat file:
 
-![db-to-file](db-to-file.png)
+<div align="center">
+    <img src="db-to-file.png" alt="db-to-file" style="width:70%;height:70%;">
+</div>
 
 Let's get started!
 

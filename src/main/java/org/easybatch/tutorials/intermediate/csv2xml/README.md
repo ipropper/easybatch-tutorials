@@ -4,7 +4,9 @@
 
 This tutorial is a typical ETL application that reads data from a CSV file, transform it to XML format and write it to an output file:
 
-![csv-to-xml](csv-to-xml.png)
+<div align="center">
+    <img src="csv-to-xml.png" alt="csv-to-xml" style="width:70%;height:70%;">
+</div>
 
 Here is the input file called `tweets.csv` :
 

@@ -4,7 +4,9 @@
 
 In this tutorial, you will learn how to read tweets from a flat file and store them in a relational database:
 
-![file-to-db](file-to-db.png)
+<div align="center">
+    <img src="file-to-db.png" alt="file-to-db" style="width:70%;height:70%;">
+</div>
 
 Here is the `tweets.csv` file:
 

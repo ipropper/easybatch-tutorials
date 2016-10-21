@@ -4,7 +4,9 @@
 
 This tutorial is an application that reads recipes from a flat file and prints them out to the standard output:
 
-![recipes](multi-line-records.png)
+<div align="center">
+    <img src="multi-line-records.png" alt="recipes" style="width:50%;height:50%;">
+</div>
 
 Each recipe is split on multiple records:
 

@@ -4,7 +4,9 @@
 
 This tutorial is a batch application that reads tweets from a relational database (master) and index them in a ElasticSearch server:
 
-![db-to-db](db-to-db.png)
+<div align="center">
+    <img src="db-to-db.png" alt="db-to-db" style="width:70%;height:70%;">
+</div>
 
 A similar use case is synchronizing data between an operational database and a [reporting database](http://martinfowler.com/bliki/ReportingDatabase.html).
 
