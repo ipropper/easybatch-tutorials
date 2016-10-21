@@ -5,7 +5,7 @@
 This tutorial is a typical ETL application that reads data from a CSV file, transform it to XML format and write it to an output file:
 
 <div align="center">
-    <img src="csv-to-xml.png" alt="csv-to-xml" style="width:70%;height:70%;">
+    <img src="csv-to-xml.png" alt="csv-to-xml" style="max-width:70%;">
 </div>
 
 Here is the input file called `tweets.csv` :
@@ -83,8 +83,8 @@ What do all these components do? Here are the details:
 * Step 4: At this point of the pipeline, we should have an instance of the `Tweet` bean for each record, we can marshal it to XML format using the `XmlRecordMarshaller`
 * Step 5: Once tweets are marshaled to XML, we can write them to the output file with a `FileRecordWriter`
 * Step 6: Finally, we need to add a wrapper tag (<tweets>...</tweets>) around the file content. This is the job of the `XmlWrapperTagWriter`. This is a job listener that:
-** Writes the XML declaration and the opening tag <tweets> at the beginning of the job
-** Writes the closing tag </tweets> and closes the file writer at the end of the job
+    ** Writes the XML declaration and the opening tag <tweets> at the beginning of the job
+    ** Writes the closing tag </tweets> and closes the file writer at the end of the job
 
 That's it. Let's run the tutorial and see the result.
 
