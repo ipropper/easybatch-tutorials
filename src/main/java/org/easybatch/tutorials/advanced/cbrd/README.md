@@ -1,4 +1,4 @@
-# tutorial: Distribute records to worker jobs based on their content
+# Tutorial: Processing files in parallel based on their content
 
 ## Description
 
