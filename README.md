@@ -7,7 +7,7 @@ Each tutorial is contained in a separate package containing a `README.md` file t
 The `org.easybatch.tutorials.common` package contains classes that are common to all tutorials.
 All examples use tweets data. Tweets are represented by the `org.easybatch.tutorials.common.Tweet` bean.
 
-:warning: Tutorials described in this page use the current stable version of Easy Batch: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.easybatch/easybatch-core/badge.svg?style=flat)](http://search.maven.org/#artifactdetails|org.easybatch|easybatch-core|5.0.0-RC2|)
+:warning: Tutorials described in this page use the current stable version of Easy Batch: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.easybatch/easybatch-core/badge.svg?style=flat)](http://search.maven.org/#artifactdetails|org.easybatch|easybatch-core|5.0.0|)
 
 If you are looking for previous versions, please refer to the [releases page](https://github.com/EasyBatch/easybatch-tutorials/releases).
 
