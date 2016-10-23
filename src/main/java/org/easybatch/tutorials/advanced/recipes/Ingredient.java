@@ -22,23 +22,39 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.advanced.jmx;
-
-import org.easybatch.core.processor.RecordProcessor;
-import org.easybatch.core.record.StringRecord;
+package org.easybatch.tutorials.advanced.recipes;
 
 /**
- * A processor that processes tweets sloooooowly :-).
- *
- * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ * Ingredient bean.
  */
-public class TweetSlowProcessor implements RecordProcessor<StringRecord, StringRecord> {
+public class Ingredient {
 
-    @Override
-    public StringRecord processRecord(StringRecord record) throws Exception {
-        //slow down the processor for demonstration purpose
-        Thread.sleep(5000);
-        return record;
+    private String name;
+
+    private int quantity;
+
+    public String getName() {
+        return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Ingredient{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", quantity=").append(quantity);
+        sb.append('}');
+        return sb.toString();
+    }
 }

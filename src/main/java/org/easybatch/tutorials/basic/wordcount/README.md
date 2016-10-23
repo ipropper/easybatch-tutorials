@@ -1,31 +1,17 @@
-# Word Count Tutorial
+# Tutorial: Word Count
 
 ## Description
 
-This tutorial is a simple batch application that counts the number of occurrences of each word in a flat data source.
+This tutorial is a simple batch application that counts the number of occurrences of each word in a flat file. We will create:
 
-## Pre-requisite
-
-* JDK 1.7+
-* Maven
-* Git (optional)
-* Your favorite IDE (optional)
-
-## Get source code
-
-### Using git
-
-`git clone https://github.com/EasyBatch/easybatch-tutorials.git`
-
-### Downloading a zip file
-
-Download the [zip file](https://github.com/EasyBatch/easybatch-tutorials/archive/master.zip) containing the source code and extract it.
+* A record mapper called `LineTokenizer` that maps each line to a list of its words
+* A record processor called `WordCounter` that counts the occurrences of each word
 
 ## Run the tutorial
 
 ### From the command line
 
-Open a terminal in the directory where you have extracted the source code of the project, then proceed as follows:
+Open a terminal and run the following commands:
 
 ```
 $>cd easybatch-tutorials

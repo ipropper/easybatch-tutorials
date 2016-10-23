@@ -22,23 +22,37 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.advanced.jmx;
+package org.easybatch.tutorials.advanced.recipes;
 
-import org.easybatch.core.processor.RecordProcessor;
-import org.easybatch.core.record.StringRecord;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.writer.StandardOutputRecordWriter;
+
+import java.io.File;
 
 /**
- * A processor that processes tweets sloooooowly :-).
+* Main class to run the recipes tutorial.
  *
- * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
- */
-public class TweetSlowProcessor implements RecordProcessor<StringRecord, StringRecord> {
+* @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+*/
+public class Launcher {
 
-    @Override
-    public StringRecord processRecord(StringRecord record) throws Exception {
-        //slow down the processor for demonstration purpose
-        Thread.sleep(5000);
-        return record;
+    public static void main(String[] args) throws Exception {
+
+        // Initialize input file recipes.txt
+        File recipes = new File("src/main/resources/data/recipes.txt");
+
+        // Build a batch job
+        Job job = new JobBuilder()
+                .reader(new RecipeRecordReader(recipes))
+                .writer(new StandardOutputRecordWriter())
+                .build();
+
+        // Execute the batch job
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.execute(job);
+        jobExecutor.shutdown();
     }
 
 }

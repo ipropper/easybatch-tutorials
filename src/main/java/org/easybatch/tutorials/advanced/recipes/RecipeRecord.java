@@ -22,23 +22,18 @@
  *  THE SOFTWARE.
  */
 
-package org.easybatch.tutorials.advanced.jmx;
+package org.easybatch.tutorials.advanced.recipes;
 
-import org.easybatch.core.processor.RecordProcessor;
-import org.easybatch.core.record.StringRecord;
+import org.easybatch.core.record.GenericRecord;
+import org.easybatch.core.record.Header;
 
 /**
- * A processor that processes tweets sloooooowly :-).
- *
- * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ * Recipe record. This logical record represents a set of physical records in recipes.txt file.
  */
-public class TweetSlowProcessor implements RecordProcessor<StringRecord, StringRecord> {
+public class RecipeRecord extends GenericRecord<Recipe> {
 
-    @Override
-    public StringRecord processRecord(StringRecord record) throws Exception {
-        //slow down the processor for demonstration purpose
-        Thread.sleep(5000);
-        return record;
+    public RecipeRecord(final Header header, final Recipe recipe) {
+        super(header, recipe);
     }
 
 }

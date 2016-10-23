@@ -24,21 +24,39 @@
 
 package org.easybatch.tutorials.advanced.jmx;
 
-import org.easybatch.core.processor.RecordProcessor;
-import org.easybatch.core.record.StringRecord;
+import org.easybatch.core.job.Job;
+import org.easybatch.core.job.JobBuilder;
+import org.easybatch.core.job.JobExecutor;
+import org.easybatch.core.writer.StandardOutputRecordWriter;
+import org.easybatch.flatfile.FlatFileRecordReader;
+
+import java.io.File;
 
 /**
- * A processor that processes tweets sloooooowly :-).
+* Main class to run the job monitoring tutorial.
  *
- * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
- */
-public class TweetSlowProcessor implements RecordProcessor<StringRecord, StringRecord> {
+* @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+*/
+public class JobMonitoringTutorial {
 
-    @Override
-    public StringRecord processRecord(StringRecord record) throws Exception {
-        //slow down the processor for demonstration purpose
-        Thread.sleep(5000);
-        return record;
+    public static void main(String[] args) throws Exception {
+
+        // Create the data source
+        File dataSource = new File("src/main/resources/data/tweets.csv");
+        
+        // Build the batch job
+        Job job = new JobBuilder()
+                .reader(new FlatFileRecordReader(dataSource))
+                .processor(new TweetSlowProcessor())
+                .writer(new StandardOutputRecordWriter())
+                .enableJmx(true)
+                .batchSize(1)
+                .build();
+
+        // Run the job
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.execute(job);
+        jobExecutor.shutdown();
     }
 
 }

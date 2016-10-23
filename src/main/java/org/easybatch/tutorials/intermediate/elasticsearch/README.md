@@ -1,31 +1,20 @@
-# ElasticSearch Tutorial
+# Tutorial: Populating a search database
 
 ## Description
 
-This tutorial is an application that reads tweets from a relational database and index them in a ElasticSearch server in bulk mode.
+This tutorial is a batch application that reads tweets from a relational database (master) and index them in a ElasticSearch server:
 
-## Pre-requisite
+<div align="center">
+    <img src="db-to-db.png" alt="db-to-db" style="width:70%;height:70%;">
+</div>
 
-* JDK 1.7+
-* Maven
-* Git (optional)
-* Your favorite IDE (optional)
-
-## Get source code
-
-### Using git
-
-`git clone https://github.com/EasyBatch/easybatch-tutorials.git`
-
-### Downloading a zip file
-
-Download the [zip file](https://github.com/EasyBatch/easybatch-tutorials/archive/master.zip) containing the source code and extract it.
+A similar use case is synchronizing data between an operational database and a [reporting database](http://martinfowler.com/bliki/ReportingDatabase.html).
 
 ## Run the tutorial
 
 ### From the command line
 
-Open a terminal in the directory where you have extracted the source code of the project, then proceed as follows:
+Open a terminal an run the following command:
 
 ```
 $>cd easybatch-tutorials

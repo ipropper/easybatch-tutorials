@@ -1,31 +1,14 @@
-# Asynchronous jobs Tutorial
+# Tutorial: Processing data asynchronously using a JMS queue
 
 ## Description
 
 This tutorial is a show case of how to implement asynchronous jobs using a JMS queue.
 
-## Pre-requisite
-
-* JDK 1.7+
-* Maven
-* Git (optional)
-* Your favorite IDE (optional)
-
-## Get source code
-
-### Using git
-
-`git clone https://github.com/EasyBatch/easybatch-tutorials.git`
-
-### Downloading a zip file
-
-Download the [zip file](https://github.com/EasyBatch/easybatch-tutorials/archive/master.zip) containing the source code and extract it.
-
 ## Run the tutorial
 
 ### From the command line
 
-Open a terminal in the directory where you have extracted the source code of the project, then proceed as follows:
+Open a terminal and run the following commands:
 
 ```
 $>cd easybatch-tutorials
@@ -40,7 +23,7 @@ Open a second terminal and run the following command:
 `mvn exec:java -PrunJmsSender`
 
 You will be able to type in tweets in the console to post them to the JMS queue and see how the job will process them as they come.
-To quit the application, type in "quit" in order to send a poison record that will stop the job.
+To quit the application, type in "quit" in order to send a poison record in order to stop the job.
 
 ### From Your IDE
 

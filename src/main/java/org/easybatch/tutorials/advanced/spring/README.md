@@ -2,30 +2,13 @@
 
 ## Description
 
-This tutorial is a show case of how to configure Easy Batch jobs using Spring framework with the `org.easybatch.integration.spring.JobFactoryBean`.
-
-## Pre-requisite
-
-* JDK 1.7+
-* Maven
-* Git (optional)
-* Your favorite IDE (optional)
-
-## Get source code
-
-### Using git
-
-`git clone https://github.com/EasyBatch/easybatch-tutorials.git`
-
-### Downloading a zip file
-
-Download the [zip file](https://github.com/EasyBatch/easybatch-tutorials/archive/master.zip) containing the source code and extract it.
+This tutorial shows how to configure Easy Batch jobs using Spring framework with the `org.easybatch.integration.spring.JobFactoryBean`.
 
 ## Run the tutorial
 
 ### From the command line
 
-Open a terminal in the directory where you have extracted the source code of the project, then proceed as follows:
+Open a terminal and run the following commands:
 
 ```
 $>cd easybatch-tutorials
