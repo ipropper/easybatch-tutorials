@@ -15,7 +15,7 @@ If you are looking for previous versions, please refer to the [releases page](ht
 
 | :information_source: Prerequisites | :arrow_down: Download   | :hash: Build | :arrow_forward: Run |
 |------------------------------------|-------------------------|--------------|---------------------|
-|Java 7+ && maven 3+ |[Get source code](https://github.com/EasyBatch/easybatch-tutorials/releases/tag/v5.0.0-RC2)|`$>mvn install`|`$>mvn exec:java -P run[tutorial name]`|
+|Java 7+ && maven 3+ |[Get source code](https://github.com/EasyBatch/easybatch-tutorials/archive/master.zip)|`$>mvn install`|`$>mvn exec:java -P run[tutorial name]`|
 
 :bulb: The `src/main/resources/logging.properties` can be used to show detailed logs and help you better understand how jobs work
 
