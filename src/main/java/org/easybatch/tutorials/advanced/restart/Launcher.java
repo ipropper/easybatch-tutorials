@@ -7,6 +7,7 @@ import org.easybatch.core.writer.FileRecordWriter;
 import org.easybatch.flatfile.FlatFileRecordReader;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,7 +23,7 @@ public class Launcher {
         Job job = new JobBuilder()
                 .batchSize(3)
                 .reader(new FlatFileRecordReader(new File("src/main/resources/data/tweets.csv")))
-                .writer(new BuggyWriter(new FileRecordWriter(new File("target/tweets-out.csv"))))
+                .writer(new BuggyWriter(new FileRecordWriter(new FileWriter("target/tweets-out.csv", true))))
                 .pipelineListener(checkPointListener)
                 .writerListener(checkPointListener)
                 .jobListener(checkPointListener)
